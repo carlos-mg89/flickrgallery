@@ -7,7 +7,7 @@ import retrofit2.http.Query
 interface FlickrService {
 
     companion object {
-        private const val FLICKR_API_KEY = "6bb8590ab71ce31cc11ce1b48cf4162a"
+        private const val FLICKR_API_KEY = "27db486eb2d4e3faad9bc3a727e8211a"
         private const val PHOTOS_SEARCH_ENDPOINT = "flickr.photos.search"
         private const val MEDIA_TYPE = "photos"
         private const val DEFAULT_RADIUS_KILOMETERS = 1.0
