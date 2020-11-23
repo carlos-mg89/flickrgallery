@@ -1,12 +1,13 @@
-package com.example.flickrgallery
+package com.example.flickrgallery.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.flickrgallery.databinding.ViewItemPhotoBinding
+import com.example.flickrgallery.model.Photo
 
-class PhotosAdapter(private val photos: List<Photo>) :
+class PhotosAdapter(var photos: List<Photo>) :
     RecyclerView.Adapter<PhotosAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -31,7 +32,7 @@ class PhotosAdapter(private val photos: List<Photo>) :
     class ViewHolder(private val binding: ViewItemPhotoBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(photo: Photo) {
-            Glide.with(binding.root).load(photo.url).into(binding.photo);
+            Glide.with(binding.root.context).load(photo.getMedium640Url()).into(binding.photo);
         }
     }
 

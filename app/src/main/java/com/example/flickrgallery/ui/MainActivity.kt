@@ -6,6 +6,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
 import com.example.flickrgallery.R
 import com.example.flickrgallery.client.FlickrApiClient
+import com.example.flickrgallery.databinding.ActivityMainBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.repo.LocalRepoImpl
 import kotlinx.coroutines.Dispatchers
@@ -19,8 +20,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        val photosAdapter = PhotosAdapter(emptyList())
+        binding.recyclerview.adapter = photosAdapter
 
         database = Room.databaseBuilder(this, Db::class.java, "location-scout.db").build()
 
@@ -30,7 +35,8 @@ class MainActivity : AppCompatActivity() {
             val wayPointPhotosResult = FlickrApiClient.service.listPhotosNearLocation(41.9575196,3.0333577)
             val wayPointPhotos = wayPointPhotosResult.photos.photo
 
-            localRepo.insertAllPhotos( wayPointPhotos)
+            localRepo.insertAllPhotos(wayPointPhotos)
+            photosAdapter.photos = wayPointPhotos
         }
     }
 }
