@@ -4,14 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.flickrgallery.databinding.ViewItemPhotoBinding
+import com.example.flickrgallery.databinding.MainItemBinding
 import com.example.flickrgallery.model.Photo
 
 class PhotosAdapter(var photos: List<Photo>) :
     RecyclerView.Adapter<PhotosAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ViewItemPhotoBinding
+        val binding = MainItemBinding
             .inflate(
                 LayoutInflater.from(parent.context),
                 parent,
@@ -29,11 +29,15 @@ class PhotosAdapter(var photos: List<Photo>) :
         holder.bind(photos[position])
     }
 
-    class ViewHolder(private val binding: ViewItemPhotoBinding) :
+    class ViewHolder(private val binding: MainItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(photo: Photo) {
             Glide.with(binding.root.context).load(photo.getMedium640Url()).into(binding.photo);
         }
     }
 
+    fun setItems(photos: List<Photo>) {
+        this.photos = photos
+        notifyDataSetChanged()
+    }
 }
