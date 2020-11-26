@@ -8,10 +8,9 @@
     tools:context=".ui.MainActivity">
 
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/navHostFragment"
+            android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:name="com.example.flickrgallery.ui.ExploreFragment"
             app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
