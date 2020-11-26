@@ -1,6 +1,7 @@
 package com.example.flickrgallery.ui
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -30,12 +31,16 @@ class MainActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.nav_explore -> {
                     replaceFragmentContainerWith(ExploreFragment())
+                    binding.storeLocationFab.visibility = View.VISIBLE
                     true
                 }
                 R.id.nav_stored_locations -> {
+                    replaceFragmentContainerWith(StoredLocationsFragment())
+                    binding.storeLocationFab.visibility = View.GONE
                     true
                 }
                 R.id.nav_favorite_photos -> {
+                    binding.storeLocationFab.visibility = View.GONE
                     true
                 }
                 else -> false
