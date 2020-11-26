@@ -6,7 +6,9 @@
     <string name="store_location">Guardar localizacion</string>
     <string name="stored_location_success">Localizacion guardada</string>
     <string name="stored_locations">Localizaciones</string>
+    <string name="stored_location_see_photos">Ver fotos</string>
     <string name="stored_location_delete">Eliminar localización guardada</string>
+    <string name="stored_location_delete_success">Has eliminado la localización guardada</string>
 
     <string name="img_guardadas">Imágenes guardadas</string>
 </resources>
