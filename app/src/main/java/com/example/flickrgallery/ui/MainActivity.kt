@@ -68,6 +68,7 @@ class MainActivity : AppCompatActivity() {
                 val database = Db.getDatabase(applicationContext)
                 val storedLocationRepo = StoredLocationRepoImpl(database)
 
+                // TODO Get real location and ask user to enter a description for the new location
                 val newStoredLocation = StoredLocation().apply {
                     latitude = 42.1115775
                     longitude = 3.1304088
