@@ -34,8 +34,7 @@ class StoredLocationsAdapter(
         }
         binding.deleteBtn.setOnClickListener {
             storedLocationDeleteClickListener(storedLocations[position])
-            storedLocations = storedLocations.minus(storedLocations[position])
-            notifyDataSetChanged()
+            setItems(storedLocations.minus(storedLocations[position]))
         }
     }
 
