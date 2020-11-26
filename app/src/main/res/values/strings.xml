@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">Flickr Gallery</string>
-    <string name="stored_location">Posición guardada</string>
-    <string name="guardar_localizacion">Guardar localizacion</string>
-    <string name="img_guardadas">Imágenes guardadas</string>
-    <string name="posiciones_guardadas">Posiciones guardadas</string>
+
     <string name="explorar">Explorar</string>
+
+    <string name="store_location">Guardar localizacion</string>
+    <string name="stored_locations">Localizaciones</string>
+
+    <string name="img_guardadas">Imágenes guardadas</string>
 </resources>
