@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.flickrgallery.R
-import com.example.flickrgallery.client.FlickrApiClient
 import com.example.flickrgallery.databinding.StoredLocationsFragmentBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.model.StoredLocation
@@ -52,9 +51,8 @@ class StoredLocationsFragment : Fragment() {
 
     private fun getPhotosFromLocationToDisplayThem(): (StoredLocation) -> Unit = {
         lifecycleScope.launch(Dispatchers.IO) {
-            val photosResult = FlickrApiClient.service.listPhotosNearLocation(it.latitude, it.longitude)
-            val locationPhotos = photosResult.photos.photo
-            // TODO Load location photos into the Explore Fragment and change the active tab to that one
+            // TODO Pass the StoredLocation's latitude and longitude along with it's description
+            //  onto the Explore Fragment so it loads the photos
         }
     }
 
