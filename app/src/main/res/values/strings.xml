@@ -4,6 +4,7 @@
     <string name="explorar">Explorar</string>
 
     <string name="store_location">Guardar localizacion</string>
+    <string name="stored_location_success">Localizacion guardada</string>
     <string name="stored_locations">Localizaciones</string>
 
     <string name="img_guardadas">Imágenes guardadas</string>
