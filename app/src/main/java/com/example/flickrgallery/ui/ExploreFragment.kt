@@ -11,6 +11,7 @@ import androidx.room.Room
 import com.example.flickrgallery.client.FlickrApiClient
 import com.example.flickrgallery.databinding.FragmentExploreBinding
 import com.example.flickrgallery.db.Db
+import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.repo.LocalRepoImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,7 +28,12 @@ class ExploreFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentExploreBinding.inflate(layoutInflater)
-        val photosAdapter = PhotosAdapter(emptyList())
+        val activity = this.activity
+        val photosAdapter = PhotosAdapter(emptyList()) {
+            (activity as MainActivityCommunicator).onPhotoClicked(it)
+        }
+
+
         binding.recyclerview.adapter = photosAdapter
         database = Room.databaseBuilder(requireContext(), Db::class.java, "location-scout.db").build()
 
@@ -46,5 +52,7 @@ class ExploreFragment : Fragment() {
         }
         return binding.root
     }
+
+
 
 }

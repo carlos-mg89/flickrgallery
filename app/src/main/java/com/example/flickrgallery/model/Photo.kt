@@ -1,13 +1,16 @@
 package com.example.flickrgallery.model
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 @Entity(tableName = "photos_table")
-class Photo {
+@Parcelize
+class Photo:Parcelable {
 
     @PrimaryKey
     var id: String = ""

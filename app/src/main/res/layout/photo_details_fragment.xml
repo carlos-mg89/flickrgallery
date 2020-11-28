@@ -1,77 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PhotoDetails">
+    tools:context=".ui.PhotoDetailsFragment"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/photo"
+        android:layout_width="match_parent"
+        android:layout_height="257dp"
+        android:contentDescription="@string/photo"
+        android:scaleType="centerCrop"
+        tools:src="@tools:sample/avatars" />
+
+    <ImageButton
+        android:id="@+id/save_image_button"
+        style="@style/Widget.AppCompat.ImageButton"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="310dp"
+        android:background="#00F44336"
+        android:baselineAlignBottom="false"
+        android:contentDescription="@string/button_to_save_image"
+        android:scaleType="centerInside"
+        android:src="@drawable/photo_no_saved"
+        android:textAlignment="textEnd" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="252dp"
-            android:scaleType="centerCrop"
-            tools:src="@tools:sample/avatars" />
-
-        <ImageButton
-            android:id="@+id/guardar_imagen_button"
-            android:layout_width="54dp"
-            android:layout_height="54dp"
-            android:layout_marginLeft="270dp"
-            android:baselineAlignBottom="false"
-            android:src="@drawable/ic_launcher_foreground"
-            android:textAlignment="textEnd" />
+        android:orientation="vertical"
+        android:padding="20dp">
 
         <TextView
             android:id="@+id/description_label"
+            style="@style/detailPhotoTextViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Descripción" />
+            android:text="@string/descripci_n"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/description_text"
             android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:paddingTop="20dp" />
+            android:layout_height="56dp"
+            android:paddingTop="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingTop="20dp">
 
             <TextView
-                android:id="@+id/label_fecha_guardado"
+                android:id="@+id/label_save_data"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingTop="20dp"
-                android:text="Fecha guardado" />
+                android:text="@string/fecha_guardado"
+                android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/fecha_guardado_text"
+                android:id="@+id/save_data_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="2" />
         </LinearLayout>
 
         <TextView
-            android:id="@+id/label_comentarios"
+            android:id="@+id/comments_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="30dp"
-            android:text="Comentarios" />
+            android:text="@string/comentarios"
+            android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/comentarios_text"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="141dp"
-            android:paddingTop="20dp" />
+            android:layout_height="148dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/comments_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="20dp" />
+            </LinearLayout>
+        </ScrollView>
 
     </LinearLayout>
 
-</FrameLayout>
+</LinearLayout>

@@ -1,0 +1,61 @@
+package com.example.flickrgallery.ui
+
+import androidx.lifecycle.ViewModelProvider
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import com.bumptech.glide.Glide
+import com.example.flickrgallery.R
+import com.example.flickrgallery.databinding.PhotoDetailsFragmentBinding
+import com.example.flickrgallery.model.Photo
+
+class PhotoDetailsFragment : Fragment() {
+
+    companion object {
+        const val EXTRA_PHOTO = "PhotoDetailsFragment:photo"
+    }
+
+    private lateinit var viewModel: PhotoDetailsViewModel
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        val binding = PhotoDetailsFragmentBinding.inflate(inflater)
+
+        val photo: Photo? = arguments?.getParcelable<Photo>(EXTRA_PHOTO)
+        if(photo != null){
+           Glide.with(this).load(photo.getMedium640Url()).into(binding.photo)
+            binding.saveDataText.text = photo.savedDate.toString()
+            binding.descriptionText.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque quis enim odio. Sed mattis augue augue."
+            binding.commentsText.text = obtainCommentsPhoto().toString()
+
+        }
+
+        return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel = ViewModelProvider(this).get(PhotoDetailsViewModel::class.java)
+        // TODO: Use the ViewModel
+    }
+
+    fun savePhotoToList(photo: Photo){
+        //TODO: save photo to list
+    }
+    fun obtainCommentsPhoto(): ArrayList<String> {
+        val comments = ArrayList<String>()
+        comments.add("Pepe: Aliquam ex lectus, placerat eget rhoncus vel, convallis quis mi. Aenean neque nulla, suscipit non efficitur vitae, ultrices quis lectus. Nullam ultricies risus congue, rhoncus libero in, mattis eros. " +
+                "Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nulla facilisi.")
+
+        comments.add("Miguel: Sed mattis augue augue. Donec sit amet dapibus arcu. Pellentesque risus nisl, facilisis et fermentum in, sagittis et est. Suspendisse potenti. Donec metus elit, sagittis non tristique sit amet, imperdiet hendrerit ante. " +
+                "Integer vestibulum sagittis erat a aliquam. " )
+        return comments
+    }
+
+}
