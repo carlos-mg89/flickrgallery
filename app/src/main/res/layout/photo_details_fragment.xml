@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,7 +11,7 @@
         android:id="@+id/photo"
         android:layout_width="match_parent"
         android:layout_height="257dp"
-        android:contentDescription="@string/photo"
+        android:contentDescription="@string/photo_details_photo"
         android:scaleType="centerCrop"
         tools:src="@tools:sample/avatars" />
 
@@ -23,7 +23,7 @@
         android:layout_marginStart="310dp"
         android:background="#00F44336"
         android:baselineAlignBottom="false"
-        android:contentDescription="@string/button_to_save_image"
+        android:contentDescription="@string/photo_details_save_btn"
         android:scaleType="centerInside"
         android:src="@drawable/photo_no_saved"
         android:textAlignment="textEnd" />
@@ -39,7 +39,7 @@
             style="@style/detailPhotoTextViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/descripci_n"
+            android:text="@string/photo_details_description"
             android:textStyle="bold" />
 
         <TextView
@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/fecha_guardado"
+                android:text="@string/photo_details_save_btn"
                 android:textStyle="bold" />
 
             <TextView
@@ -74,7 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="30dp"
-            android:text="@string/comentarios"
+            android:text="@string/photo_details_comments"
             android:textStyle="bold" />
 
         <ScrollView

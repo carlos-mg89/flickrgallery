@@ -6,11 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.PhotoDetailsFragmentBinding
+import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.model.Photo
+import com.example.flickrgallery.repo.LocalRepoImpl
+
 
 class PhotoDetailsFragment : Fragment() {
 
@@ -19,35 +22,43 @@ class PhotoDetailsFragment : Fragment() {
     }
 
     private lateinit var viewModel: PhotoDetailsViewModel
-
+    private lateinit var binding: PhotoDetailsFragmentBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        val binding = PhotoDetailsFragmentBinding.inflate(inflater)
+        binding = PhotoDetailsFragmentBinding.inflate(inflater)
 
         val photo: Photo? = arguments?.getParcelable<Photo>(EXTRA_PHOTO)
         if(photo != null){
            Glide.with(this).load(photo.getMedium640Url()).into(binding.photo)
             binding.saveDataText.text = photo.savedDate.toString()
-            binding.descriptionText.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque quis enim odio. Sed mattis augue augue."
+            binding.descriptionText.text = photo.title
             binding.commentsText.text = obtainCommentsPhoto().toString()
-
+            binding.saveImageButton.setOnClickListener {
+                viewModel.toggleSaveStatus()
+            }
         }
 
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(PhotoDetailsViewModel::class.java)
-        // TODO: Use the ViewModel
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val database = Db.getDatabase(requireContext().applicationContext)
+        val localRepo = LocalRepoImpl(database)
+
+        val factory = ViewModelFactory(localRepo)
+        viewModel = ViewModelProvider(this,factory).get(PhotoDetailsViewModel::class.java)
+        viewModel.prueba = "funciona"
+        subscribeUi()
+
     }
 
-    fun savePhotoToList(photo: Photo){
-        //TODO: save photo to list
-    }
+
+
+
     fun obtainCommentsPhoto(): ArrayList<String> {
         val comments = ArrayList<String>()
         comments.add("Pepe: Aliquam ex lectus, placerat eget rhoncus vel, convallis quis mi. Aenean neque nulla, suscipit non efficitur vitae, ultrices quis lectus. Nullam ultricies risus congue, rhoncus libero in, mattis eros. " +
@@ -56,6 +67,18 @@ class PhotoDetailsFragment : Fragment() {
         comments.add("Miguel: Sed mattis augue augue. Donec sit amet dapibus arcu. Pellentesque risus nisl, facilisis et fermentum in, sagittis et est. Suspendisse potenti. Donec metus elit, sagittis non tristique sit amet, imperdiet hendrerit ante. " +
                 "Integer vestibulum sagittis erat a aliquam. " )
         return comments
+    }
+
+    fun subscribeUi(){
+        viewModel.favoriteStatus.observe(this.viewLifecycleOwner,{isSaved ->
+            val drawble = if(isSaved){
+                ContextCompat.getDrawable(requireContext(),R.drawable.photo_saved)
+            }else{
+                ContextCompat.getDrawable(requireContext(),R.drawable.photo_no_saved)
+            }
+            binding.saveImageButton.setImageDrawable(drawble)
+
+        })
     }
 
 }
