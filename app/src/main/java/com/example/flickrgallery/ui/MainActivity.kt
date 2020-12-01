@@ -12,6 +12,7 @@ import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.ActivityMainBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.gps.GpsProvider
+import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.model.StoredLocation
 import com.example.flickrgallery.repo.GpsRepo
 import com.example.flickrgallery.repo.GpsRepoImpl
@@ -19,8 +20,11 @@ import com.example.flickrgallery.repo.StoredLocationRepoImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+interface MainActivityCommunicator{
+    fun onPhotoClicked(photo:Photo)
+}
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MainActivityCommunicator {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var gpsRepo: GpsRepo
@@ -98,10 +102,25 @@ class MainActivity : AppCompatActivity() {
             val newStoredLocation = StoredLocation().apply {
                 latitude = snapshot.latitude
                 longitude = snapshot.longitude
-                description = "L'Escala"
+                description = "Location ${getRandomNumber()}"
             }
 
             storedLocationRepo.insert(newStoredLocation)
         }
+    }
+
+    private fun getRandomNumber(): Int {
+        val min = 1
+        val max = 100
+        val randomDouble = Math.random() * (max - min + 1) + min
+        return randomDouble.toInt()
+    }
+
+    override fun onPhotoClicked(photo: Photo) {
+        val bundle = Bundle()
+        val photoDetailsFragment = PhotoDetailsFragment()
+        bundle.putParcelable(PhotoDetailsFragment.EXTRA_PHOTO,photo)
+        photoDetailsFragment.arguments = bundle
+        replaceFragmentContainerWith(photoDetailsFragment)
     }
 }
