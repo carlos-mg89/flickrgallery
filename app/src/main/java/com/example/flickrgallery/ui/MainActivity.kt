@@ -98,10 +98,17 @@ class MainActivity : AppCompatActivity() {
             val newStoredLocation = StoredLocation().apply {
                 latitude = actualGpsSnapshot.latitude
                 longitude = actualGpsSnapshot.longitude
-                description = "L'Escala"
+                description = "Location ${getRandomNumber()}"
             }
 
             storedLocationRepo.insert(newStoredLocation)
         }
+    }
+
+    private fun getRandomNumber(): Int {
+        val min = 1
+        val max = 100
+        val randomDouble = Math.random() * (max - min + 1) + min
+        return randomDouble.toInt()
     }
 }
