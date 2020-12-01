@@ -92,12 +92,12 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch(Dispatchers.IO) {
             val database = Db.getDatabase(applicationContext)
             val storedLocationRepo = StoredLocationRepoImpl(database)
-            val snapshot = gpsRepo.getActualPosition()
+            val actualGpsSnapshot = gpsRepo.getActualPosition()
 
             // TODO ask user to enter a description for the new location
             val newStoredLocation = StoredLocation().apply {
-                latitude = snapshot.latitude
-                longitude = snapshot.longitude
+                latitude = actualGpsSnapshot.latitude
+                longitude = actualGpsSnapshot.longitude
                 description = "L'Escala"
             }
 
