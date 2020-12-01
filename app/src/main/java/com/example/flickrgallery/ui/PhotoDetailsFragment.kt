@@ -59,7 +59,7 @@ class PhotoDetailsFragment : Fragment() {
 
 
 
-    fun obtainCommentsPhoto(): ArrayList<String> {
+   private fun obtainCommentsPhoto(): ArrayList<String> {
         val comments = ArrayList<String>()
         comments.add("Pepe: Aliquam ex lectus, placerat eget rhoncus vel, convallis quis mi. Aenean neque nulla, suscipit non efficitur vitae, ultrices quis lectus. Nullam ultricies risus congue, rhoncus libero in, mattis eros. " +
                 "Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nulla facilisi.")
@@ -69,7 +69,7 @@ class PhotoDetailsFragment : Fragment() {
         return comments
     }
 
-    fun subscribeUi(){
+    private fun subscribeUi(){
         viewModel.favoriteStatus.observe(this.viewLifecycleOwner,{isSaved ->
             val drawble = if(isSaved){
                 ContextCompat.getDrawable(requireContext(),R.drawable.photo_saved)
