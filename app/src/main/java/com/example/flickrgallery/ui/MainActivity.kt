@@ -1,5 +1,6 @@
 package com.example.flickrgallery.ui
 
+
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -9,13 +10,17 @@ import androidx.lifecycle.lifecycleScope
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.ActivityMainBinding
 import com.example.flickrgallery.db.Db
+import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.model.StoredLocation
 import com.example.flickrgallery.repo.StoredLocationRepoImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+interface MainActivityCommunicator{
+    fun onPhotoClicked(photo:Photo)
 
-class MainActivity : AppCompatActivity() {
+}
+class MainActivity : AppCompatActivity(),MainActivityCommunicator {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -27,6 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         setOnNavigationItemSelectedListener()
         setStoreLocationFabOnClickListener()
+
     }
 
     private fun setOnNavigationItemSelectedListener() {
@@ -79,4 +85,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onPhotoClicked(photo: Photo) {
+        val bundle = Bundle()
+        val photoDetailsFragment = PhotoDetailsFragment()
+        bundle.putParcelable(PhotoDetailsFragment.EXTRA_PHOTO,photo)
+        photoDetailsFragment.arguments = bundle
+        replaceFragmentContainerWith(photoDetailsFragment)
+    }
+
 }

@@ -14,6 +14,9 @@ class ViewModelFactory constructor(
             when {
                 isAssignableFrom(MainViewModel::class.java) ->
                     MainViewModel(localRepo)
+
+                isAssignableFrom(PhotoDetailsViewModel::class.java) ->
+                    PhotoDetailsViewModel(localRepo)
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }
