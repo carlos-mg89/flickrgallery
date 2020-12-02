@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var gpsRepo: GpsRepo
+    private var navigationHistory = NavigationHistory()
 
     // TODO: 29/11/2020 Petición de permisos de forma simple
     private val requestPermissionLauncher = registerForActivityResult(
@@ -57,12 +58,12 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
         binding.bottomNavigation.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_explore -> {
-                    replaceFragmentContainerWith(ExploreFragment())
+                    replaceFragmentContainerWith(ExploreFragment(), item.itemId)
                     binding.storeLocationFab.visibility = View.VISIBLE
                     true
                 }
                 R.id.nav_stored_locations -> {
-                    replaceFragmentContainerWith(StoredLocationsFragment())
+                    replaceFragmentContainerWith(StoredLocationsFragment(), item.itemId)
                     binding.storeLocationFab.visibility = View.GONE
                     true
                 }
@@ -77,11 +78,12 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
         binding.bottomNavigation.selectedItemId = R.id.nav_explore
     }
 
-    private fun replaceFragmentContainerWith(fragment: Fragment) {
+    private fun replaceFragmentContainerWith(fragment: Fragment, navItemId: Int = R.id.nav_explore) {
+        navigationHistory.pushItem(navItemId)
         supportFragmentManager
                 .beginTransaction()
-                .replace(binding.fragmentContainer.id, fragment)
-                .addToBackStack(null)
+                .replace(binding.fragmentContainer.id, fragment, navItemId.toString())
+                .addToBackStack(navItemId.toString())
                 .commit()
     }
 
@@ -98,7 +100,6 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
             val storedLocationRepo = StoredLocationRepoImpl(database)
             val snapshot = gpsRepo.getActualPosition()
 
-            // TODO ask user to enter a description for the new location
             val newStoredLocation = StoredLocation().apply {
                 latitude = snapshot.latitude
                 longitude = snapshot.longitude
@@ -123,4 +124,30 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
         photoDetailsFragment.arguments = bundle
         replaceFragmentContainerWith(photoDetailsFragment)
     }
+
+    override fun onBackPressed() = with(navigationHistory) {
+        if (!isEmpty()) {
+            binding.bottomNavigation.selectedItemId = popLastSelected()
+        }
+        handleBackStackFragments()
+    }
+
+    private fun handleBackStackFragments() {
+        val tag = currentFragment?.tag
+        val backStackIsEmpty = supportFragmentManager.backStackEntryCount == 1
+        val isStartFragment = tag == 0.toString()
+        if (backStackIsEmpty && isStartFragment) {
+            finish()
+        } else {
+            val fragmentPopped = supportFragmentManager.popBackStackImmediate(tag, 0)
+            if (fragmentPopped) {
+                binding.bottomNavigation.selectedItemId = tag?.toIntOrNull() ?: R.id.nav_explore
+            } else {
+                binding.bottomNavigation.selectedItemId = R.id.nav_explore
+            }
+        }
+    }
+
+    private val currentFragment: Fragment?
+        get() = supportFragmentManager.findFragmentById(R.id.container)
 }
