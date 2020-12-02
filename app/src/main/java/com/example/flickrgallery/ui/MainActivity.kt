@@ -1,40 +1,48 @@
 package com.example.flickrgallery.ui
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.location.Location
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.ActivityMainBinding
 import com.example.flickrgallery.db.Db
-import com.example.flickrgallery.gps.GpsProvider
 import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.model.StoredLocation
-import com.example.flickrgallery.repo.GpsRepo
-import com.example.flickrgallery.repo.GpsRepoImpl
+import com.example.flickrgallery.repo.LocalRepoImpl
 import com.example.flickrgallery.repo.StoredLocationRepoImpl
+import com.google.android.gms.location.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-interface MainActivityCommunicator{
-    fun onPhotoClicked(photo:Photo)
+interface MainActivityCommunicator {
+    fun onPhotoClicked(photo: Photo)
 }
 
 class MainActivity : AppCompatActivity(), MainActivityCommunicator {
 
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var gpsRepo: GpsRepo
+    companion object {
+        private const val ACCEPTABLE_MINIMUM_LOCATION_ACCURACY = 10
+        private const val SECONDS_TO_UPDATE_LOCATION = 5 * 1000L
+    }
 
-    // TODO: 29/11/2020 Petición de permisos de forma simple
-    private val requestPermissionLauncher = registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted ->
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var viewModel: MainViewModel
+    private var currentLocation: Location? = null
+    private var isPendingToLoadInitialPhotos = true
+
+    private val requestPermissionLauncherToGetLocation = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
             if (isGranted) {
-                storeLocation()
+                setLocationRefresherPeriodically()
             } else {
                 Toast.makeText(this, R.string.location_permission_denied, Toast.LENGTH_LONG).show()
             }
@@ -43,14 +51,35 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        viewModel = getMainViewModel()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val gpsProvider = GpsProvider(applicationContext)
-        gpsRepo = GpsRepoImpl(gpsProvider)
+        setListeners()
+    }
 
+    private fun getMainViewModel(): MainViewModel {
+        val database = Db.getDatabase(applicationContext)
+        val localRepo = LocalRepoImpl(database)
+        val factory = ViewModelFactory(localRepo)
+
+        return ViewModelProvider(this, factory).get(MainViewModel::class.java)
+    }
+
+    private fun setListeners() {
         setOnNavigationItemSelectedListener()
         setStoreLocationFabOnClickListener()
+        requestLocationPermissionsAndLoadExploreTab()
+    }
+
+    private fun requestLocationPermissionsAndLoadExploreTab() {
+        requestPermissionLauncherToGetLocation.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        viewModel.photos.observe(this) {
+            if (it.isNotEmpty()) {
+                binding.bottomNavigation.selectedItemId = R.id.nav_explore
+                viewModel.photos.removeObservers(this@MainActivity)
+            }
+        }
     }
 
     private fun setOnNavigationItemSelectedListener() {
@@ -73,8 +102,6 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
                 else -> false
             }
         }
-
-        binding.bottomNavigation.selectedItemId = R.id.nav_explore
     }
 
     private fun replaceFragmentContainerWith(fragment: Fragment) {
@@ -87,26 +114,63 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
 
     private fun setStoreLocationFabOnClickListener() {
         binding.storeLocationFab.setOnClickListener {
-            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            storeLocation()
         }
     }
 
     private fun storeLocation() {
         Toast.makeText(this, R.string.stored_location_success, Toast.LENGTH_LONG).show()
         lifecycleScope.launch(Dispatchers.IO) {
-            val database = Db.getDatabase(applicationContext)
-            val storedLocationRepo = StoredLocationRepoImpl(database)
-            val snapshot = gpsRepo.getActualPosition()
+            currentLocation?.let {
+                val database = Db.getDatabase(applicationContext)
+                val storedLocationRepo = StoredLocationRepoImpl(database)
 
-            // TODO ask user to enter a description for the new location
-            val newStoredLocation = StoredLocation().apply {
-                latitude = snapshot.latitude
-                longitude = snapshot.longitude
-                description = "Location ${getRandomNumber()}"
+                viewModel.setPhotosAt(it.latitude, it.longitude)
+
+                val newStoredLocation = StoredLocation().apply {
+                    latitude = it.latitude
+                    longitude = it.longitude
+                    description = "Location ${getRandomNumber()}"
+                }
+
+                storedLocationRepo.insert(newStoredLocation)
             }
-
-            storedLocationRepo.insert(newStoredLocation)
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun setLocationRefresherPeriodically() {
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        fusedLocationClient.requestLocationUpdates(
+                getLocationRequest(), getLocationCallback(), null
+        )
+    }
+
+    private fun getLocationRequest(): LocationRequest {
+        return LocationRequest.create().apply {
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            interval = SECONDS_TO_UPDATE_LOCATION
+        }
+    }
+
+    private fun getLocationCallback() = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            for (location in locationResult.locations) {
+                if (shouldUpdateLocation(location)) {
+                    currentLocation = location
+                    if (isPendingToLoadInitialPhotos) {
+                        isPendingToLoadInitialPhotos = false
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            viewModel.setPhotosAt(location.latitude, location.longitude)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun shouldUpdateLocation(location: Location?): Boolean {
+        return location != null && location.accuracy < ACCEPTABLE_MINIMUM_LOCATION_ACCURACY
     }
 
     private fun getRandomNumber(): Int {
