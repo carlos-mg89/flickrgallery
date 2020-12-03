@@ -120,8 +120,6 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
                 val database = Db.getDatabase(applicationContext)
                 val storedLocationRepo = StoredLocationRepoImpl(database)
 
-                viewModel.setPhotosAt(it.latitude, it.longitude)
-
                 val newStoredLocation = StoredLocation().apply {
                     latitude = it.latitude
                     longitude = it.longitude
