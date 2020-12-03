@@ -70,10 +70,10 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
     private fun setListeners() {
         setOnNavigationItemSelectedListener()
         setStoreLocationFabOnClickListener()
-        requestLocationPermissionsAndLoadExploreTab()
+        requestLocationPermissionsSoExploreFragmentIsLoadedWithPhotos()
     }
 
-    private fun requestLocationPermissionsAndLoadExploreTab() {
+    private fun requestLocationPermissionsSoExploreFragmentIsLoadedWithPhotos() {
         requestPermissionLauncherToGetLocation.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         viewModel.photos.observe(this) {
             if (it.isNotEmpty()) {
