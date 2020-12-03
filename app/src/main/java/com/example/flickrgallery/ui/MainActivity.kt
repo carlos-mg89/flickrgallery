@@ -70,10 +70,7 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
 
     private fun setProgressVisibleObserver() {
         viewModel.progressVisible.observe(this) {
-            binding.progressVisibleLayout.visibility = when(it) {
-                true -> View.VISIBLE
-                false -> View.GONE
-            }
+            binding.progressVisibleLayout.visibility = if(it) View.VISIBLE else View.GONE
         }
     }
 
