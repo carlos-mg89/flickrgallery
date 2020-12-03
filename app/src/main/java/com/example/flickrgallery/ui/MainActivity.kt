@@ -159,7 +159,7 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
     private fun getLocationCallback() = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             for (location in locationResult.locations) {
-                if (shouldUpdateLocation(location)) {
+                if (isLocationAccurateEnough(location)) {
                     currentLocation = location
                     lifecycleScope.launch(Dispatchers.IO) {
                         viewModel.setPhotosAt(location.latitude, location.longitude)
@@ -169,7 +169,7 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
         }
     }
 
-    private fun shouldUpdateLocation(location: Location?): Boolean {
+    private fun isLocationAccurateEnough(location: Location?): Boolean {
         return location != null && location.accuracy < ACCEPTABLE_MINIMUM_LOCATION_ACCURACY
     }
 
