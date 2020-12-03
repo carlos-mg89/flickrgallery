@@ -64,7 +64,17 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
     private fun setListeners() {
         setOnNavigationItemSelectedListener()
         setStoreLocationFabOnClickListener()
+        setProgressVisibleObserver()
         requestLocationPermissionsSoExploreFragmentIsLoadedWithPhotos()
+    }
+
+    private fun setProgressVisibleObserver() {
+        viewModel.progressVisible.observe(this) {
+            binding.progressVisibleLayout.visibility = when(it) {
+                true -> View.VISIBLE
+                false -> View.GONE
+            }
+        }
     }
 
     private fun requestLocationPermissionsSoExploreFragmentIsLoadedWithPhotos() {
