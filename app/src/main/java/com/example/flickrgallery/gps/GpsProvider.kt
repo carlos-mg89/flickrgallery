@@ -53,9 +53,8 @@ class GpsProvider(context: Context) {
 
     @SuppressLint("MissingPermission")
     fun setAccurateLocationListener(onLocationUpdated: (GpsSnapshot) -> Unit) {
-        val locationCallback = getLocationCallback(onLocationUpdated)
         fusedLocationClient.requestLocationUpdates(
-                getLocationRequest(), locationCallback, null
+                getLocationRequest(), getLocationCallback(onLocationUpdated), null
         )
     }
 
