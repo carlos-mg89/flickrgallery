@@ -35,8 +35,9 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationCallback: LocationCallback
     private var currentLocation: Location? = null
-    private var isPendingToLoadInitialPhotos = true
 
     private val requestPermissionLauncherToGetLocation = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -78,6 +79,7 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
             if (it.isNotEmpty()) {
                 binding.bottomNavigation.selectedItemId = R.id.nav_explore
                 viewModel.photos.removeObservers(this@MainActivity)
+                fusedLocationClient.removeLocationUpdates(locationCallback)
             }
         }
     }
@@ -140,9 +142,10 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
 
     @SuppressLint("MissingPermission")
     private fun setLocationRefresherPeriodically() {
-        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        locationCallback = getLocationCallback()
         fusedLocationClient.requestLocationUpdates(
-                getLocationRequest(), getLocationCallback(), null
+                getLocationRequest(), locationCallback, null
         )
     }
 
@@ -158,11 +161,8 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
             for (location in locationResult.locations) {
                 if (shouldUpdateLocation(location)) {
                     currentLocation = location
-                    if (isPendingToLoadInitialPhotos) {
-                        isPendingToLoadInitialPhotos = false
-                        lifecycleScope.launch(Dispatchers.IO) {
-                            viewModel.setPhotosAt(location.latitude, location.longitude)
-                        }
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        viewModel.setPhotosAt(location.latitude, location.longitude)
                     }
                 }
             }
