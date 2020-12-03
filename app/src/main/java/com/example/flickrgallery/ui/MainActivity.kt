@@ -19,7 +19,6 @@ import com.example.flickrgallery.model.StoredLocation
 import com.example.flickrgallery.repo.GpsRepoImpl
 import com.example.flickrgallery.repo.LocalRepoImpl
 import com.example.flickrgallery.repo.StoredLocationRepoImpl
-import com.google.android.gms.location.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
