@@ -1,8 +1,6 @@
 package com.example.flickrgallery.ui
 
 import android.Manifest
-import android.annotation.SuppressLint
-import android.location.Location
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -14,8 +12,11 @@ import androidx.lifecycle.lifecycleScope
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.ActivityMainBinding
 import com.example.flickrgallery.db.Db
+import com.example.flickrgallery.gps.GpsProvider
+import com.example.flickrgallery.model.GpsSnapshot
 import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.model.StoredLocation
+import com.example.flickrgallery.repo.GpsRepoImpl
 import com.example.flickrgallery.repo.LocalRepoImpl
 import com.example.flickrgallery.repo.StoredLocationRepoImpl
 import com.google.android.gms.location.*
@@ -28,22 +29,15 @@ interface MainActivityCommunicator {
 
 class MainActivity : AppCompatActivity(), MainActivityCommunicator {
 
-    companion object {
-        private const val ACCEPTABLE_MINIMUM_LOCATION_ACCURACY = 10
-        private const val SECONDS_TO_UPDATE_LOCATION = 5 * 1000L
-    }
-
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var locationCallback: LocationCallback
-    private var currentLocation: Location? = null
+    private var currentLocation: GpsSnapshot? = null
 
     private val requestPermissionLauncherToGetLocation = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
             if (isGranted) {
-                setLocationRefresherPeriodically()
+                setLocationListenerToObtainInitialPhotos()
             } else {
                 Toast.makeText(this, R.string.location_permission_denied, Toast.LENGTH_LONG).show()
             }
@@ -79,7 +73,6 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
             if (it.isNotEmpty()) {
                 binding.bottomNavigation.selectedItemId = R.id.nav_explore
                 viewModel.photos.removeObservers(this@MainActivity)
-                fusedLocationClient.removeLocationUpdates(locationCallback)
             }
         }
     }
@@ -140,37 +133,15 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
         }
     }
 
-    @SuppressLint("MissingPermission")
-    private fun setLocationRefresherPeriodically() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        locationCallback = getLocationCallback()
-        fusedLocationClient.requestLocationUpdates(
-                getLocationRequest(), locationCallback, null
-        )
-    }
-
-    private fun getLocationRequest(): LocationRequest {
-        return LocationRequest.create().apply {
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            interval = SECONDS_TO_UPDATE_LOCATION
-        }
-    }
-
-    private fun getLocationCallback() = object : LocationCallback() {
-        override fun onLocationResult(locationResult: LocationResult) {
-            for (location in locationResult.locations) {
-                if (isLocationAccurateEnough(location)) {
-                    currentLocation = location
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        viewModel.setPhotosAt(location.latitude, location.longitude)
-                    }
-                }
+    private fun setLocationListenerToObtainInitialPhotos() {
+        val gpsProvider =  GpsProvider(this)
+        val gpsRepo = GpsRepoImpl(gpsProvider)
+        gpsRepo.setAccurateLocationListener {
+            lifecycleScope.launch(Dispatchers.IO) {
+                viewModel.setPhotosAt(it.latitude, it.longitude)
+                currentLocation = it
             }
         }
-    }
-
-    private fun isLocationAccurateEnough(location: Location?): Boolean {
-        return location != null && location.accuracy < ACCEPTABLE_MINIMUM_LOCATION_ACCURACY
     }
 
     private fun getRandomNumber(): Int {
