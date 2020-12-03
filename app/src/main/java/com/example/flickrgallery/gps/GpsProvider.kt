@@ -17,7 +17,7 @@ class GpsProvider(context: Context) {
 
     companion object {
         private const val ACCEPTABLE_MINIMUM_LOCATION_ACCURACY = 10
-        private const val SECONDS_TO_UPDATE_LOCATION = 5 * 1000L
+        private const val SECONDS_TO_UPDATE_LOCATION = 1 * 1000L
     }
 
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
