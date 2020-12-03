@@ -8,10 +8,15 @@ import kotlinx.coroutines.withContext
 
 class GpsRepoImpl(private val gpsProvider: GpsProvider) : GpsRepo {
 
-
     override suspend fun getActualPosition(): GpsSnapshot {
         return withContext(Dispatchers.IO) {
             gpsProvider.getActualLocation()
+        }
+    }
+
+    override fun setAccurateLocationListener(onLocationUpdated: (GpsSnapshot) -> Unit) {
+        gpsProvider.setAccurateLocationListener {
+            onLocationUpdated(it)
         }
     }
 }

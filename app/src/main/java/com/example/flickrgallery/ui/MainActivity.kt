@@ -7,34 +7,36 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.ActivityMainBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.gps.GpsProvider
+import com.example.flickrgallery.model.GpsSnapshot
 import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.model.StoredLocation
-import com.example.flickrgallery.repo.GpsRepo
 import com.example.flickrgallery.repo.GpsRepoImpl
+import com.example.flickrgallery.repo.LocalRepoImpl
 import com.example.flickrgallery.repo.StoredLocationRepoImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-interface MainActivityCommunicator{
-    fun onPhotoClicked(photo:Photo)
+interface MainActivityCommunicator {
+    fun onPhotoClicked(photo: Photo)
 }
 
 class MainActivity : AppCompatActivity(), MainActivityCommunicator {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var gpsRepo: GpsRepo
+    private lateinit var viewModel: MainViewModel
+    private var currentLocation: GpsSnapshot? = null
 
-    // TODO: 29/11/2020 Petición de permisos de forma simple
-    private val requestPermissionLauncher = registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted ->
+    private val requestPermissionLauncherToGetLocation = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
             if (isGranted) {
-                storeLocation()
+                setLocationListenerToObtainInitialPhotos()
             } else {
                 Toast.makeText(this, R.string.location_permission_denied, Toast.LENGTH_LONG).show()
             }
@@ -43,14 +45,40 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        viewModel = getMainViewModel()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val gpsProvider = GpsProvider(applicationContext)
-        gpsRepo = GpsRepoImpl(gpsProvider)
+        setListeners()
+    }
 
+    private fun getMainViewModel(): MainViewModel {
+        val database = Db.getDatabase(applicationContext)
+        val localRepo = LocalRepoImpl(database)
+        val factory = ViewModelFactory(localRepo)
+
+        return ViewModelProvider(this, factory).get(MainViewModel::class.java)
+    }
+
+    private fun setListeners() {
         setOnNavigationItemSelectedListener()
         setStoreLocationFabOnClickListener()
+        setProgressVisibleObserver()
+        requestLocationPermissionsSoExploreFragmentIsLoadedWithPhotos()
+    }
+
+    private fun setProgressVisibleObserver() {
+        viewModel.progressVisible.observe(this) {
+            binding.progressVisibleLayout.visibility = if(it) View.VISIBLE else View.GONE
+        }
+    }
+
+    private fun requestLocationPermissionsSoExploreFragmentIsLoadedWithPhotos() {
+        requestPermissionLauncherToGetLocation.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        viewModel.photos.observe(this) {
+            binding.bottomNavigation.selectedItemId = R.id.nav_explore
+            viewModel.photos.removeObservers(this@MainActivity)
+        }
     }
 
     private fun setOnNavigationItemSelectedListener() {
@@ -73,8 +101,6 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
                 else -> false
             }
         }
-
-        binding.bottomNavigation.selectedItemId = R.id.nav_explore
     }
 
     private fun replaceFragmentContainerWith(fragment: Fragment) {
@@ -87,25 +113,36 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
 
     private fun setStoreLocationFabOnClickListener() {
         binding.storeLocationFab.setOnClickListener {
-            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            storeLocation()
         }
     }
 
     private fun storeLocation() {
         Toast.makeText(this, R.string.stored_location_success, Toast.LENGTH_LONG).show()
         lifecycleScope.launch(Dispatchers.IO) {
-            val database = Db.getDatabase(applicationContext)
-            val storedLocationRepo = StoredLocationRepoImpl(database)
-            val snapshot = gpsRepo.getActualPosition()
+            currentLocation?.let {
+                val database = Db.getDatabase(applicationContext)
+                val storedLocationRepo = StoredLocationRepoImpl(database)
 
-            // TODO ask user to enter a description for the new location
-            val newStoredLocation = StoredLocation().apply {
-                latitude = snapshot.latitude
-                longitude = snapshot.longitude
-                description = "Location ${getRandomNumber()}"
+                val newStoredLocation = StoredLocation().apply {
+                    latitude = it.latitude
+                    longitude = it.longitude
+                    description = "Location ${getRandomNumber()}"
+                }
+
+                storedLocationRepo.insert(newStoredLocation)
             }
+        }
+    }
 
-            storedLocationRepo.insert(newStoredLocation)
+    private fun setLocationListenerToObtainInitialPhotos() {
+        val gpsProvider = GpsProvider(this)
+        val gpsRepo = GpsRepoImpl(gpsProvider)
+        gpsRepo.setAccurateLocationListener {
+            lifecycleScope.launch(Dispatchers.IO) {
+                viewModel.setPhotosAt(it.latitude, it.longitude)
+                currentLocation = it
+            }
         }
     }
 
