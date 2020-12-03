@@ -17,10 +17,6 @@ class MainViewModel(private val localRepo: LocalRepo) : ViewModel() {
     val photos: LiveData<List<Photo>>
         get() = _photos
 
-    init {
-        _progressVisible.value = true
-    }
-
     suspend fun setPhotosAt(latitude: Double, longitude: Double) {
         _progressVisible.postValue(true)
         _photos.postValue(getPhotos(latitude, longitude))
