@@ -77,10 +77,8 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
     private fun requestLocationPermissionsSoExploreFragmentIsLoadedWithPhotos() {
         requestPermissionLauncherToGetLocation.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         viewModel.photos.observe(this) {
-            if (it.isNotEmpty()) {
-                binding.bottomNavigation.selectedItemId = R.id.nav_explore
-                viewModel.photos.removeObservers(this@MainActivity)
-            }
+            binding.bottomNavigation.selectedItemId = R.id.nav_explore
+            viewModel.photos.removeObservers(this@MainActivity)
         }
     }
 

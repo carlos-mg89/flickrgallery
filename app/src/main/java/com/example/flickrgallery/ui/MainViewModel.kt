@@ -19,7 +19,6 @@ class MainViewModel(private val localRepo: LocalRepo) : ViewModel() {
 
     init {
         _progressVisible.value = true
-        _photos.value = ArrayList()
     }
 
     suspend fun setPhotosAt(latitude: Double, longitude: Double) {
