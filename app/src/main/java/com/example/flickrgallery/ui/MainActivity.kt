@@ -56,7 +56,9 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
     private fun getMainViewModel(): MainViewModel {
         val database = Db.getDatabase(applicationContext)
         val localRepo = LocalRepoImpl(database)
-        val factory = ViewModelFactory(localRepo)
+        val gpsProvider = GpsProvider(applicationContext)
+        val gpsRepo = GpsRepoImpl(gpsProvider)
+        val factory = ViewModelFactory(localRepo, gpsRepo)
 
         return ViewModelProvider(this, factory).get(MainViewModel::class.java)
     }

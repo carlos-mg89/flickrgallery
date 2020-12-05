@@ -11,7 +11,9 @@ import com.bumptech.glide.Glide
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.PhotoDetailsFragmentBinding
 import com.example.flickrgallery.db.Db
+import com.example.flickrgallery.gps.GpsProvider
 import com.example.flickrgallery.model.Photo
+import com.example.flickrgallery.repo.GpsRepoImpl
 import com.example.flickrgallery.repo.LocalRepoImpl
 
 
@@ -49,7 +51,10 @@ class PhotoDetailsFragment : Fragment() {
         val database = Db.getDatabase(requireContext().applicationContext)
         val localRepo = LocalRepoImpl(database)
 
-        val factory = ViewModelFactory(localRepo)
+        val gpsProvider = GpsProvider(requireContext())
+        val gpsRepo = GpsRepoImpl(gpsProvider)
+
+        val factory = ViewModelFactory(localRepo, gpsRepo)
         viewModel = ViewModelProvider(this,factory).get(PhotoDetailsViewModel::class.java)
         viewModel.prueba = "funciona"
         subscribeUi()
