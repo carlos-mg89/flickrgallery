@@ -1,14 +1,17 @@
 package com.example.flickrgallery.ui
 
+import android.Manifest
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
-import com.example.flickrgallery.client.FlickrApiClient
+import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.FragmentExploreBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.gps.GpsProvider
@@ -16,9 +19,7 @@ import com.example.flickrgallery.repo.GpsRepo
 import com.example.flickrgallery.repo.GpsRepoImpl
 import com.example.flickrgallery.repo.LocalRepo
 import com.example.flickrgallery.repo.LocalRepoImpl
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.google.android.material.snackbar.Snackbar
 
 class ExploreFragment : Fragment() {
 
@@ -49,15 +50,36 @@ class ExploreFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        buildDependencies()
+        viewModel = buildViewModel()
+        setupUi()
+        subscribeUi()
+        requestLocationPermissionAndGetPhotos()
+        return binding.root
+    }
+
+    private fun requestLocationPermissionAndGetPhotos() {
+        requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+    }
+
+    private fun subscribeUi() {
+        viewModel.photos.observe(requireActivity()) { photos ->
+            photosAdapter.setItems(photos)
+        }
+        viewModel.progressVisible.observe(requireActivity(),{
+            val visibility = if (it) VISIBLE else GONE
+            binding.exploreFragmentProgress.visibility = visibility
+        })
+    }
+
+    private fun setupUi() {
         binding = FragmentExploreBinding.inflate(layoutInflater)
         val activity = this.activity
-        val photosAdapter = PhotosAdapter(emptyList()) {
+        photosAdapter = PhotosAdapter(emptyList()) {
             (activity as MainActivityCommunicator).onPhotoClicked(it)
         }
-
-
         binding.recyclerview.adapter = photosAdapter
-        database = Room.databaseBuilder(requireContext(), Db::class.java, "location-scout.db").build()
+    }
 
     private fun buildDependencies() {
         val database = Room.databaseBuilder(
@@ -70,6 +92,8 @@ class ExploreFragment : Fragment() {
         gpsRepo = GpsRepoImpl(gpsProvider)
     }
 
-
-
+    private fun buildViewModel(): MainViewModel {
+        val factory = ViewModelFactory(localRepo, gpsRepo)
+        return ViewModelProvider(this, factory).get(MainViewModel::class.java)
+    }
 }

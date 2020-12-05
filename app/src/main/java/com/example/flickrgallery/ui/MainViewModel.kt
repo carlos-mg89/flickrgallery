@@ -1,13 +1,17 @@
 package com.example.flickrgallery.ui
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.example.flickrgallery.client.FlickrApiClient
 import com.example.flickrgallery.model.Photo
+import com.example.flickrgallery.repo.GpsRepo
 import com.example.flickrgallery.repo.LocalRepo
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class MainViewModel(private val localRepo: LocalRepo) : ViewModel() {
+class MainViewModel(
+    private val localRepo: LocalRepo,
+    private val gpsRepo: GpsRepo
+) : ViewModel() {
 
     private val _progressVisible = MutableLiveData<Boolean>()
     val progressVisible: LiveData<Boolean>
@@ -17,18 +21,26 @@ class MainViewModel(private val localRepo: LocalRepo) : ViewModel() {
     val photos: LiveData<List<Photo>>
         get() = _photos
 
-    suspend fun setPhotosAt(latitude: Double, longitude: Double) {
+    fun proceedGettingUpdates() {
+        if (gpsRepo.areUpdatesDisabled) {
+            gpsRepo.areUpdatesDisabled = false
+            gpsRepo.setAccurateLocationListener {
+                viewModelScope.launch(Dispatchers.IO) {
+                    postPhotosAt(it.latitude, it.longitude)
+                }
+            }
+        }
+    }
+
+    private suspend fun postPhotosAt(latitude: Double, longitude: Double) {
         _progressVisible.postValue(true)
-        _photos.postValue(getPhotos(latitude, longitude))
+        val photos = getPhotos(latitude, longitude)
+        _photos.postValue(photos)
         _progressVisible.postValue(false)
     }
 
     private suspend fun getPhotos(latitude: Double, longitude: Double): List<Photo> {
         val wayPointPhotosResult = FlickrApiClient.service.listPhotosNearLocation(latitude, longitude)
-        val wayPointPhotos = wayPointPhotosResult.photos.photo
-
-        localRepo.insertAllPhotos(wayPointPhotos)
-
-        return wayPointPhotos
+        return wayPointPhotosResult.photos.photo
     }
 }
