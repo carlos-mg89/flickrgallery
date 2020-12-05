@@ -115,17 +115,6 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
         }
     }
 
-    private fun setLocationListenerToObtainInitialPhotos() {
-        val gpsProvider = GpsProvider(this)
-        val gpsRepo = GpsRepoImpl(gpsProvider)
-        gpsRepo.setAccurateLocationListener {
-            lifecycleScope.launch(Dispatchers.IO) {
-                viewModel.setPhotosAt(it.latitude, it.longitude)
-                currentLocation = it
-            }
-        }
-    }
-
     private fun getRandomNumber(): Int {
         val min = 1
         val max = 100
