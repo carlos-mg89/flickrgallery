@@ -32,15 +32,6 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
     private lateinit var viewModel: MainViewModel
     private var currentLocation: GpsSnapshot? = null
 
-    private val requestPermissionLauncherToGetLocation = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-            if (isGranted) {
-                setLocationListenerToObtainInitialPhotos()
-            } else {
-                Toast.makeText(this, R.string.location_permission_denied, Toast.LENGTH_LONG).show()
-            }
-        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,20 +59,6 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
         setStoreLocationFabOnClickListener()
         setProgressVisibleObserver()
         requestLocationPermissionsSoExploreFragmentIsLoadedWithPhotos()
-    }
-
-    private fun setProgressVisibleObserver() {
-        viewModel.progressVisible.observe(this) {
-            binding.progressVisibleLayout.visibility = if(it) View.VISIBLE else View.GONE
-        }
-    }
-
-    private fun requestLocationPermissionsSoExploreFragmentIsLoadedWithPhotos() {
-        requestPermissionLauncherToGetLocation.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-        viewModel.photos.observe(this) {
-            binding.bottomNavigation.selectedItemId = R.id.nav_explore
-            viewModel.photos.removeObservers(this@MainActivity)
-        }
     }
 
     private fun setOnNavigationItemSelectedListener() {
