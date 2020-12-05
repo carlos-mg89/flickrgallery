@@ -3,6 +3,7 @@ package com.example.flickrgallery.gps
 import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
+import com.example.flickrgallery.BuildConfig
 import com.example.flickrgallery.model.GpsSnapshot
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -39,7 +40,7 @@ class GpsProvider(context: Context) {
 
     private fun getLocationRequest(): LocationRequest {
         return LocationRequest.create().apply {
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            priority = LocationRequest.PRIORITY_LOW_POWER
             interval = SECONDS_TO_UPDATE_LOCATION
         }
     }
@@ -56,6 +57,10 @@ class GpsProvider(context: Context) {
     }
 
     private fun isLocationAccurateEnough(location: Location?): Boolean {
-        return location != null && location.accuracy < ACCEPTABLE_MINIMUM_LOCATION_ACCURACY
+        return if (BuildConfig.DEBUG){
+            true
+        } else{
+            location != null && location.accuracy < ACCEPTABLE_MINIMUM_LOCATION_ACCURACY
+        }
     }
 }
