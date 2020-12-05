@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
         setContentView(binding.root)
 
         setListeners()
+        binding.bottomNavigation.selectedItemId = R.id.nav_explore
     }
 
     private fun getMainViewModel(): MainViewModel {
