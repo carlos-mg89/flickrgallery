@@ -39,7 +39,6 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
         viewModel = getMainViewModel()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setListeners()
         binding.bottomNavigation.selectedItemId = R.id.nav_explore
     }
@@ -57,8 +56,6 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
     private fun setListeners() {
         setOnNavigationItemSelectedListener()
         setStoreLocationFabOnClickListener()
-        setProgressVisibleObserver()
-        requestLocationPermissionsSoExploreFragmentIsLoadedWithPhotos()
     }
 
     private fun setOnNavigationItemSelectedListener() {
