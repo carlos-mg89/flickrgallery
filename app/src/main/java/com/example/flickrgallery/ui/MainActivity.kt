@@ -15,7 +15,7 @@ import com.example.flickrgallery.model.GpsSnapshot
 import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.model.StoredLocation
 import com.example.flickrgallery.repo.GpsRepoImpl
-import com.example.flickrgallery.repo.LocalRepoImpl
+import com.example.flickrgallery.repo.PhotoRepoImpl
 import com.example.flickrgallery.repo.StoredLocationRepoImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,7 +27,7 @@ interface MainActivityCommunicator {
 class MainActivity : AppCompatActivity(), MainActivityCommunicator {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: ExploreViewModel
     private var currentLocation: GpsSnapshot? = null
 
 
@@ -41,14 +41,14 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
         binding.bottomNavigation.selectedItemId = R.id.nav_explore
     }
 
-    private fun getMainViewModel(): MainViewModel {
+    private fun getMainViewModel(): ExploreViewModel {
         val database = Db.getDatabase(applicationContext)
-        val localRepo = LocalRepoImpl(database)
+        val photoRepo = PhotoRepoImpl(database)
         val gpsProvider = GpsProvider(applicationContext)
         val gpsRepo = GpsRepoImpl(gpsProvider)
-        val factory = MainViewModelFactory(localRepo, gpsRepo)
+        val factory = ExploreViewModelFactory(photoRepo, gpsRepo)
 
-        return ViewModelProvider(this, factory).get(MainViewModel::class.java)
+        return ViewModelProvider(this, factory).get(ExploreViewModel::class.java)
     }
 
     private fun setListeners() {

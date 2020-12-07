@@ -2,7 +2,7 @@ package com.example.flickrgallery.repo
 
 import com.example.flickrgallery.model.Photo
 
-interface LocalRepo {
+interface PhotoRepo {
 
 
     fun loadStoredPhotos(): List<Photo>

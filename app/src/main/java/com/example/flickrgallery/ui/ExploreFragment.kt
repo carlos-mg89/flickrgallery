@@ -16,16 +16,16 @@ import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.gps.GpsProvider
 import com.example.flickrgallery.repo.GpsRepo
 import com.example.flickrgallery.repo.GpsRepoImpl
-import com.example.flickrgallery.repo.LocalRepo
-import com.example.flickrgallery.repo.LocalRepoImpl
+import com.example.flickrgallery.repo.PhotoRepo
+import com.example.flickrgallery.repo.PhotoRepoImpl
 import com.google.android.material.snackbar.Snackbar
 
 class ExploreFragment : Fragment() {
 
-    private lateinit var localRepo: LocalRepo
+    private lateinit var photoRepo: PhotoRepo
     private lateinit var gpsRepo: GpsRepo
     private lateinit var binding: FragmentExploreBinding
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: ExploreViewModel
     private lateinit var photosAdapter: PhotosAdapter
 
     // Falta controlar el "Denegar siempre"
@@ -82,13 +82,13 @@ class ExploreFragment : Fragment() {
 
     private fun buildDependencies() {
         val database = Db.getDatabase(requireContext().applicationContext)
-        localRepo = LocalRepoImpl(database)
+        photoRepo = PhotoRepoImpl(database)
         val gpsProvider = GpsProvider(requireContext())
         gpsRepo = GpsRepoImpl(gpsProvider)
     }
 
-    private fun buildViewModel(): MainViewModel {
-        val factory = MainViewModelFactory(localRepo, gpsRepo)
-        return ViewModelProvider(this, factory).get(MainViewModel::class.java)
+    private fun buildViewModel(): ExploreViewModel {
+        val factory = ExploreViewModelFactory(photoRepo, gpsRepo)
+        return ViewModelProvider(this, factory).get(ExploreViewModel::class.java)
     }
 }

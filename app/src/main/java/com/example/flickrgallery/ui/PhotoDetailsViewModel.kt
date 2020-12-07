@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.flickrgallery.model.Photo
-import com.example.flickrgallery.repo.LocalRepo
+import com.example.flickrgallery.repo.PhotoRepo
 
-class PhotoDetailsViewModel(localRepo: LocalRepo) : ViewModel() {
+class PhotoDetailsViewModel(photoRepo: PhotoRepo) : ViewModel() {
     // TODO: Implement the ViewModel
     var prueba:String =""
 
