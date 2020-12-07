@@ -4,6 +4,6 @@ import com.example.flickrgallery.model.GpsSnapshot
 
 
 interface GpsRepo {
-    suspend fun getActualPosition(): GpsSnapshot
+    var areUpdatesDisabled: Boolean
     fun setAccurateLocationListener(onLocationUpdated: (GpsSnapshot) -> Unit)
 }

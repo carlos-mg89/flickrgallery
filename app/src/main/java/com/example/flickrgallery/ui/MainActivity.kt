@@ -1,10 +1,8 @@
 package com.example.flickrgallery.ui
 
-import android.Manifest
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -32,15 +30,6 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
     private lateinit var viewModel: MainViewModel
     private var currentLocation: GpsSnapshot? = null
 
-    private val requestPermissionLauncherToGetLocation = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-            if (isGranted) {
-                setLocationListenerToObtainInitialPhotos()
-            } else {
-                Toast.makeText(this, R.string.location_permission_denied, Toast.LENGTH_LONG).show()
-            }
-        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,14 +37,16 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
         viewModel = getMainViewModel()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setListeners()
+        binding.bottomNavigation.selectedItemId = R.id.nav_explore
     }
 
     private fun getMainViewModel(): MainViewModel {
         val database = Db.getDatabase(applicationContext)
         val localRepo = LocalRepoImpl(database)
-        val factory = ViewModelFactory(localRepo)
+        val gpsProvider = GpsProvider(applicationContext)
+        val gpsRepo = GpsRepoImpl(gpsProvider)
+        val factory = MainViewModelFactory(localRepo, gpsRepo)
 
         return ViewModelProvider(this, factory).get(MainViewModel::class.java)
     }
@@ -63,22 +54,6 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
     private fun setListeners() {
         setOnNavigationItemSelectedListener()
         setStoreLocationFabOnClickListener()
-        setProgressVisibleObserver()
-        requestLocationPermissionsSoExploreFragmentIsLoadedWithPhotos()
-    }
-
-    private fun setProgressVisibleObserver() {
-        viewModel.progressVisible.observe(this) {
-            binding.progressVisibleLayout.visibility = if(it) View.VISIBLE else View.GONE
-        }
-    }
-
-    private fun requestLocationPermissionsSoExploreFragmentIsLoadedWithPhotos() {
-        requestPermissionLauncherToGetLocation.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-        viewModel.photos.observe(this) {
-            binding.bottomNavigation.selectedItemId = R.id.nav_explore
-            viewModel.photos.removeObservers(this@MainActivity)
-        }
     }
 
     private fun setOnNavigationItemSelectedListener() {
@@ -131,17 +106,6 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
                 }
 
                 storedLocationRepo.insert(newStoredLocation)
-            }
-        }
-    }
-
-    private fun setLocationListenerToObtainInitialPhotos() {
-        val gpsProvider = GpsProvider(this)
-        val gpsRepo = GpsRepoImpl(gpsProvider)
-        gpsRepo.setAccurateLocationListener {
-            lifecycleScope.launch(Dispatchers.IO) {
-                viewModel.setPhotosAt(it.latitude, it.longitude)
-                currentLocation = it
             }
         }
     }

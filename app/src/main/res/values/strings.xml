@@ -17,4 +17,8 @@
     <string name="photo_details_description">Descripción:</string>
     <string name="photo_details_photo">photo</string>
     <string name="photo_details_save_btn">button to save image</string>
+
+    <string name="retry">"Reintentar"</string>
+
+
 </resources>
