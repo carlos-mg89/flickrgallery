@@ -3,7 +3,7 @@ package com.example.flickrgallery.repo
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.model.Photo
 
-class LocalRepoImpl (private val database: Db) : LocalRepo {
+class PhotoRepoImpl (private val database: Db) : PhotoRepo {
 
     override fun loadStoredPhotos(): List<Photo> {
         TODO("Not yet implemented")

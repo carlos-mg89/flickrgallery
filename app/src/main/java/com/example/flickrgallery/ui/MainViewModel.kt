@@ -4,12 +4,12 @@ import androidx.lifecycle.*
 import com.example.flickrgallery.client.FlickrApiClient
 import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.repo.GpsRepo
-import com.example.flickrgallery.repo.LocalRepo
+import com.example.flickrgallery.repo.PhotoRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-    private val localRepo: LocalRepo,
+    private val photoRepo: PhotoRepo,
     private val gpsRepo: GpsRepo
 ) : ViewModel() {
 

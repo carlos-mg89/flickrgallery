@@ -12,7 +12,7 @@ import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.PhotoDetailsFragmentBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.model.Photo
-import com.example.flickrgallery.repo.LocalRepoImpl
+import com.example.flickrgallery.repo.PhotoRepoImpl
 
 
 class PhotoDetailsFragment : Fragment() {
@@ -47,9 +47,9 @@ class PhotoDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val database = Db.getDatabase(requireContext().applicationContext)
-        val localRepo = LocalRepoImpl(database)
+        val photoRepo = PhotoRepoImpl(database)
 
-        val factory = PhotoDetailsViewModelFactory(localRepo)
+        val factory = PhotoDetailsViewModelFactory(photoRepo)
         viewModel = ViewModelProvider(this,factory).get(PhotoDetailsViewModel::class.java)
         viewModel.prueba = "funciona"
         subscribeUi()

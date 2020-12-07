@@ -15,7 +15,7 @@ import com.example.flickrgallery.model.GpsSnapshot
 import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.model.StoredLocation
 import com.example.flickrgallery.repo.GpsRepoImpl
-import com.example.flickrgallery.repo.LocalRepoImpl
+import com.example.flickrgallery.repo.PhotoRepoImpl
 import com.example.flickrgallery.repo.StoredLocationRepoImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,10 +43,10 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
 
     private fun getMainViewModel(): MainViewModel {
         val database = Db.getDatabase(applicationContext)
-        val localRepo = LocalRepoImpl(database)
+        val photoRepo = PhotoRepoImpl(database)
         val gpsProvider = GpsProvider(applicationContext)
         val gpsRepo = GpsRepoImpl(gpsProvider)
-        val factory = MainViewModelFactory(localRepo, gpsRepo)
+        val factory = MainViewModelFactory(photoRepo, gpsRepo)
 
         return ViewModelProvider(this, factory).get(MainViewModel::class.java)
     }
