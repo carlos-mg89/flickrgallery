@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.room.Room
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.FragmentExploreBinding
 import com.example.flickrgallery.db.Db
@@ -89,7 +88,7 @@ class ExploreFragment : Fragment() {
     }
 
     private fun buildViewModel(): MainViewModel {
-        val factory = ViewModelFactory(localRepo, gpsRepo)
+        val factory = MainViewModelFactory(localRepo, gpsRepo)
         return ViewModelProvider(this, factory).get(MainViewModel::class.java)
     }
 }

@@ -1,10 +1,8 @@
 package com.example.flickrgallery.ui
 
-import android.Manifest
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -48,7 +46,7 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
         val localRepo = LocalRepoImpl(database)
         val gpsProvider = GpsProvider(applicationContext)
         val gpsRepo = GpsRepoImpl(gpsProvider)
-        val factory = ViewModelFactory(localRepo, gpsRepo)
+        val factory = MainViewModelFactory(localRepo, gpsRepo)
 
         return ViewModelProvider(this, factory).get(MainViewModel::class.java)
     }

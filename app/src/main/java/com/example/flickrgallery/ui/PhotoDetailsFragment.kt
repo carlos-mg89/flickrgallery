@@ -11,9 +11,7 @@ import com.bumptech.glide.Glide
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.PhotoDetailsFragmentBinding
 import com.example.flickrgallery.db.Db
-import com.example.flickrgallery.gps.GpsProvider
 import com.example.flickrgallery.model.Photo
-import com.example.flickrgallery.repo.GpsRepoImpl
 import com.example.flickrgallery.repo.LocalRepoImpl
 
 
@@ -51,20 +49,13 @@ class PhotoDetailsFragment : Fragment() {
         val database = Db.getDatabase(requireContext().applicationContext)
         val localRepo = LocalRepoImpl(database)
 
-        val gpsProvider = GpsProvider(requireContext())
-        val gpsRepo = GpsRepoImpl(gpsProvider)
-
-        val factory = ViewModelFactory(localRepo, gpsRepo)
+        val factory = PhotoDetailsViewModelFactory(localRepo)
         viewModel = ViewModelProvider(this,factory).get(PhotoDetailsViewModel::class.java)
         viewModel.prueba = "funciona"
         subscribeUi()
-
     }
 
-
-
-
-   private fun obtainCommentsPhoto(): ArrayList<String> {
+    private fun obtainCommentsPhoto(): ArrayList<String> {
         val comments = ArrayList<String>()
         comments.add("Pepe: Aliquam ex lectus, placerat eget rhoncus vel, convallis quis mi. Aenean neque nulla, suscipit non efficitur vitae, ultrices quis lectus. Nullam ultricies risus congue, rhoncus libero in, mattis eros. " +
                 "Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nulla facilisi.")
