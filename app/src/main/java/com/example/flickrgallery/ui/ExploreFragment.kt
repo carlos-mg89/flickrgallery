@@ -25,7 +25,7 @@ class ExploreFragment : Fragment() {
     private lateinit var photoRepo: PhotoRepo
     private lateinit var gpsRepo: GpsRepo
     private lateinit var binding: FragmentExploreBinding
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: ExploreViewModel
     private lateinit var photosAdapter: PhotosAdapter
 
     // Falta controlar el "Denegar siempre"
@@ -87,8 +87,8 @@ class ExploreFragment : Fragment() {
         gpsRepo = GpsRepoImpl(gpsProvider)
     }
 
-    private fun buildViewModel(): MainViewModel {
-        val factory = MainViewModelFactory(photoRepo, gpsRepo)
-        return ViewModelProvider(this, factory).get(MainViewModel::class.java)
+    private fun buildViewModel(): ExploreViewModel {
+        val factory = ExploreViewModelFactory(photoRepo, gpsRepo)
+        return ViewModelProvider(this, factory).get(ExploreViewModel::class.java)
     }
 }

@@ -8,7 +8,7 @@ import com.example.flickrgallery.repo.PhotoRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MainViewModel(
+class ExploreViewModel(
     private val photoRepo: PhotoRepo,
     private val gpsRepo: GpsRepo
 ) : ViewModel() {

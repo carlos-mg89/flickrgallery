@@ -7,11 +7,11 @@ import com.example.flickrgallery.repo.PhotoRepo
 
 
 @Suppress("UNCHECKED_CAST")
-class MainViewModelFactory constructor(
+class ExploreViewModelFactory constructor(
     private val photoRepo: PhotoRepo,
     private val gpsRepo: GpsRepo
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>) =
-            MainViewModel(photoRepo, gpsRepo) as T
+            ExploreViewModel(photoRepo, gpsRepo) as T
 }
 
