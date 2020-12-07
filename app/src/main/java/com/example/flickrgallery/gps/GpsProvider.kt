@@ -9,9 +9,6 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
-import kotlinx.coroutines.suspendCancellableCoroutine
-import java.util.*
-import kotlin.coroutines.resume
 
 
 class GpsProvider(context: Context) {
