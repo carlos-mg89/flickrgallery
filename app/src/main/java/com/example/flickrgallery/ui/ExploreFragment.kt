@@ -82,11 +82,7 @@ class ExploreFragment : Fragment() {
     }
 
     private fun buildDependencies() {
-        val database = Room.databaseBuilder(
-            requireContext(),
-            Db::class.java,
-            "location-scout.db"
-        ).build()
+        val database = Db.getDatabase(requireContext().applicationContext)
         localRepo = LocalRepoImpl(database)
         val gpsProvider = GpsProvider(requireContext())
         gpsRepo = GpsRepoImpl(gpsProvider)
