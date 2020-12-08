@@ -70,6 +70,7 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
                     true
                 }
                 R.id.nav_favorite_photos -> {
+                    replaceFragmentContainerWith(SavedPhotosFragment())
                     binding.storeLocationFab.visibility = View.GONE
                     true
                 }
