@@ -17,4 +17,12 @@ class PhotoRepoImpl (private val database: Db) : PhotoRepo {
     override fun insertAllPhotos(photos: List<Photo>) {
         database.photoDao().insertAll(photos)
     }
+
+    override fun insertOnePhoto(photo: Photo){
+        database.photoDao().insertOnePhoto(photo)
+    }
+
+    override fun deleteOnePhoto(id: String) {
+        database.photoDao().deleteOnePhoto(id)
+    }
 }
