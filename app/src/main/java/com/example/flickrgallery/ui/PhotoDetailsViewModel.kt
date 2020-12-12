@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.repo.PhotoRepo
 
-class PhotoDetailsViewModel(private val photoRepo: PhotoRepo) : ViewModel() {
+class PhotoDetailsViewModel(photoRepo: PhotoRepo) : ViewModel() {
     // TODO: Implement the ViewModel
     var prueba:String =""
 
@@ -20,12 +20,6 @@ class PhotoDetailsViewModel(private val photoRepo: PhotoRepo) : ViewModel() {
     }
     fun savePhotoToList(photo: Photo){
         //TODO: save photo to list
-        photoRepo.insertOnePhoto(photo)
-    }
-    fun deletePhotoInList(id: String)
-    {
-        //TODO: delete photo in db
-        photoRepo.deleteOnePhoto(id)
     }
 
 

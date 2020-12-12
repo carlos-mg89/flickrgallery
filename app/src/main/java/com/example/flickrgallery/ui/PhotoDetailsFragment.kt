@@ -48,14 +48,11 @@ class PhotoDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val database = Db.getDatabase(requireContext().applicationContext)
         val photoRepo = PhotoRepoImpl(database)
-        val photo: Photo? = arguments?.getParcelable<Photo>(EXTRA_PHOTO)
 
         val factory = PhotoDetailsViewModelFactory(photoRepo)
         viewModel = ViewModelProvider(this,factory).get(PhotoDetailsViewModel::class.java)
         viewModel.prueba = "funciona"
-        if (photo != null) {
-            subscribeUi(photo)
-        }
+        subscribeUi()
     }
 
     private fun obtainCommentsPhoto(): ArrayList<String> {
@@ -68,20 +65,16 @@ class PhotoDetailsFragment : Fragment() {
         return comments
     }
 
-    private fun subscribeUi(photo: Photo){
-        viewModel.favoriteStatus.observe(this.viewLifecycleOwner) { isSaved ->
-            val drawable = if (isSaved) {
-                viewModel.savePhotoToList(photo)
-                ContextCompat.getDrawable(requireContext(), R.drawable.photo_saved)
-
-            } else {
-                viewModel.deletePhotoInList(photo.id)
-                ContextCompat.getDrawable(requireContext(), R.drawable.photo_no_saved)
-
+    private fun subscribeUi(){
+        viewModel.favoriteStatus.observe(this.viewLifecycleOwner,{isSaved ->
+            val drawble = if(isSaved){
+                ContextCompat.getDrawable(requireContext(),R.drawable.photo_saved)
+            }else{
+                ContextCompat.getDrawable(requireContext(),R.drawable.photo_no_saved)
             }
-            binding.saveImageButton.setImageDrawable(drawable)
+            binding.saveImageButton.setImageDrawable(drawble)
 
-        }
+        })
     }
 
 }
