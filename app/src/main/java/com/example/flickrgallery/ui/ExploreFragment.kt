@@ -19,7 +19,6 @@ import com.google.android.material.snackbar.Snackbar
 
 class ExploreFragment : Fragment() {
 
-    private lateinit var photoRepo: PhotoRepo
     private lateinit var gpsRepo: GpsRepo
     private lateinit var storedLocationRepo: StoredLocationRepo
     private lateinit var binding: FragmentExploreBinding
@@ -83,7 +82,6 @@ class ExploreFragment : Fragment() {
 
     private fun buildDependencies() {
         val database = Db.getDatabase(requireContext().applicationContext)
-        photoRepo = PhotoRepoImpl(database)
         val gpsProvider = GpsProvider(requireContext())
         gpsRepo = GpsRepoImpl(gpsProvider)
         storedLocationRepo = StoredLocationRepoImpl(database)
