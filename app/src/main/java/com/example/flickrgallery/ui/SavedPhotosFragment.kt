@@ -22,8 +22,8 @@ class SavedPhotosFragment : Fragment() {
     private lateinit var viewModel: SavedPhotosViewModel
     private val savedPhotosAdapter = SavedPhotosAdapter(
             emptyList(),
-            viewSavedPhoto(),
-            deleteSavedPhoto()
+            onSavedPhotoClicked(),
+            onDeleteBtnClicked()
     )
 
     override fun onCreateView(
@@ -55,11 +55,11 @@ class SavedPhotosFragment : Fragment() {
         }
     }
 
-    private fun viewSavedPhoto(): (Photo) -> Unit = {
+    private fun onSavedPhotoClicked(): (Photo) -> Unit = {
         (activity as MainActivityCommunicator).onPhotoClicked(it)
     }
 
-    private fun deleteSavedPhoto(): (Photo) -> Unit = {
+    private fun onDeleteBtnClicked(): (Photo) -> Unit = {
         lifecycleScope.launch(Dispatchers.IO) {
             viewModel.deleteSavedPhoto(it)
         }
