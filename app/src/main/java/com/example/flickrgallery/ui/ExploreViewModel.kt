@@ -9,7 +9,6 @@ import com.example.flickrgallery.model.GpsSnapshot
 import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.model.StoredLocation
 import com.example.flickrgallery.repo.GpsRepo
-import com.example.flickrgallery.repo.PhotoRepo
 import com.example.flickrgallery.repo.StoredLocationRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
