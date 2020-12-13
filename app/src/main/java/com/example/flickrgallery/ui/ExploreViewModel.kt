@@ -28,33 +28,23 @@ class ExploreViewModel(
     fun proceedGettingUpdates() {
         viewModelScope.launch(Dispatchers.Main) {
             if (gpsRepo.areUpdatesDisabled) {
-                gpsRepo.getPositionUpdates().collect { position ->
-                    updateUiState {
-                        it.isFabEnabled = true
-                        return@updateUiState it
-                    }
-                    val currentGpsSnapshot = GpsSnapshot(
-                        latitude = position.latitude,
-                        longitude = position.longitude,
-                        dateCaptured = position.dateCaptured
-                    )
-                    gpsSnapshot = currentGpsSnapshot
-                    postPhotosAt(gpsSnapshot.latitude, gpsSnapshot.longitude)
-                }
+                gpsRepo.getPositionUpdates().collect(::onNewPositionReceived)
             }
         }
     }
 
-    private suspend fun postPhotosAt(latitude: Double, longitude: Double) {
+    private suspend fun onNewPositionReceived(position: GpsSnapshot) {
+        setUiUpdatesEnabled()
         setUiBusy()
-        val photos = getPhotos(latitude, longitude)
-        updateUiState {
-            it.photos = photos
-            it.isProgressVisible = false
-            it.isFabEnabled = true
-            return@updateUiState it
-        }
+        gpsSnapshot = GpsSnapshot(
+            latitude = position.latitude,
+            longitude = position.longitude,
+            dateCaptured = position.dateCaptured
+        )
+        val photos = getPhotos(position.latitude, position.longitude)
+        setUiPhotosReceived(photos)
     }
+
 
     private suspend fun getPhotos(latitude: Double, longitude: Double): List<Photo> {
         val wayPointPhotosResult = FlickrApiClient.service.listPhotosNearLocation(latitude, longitude)
@@ -75,6 +65,22 @@ class ExploreViewModel(
         updateUiState {
             it.isProgressVisible = true
             it.isFabEnabled = false
+            return@updateUiState it
+        }
+    }
+
+    private fun setUiUpdatesEnabled(){
+        updateUiState {
+            it.isFabEnabled = true
+            return@updateUiState it
+        }
+    }
+
+    private fun setUiPhotosReceived(photos: List<Photo>){
+        updateUiState {
+            it.isProgressVisible = false
+            it.isFabEnabled = true
+            it.photos = photos
             return@updateUiState it
         }
     }
