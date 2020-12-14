@@ -6,9 +6,9 @@ import com.example.flickrgallery.model.Photo
 interface PhotoRepo {
 
     fun getAllLiveData(): LiveData<List<Photo>>
-    fun getAll(): List<Photo>
-    fun get(id: Int): Photo
+    suspend fun getAll(): List<Photo>
+    suspend fun get(id: Int): Photo
 
-    fun insertAll(photos: List<Photo>)
-    fun delete(photo: Photo)
+    suspend fun insertAll(photos: List<Photo>)
+    suspend fun delete(photo: Photo)
 }

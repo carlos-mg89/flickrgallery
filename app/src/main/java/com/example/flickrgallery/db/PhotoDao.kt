@@ -11,20 +11,20 @@ interface PhotoDao {
     fun getAllLiveData(): LiveData<List<Photo>>
 
     @Query("SELECT * FROM photos_table")
-    fun getAll(): List<Photo>
+    suspend fun getAll(): List<Photo>
 
     @Query("SELECT * FROM photos_table WHERE id = :id")
-    fun get(id: Int): Photo
+    suspend fun get(id: Int): Photo
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertAll(photos: List<Photo>)
+    suspend fun insertAll(photos: List<Photo>)
 
     @Update
-    fun update(photo: Photo)
+    suspend fun update(photo: Photo)
 
     @Delete
-    fun delete(photo: Photo)
+    suspend fun delete(photo: Photo)
 
     @Query("DELETE FROM photos_table")
-    fun deleteAll()
+    suspend fun deleteAll()
 }
