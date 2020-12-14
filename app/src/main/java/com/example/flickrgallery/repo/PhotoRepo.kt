@@ -5,10 +5,10 @@ import com.example.flickrgallery.model.Photo
 
 interface PhotoRepo {
 
-    fun findAllAsLiveData(): LiveData<List<Photo>>
-    fun loadStoredPhotos(): List<Photo>
-    fun loadStoredPosition(id: Int)
+    fun getAllLiveData(): LiveData<List<Photo>>
+    fun getAll(): List<Photo>
+    fun get(id: Int): Photo
 
-    fun insertAllPhotos(photos: List<Photo>)
+    fun insertAll(photos: List<Photo>)
     fun delete(photo: Photo)
 }

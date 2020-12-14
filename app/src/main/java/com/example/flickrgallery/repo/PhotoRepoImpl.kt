@@ -9,19 +9,19 @@ class PhotoRepoImpl (database: Db) : PhotoRepo {
 
     private var photoDao: PhotoDao = database.photoDao()
 
-    override fun findAllAsLiveData(): LiveData<List<Photo>> {
-        return photoDao.loadAllPhotos()
+    override fun getAllLiveData(): LiveData<List<Photo>> {
+        return photoDao.getAllLiveData()
     }
 
-    override fun loadStoredPhotos(): List<Photo> {
-        TODO("Not yet implemented")
+    override fun getAll(): List<Photo> {
+        return photoDao.getAll()
     }
 
-    override fun loadStoredPosition(id: Int) {
-        TODO("Not yet implemented")
+    override fun get(id: Int): Photo {
+        return photoDao.get(id)
     }
 
-    override fun insertAllPhotos(photos: List<Photo>) {
+    override fun insertAll(photos: List<Photo>) {
         photoDao.insertAll(photos)
     }
 

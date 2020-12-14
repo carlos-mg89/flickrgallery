@@ -8,7 +8,7 @@ import com.example.flickrgallery.repo.PhotoRepo
 class SavedPhotosViewModel(val photoRepo: PhotoRepo) : ViewModel() {
 
     val savedPhotos: LiveData<List<Photo>>
-        get() = photoRepo.findAllAsLiveData()
+        get() = photoRepo.getAllLiveData()
 
     fun deleteSavedPhoto(photo: Photo) {
         photoRepo.delete(photo)
