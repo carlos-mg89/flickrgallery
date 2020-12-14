@@ -33,15 +33,11 @@ class ExploreViewModel(
         }
     }
 
-    private suspend fun onNewPositionReceived(position: GpsSnapshot) {
+    private suspend fun onNewPositionReceived(gpsSnapshot: GpsSnapshot) {
         setUiUpdatesEnabled()
         setUiBusy()
-        gpsSnapshot = GpsSnapshot(
-            latitude = position.latitude,
-            longitude = position.longitude,
-            dateCaptured = position.dateCaptured
-        )
-        val photos = getPhotos(position.latitude, position.longitude)
+        this.gpsSnapshot = gpsSnapshot
+        val photos = getPhotos(gpsSnapshot.latitude, gpsSnapshot.longitude)
         setUiPhotosReceived(photos)
     }
 
