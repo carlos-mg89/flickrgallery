@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
                     true
                 }
                 R.id.nav_favorite_photos -> {
+                    replaceFragmentContainerWith(SavedPhotosFragment())
                     true
                 }
                 else -> false
