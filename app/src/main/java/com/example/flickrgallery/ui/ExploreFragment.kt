@@ -14,16 +14,13 @@ import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.FragmentExploreBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.gps.GpsProvider
-import com.example.flickrgallery.repo.GpsRepo
-import com.example.flickrgallery.repo.GpsRepoImpl
-import com.example.flickrgallery.repo.PhotoRepo
-import com.example.flickrgallery.repo.PhotoRepoImpl
+import com.example.flickrgallery.repo.*
 import com.google.android.material.snackbar.Snackbar
 
 class ExploreFragment : Fragment() {
 
-    private lateinit var photoRepo: PhotoRepo
     private lateinit var gpsRepo: GpsRepo
+    private lateinit var storedLocationRepo: StoredLocationRepo
     private lateinit var binding: FragmentExploreBinding
     private lateinit var viewModel: ExploreViewModel
     private lateinit var photosAdapter: PhotosAdapter
@@ -62,13 +59,12 @@ class ExploreFragment : Fragment() {
     }
 
     private fun subscribeUi() {
-        viewModel.photos.observe(requireActivity()) { photos ->
-            photosAdapter.setItems(photos)
-        }
-        viewModel.progressVisible.observe(requireActivity(),{
-            val visibility = if (it) VISIBLE else GONE
+        viewModel.exploreUiState.observe(requireActivity()){
+            val visibility = if (it.isProgressVisible) VISIBLE else GONE
             binding.exploreFragmentProgress.visibility = visibility
-        })
+            binding.exploreFragmentFab.isEnabled = it.isFabEnabled
+            photosAdapter.setItems(it.photos)
+        }
     }
 
     private fun setupUi() {
@@ -78,17 +74,28 @@ class ExploreFragment : Fragment() {
             (activity as MainActivityCommunicator).onPhotoClicked(it)
         }
         binding.recyclerview.adapter = photosAdapter
+
+        binding.exploreFragmentFab.setOnClickListener {
+            viewModel.storeLocation(description = getRandomNumber().toString())
+        }
     }
 
     private fun buildDependencies() {
         val database = Db.getDatabase(requireContext().applicationContext)
-        photoRepo = PhotoRepoImpl(database)
         val gpsProvider = GpsProvider(requireContext())
         gpsRepo = GpsRepoImpl(gpsProvider)
+        storedLocationRepo = StoredLocationRepoImpl(database)
     }
 
     private fun buildViewModel(): ExploreViewModel {
-        val factory = ExploreViewModelFactory(photoRepo, gpsRepo)
+        val factory = ExploreViewModelFactory(gpsRepo, storedLocationRepo)
         return ViewModelProvider(this, factory).get(ExploreViewModel::class.java)
+    }
+
+    private fun getRandomNumber(): Int {
+        val min = 1
+        val max = 100
+        val randomDouble = Math.random() * (max - min + 1) + min
+        return randomDouble.toInt()
     }
 }
