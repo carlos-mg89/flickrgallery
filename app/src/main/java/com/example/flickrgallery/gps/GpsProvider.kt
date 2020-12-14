@@ -9,6 +9,10 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 
 
 class GpsProvider(context: Context) {
@@ -19,6 +23,22 @@ class GpsProvider(context: Context) {
     }
 
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
+    @SuppressLint("MissingPermission")
+    @ExperimentalCoroutinesApi
+    fun  getPositionUpdates(): Flow<GpsSnapshot> = callbackFlow {
+        val locationCallback =  object :LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                for (location in locationResult.locations) {
+                    if (isLocationAccurateEnough(location)) {
+                        offer(buildGpsSnapshot(location))
+                        fusedLocationClient.removeLocationUpdates(this)
+                    }
+                }
+            }
+        }
+        fusedLocationClient.requestLocationUpdates(getLocationRequest(), locationCallback, null)
+        awaitClose()
+    }
 
     private fun buildGpsSnapshot(location: Location): GpsSnapshot {
         return GpsSnapshot(
@@ -28,28 +48,10 @@ class GpsProvider(context: Context) {
         )
     }
 
-    @SuppressLint("MissingPermission")
-    fun setAccurateLocationListener(onLocationUpdated: (GpsSnapshot) -> Unit) {
-        fusedLocationClient.requestLocationUpdates(
-                getLocationRequest(), getLocationCallback(onLocationUpdated), null
-        )
-    }
-
     private fun getLocationRequest(): LocationRequest {
         return LocationRequest.create().apply {
             priority = LocationRequest.PRIORITY_LOW_POWER
             interval = SECONDS_TO_UPDATE_LOCATION
-        }
-    }
-
-    private fun getLocationCallback(onLocationUpdated: (GpsSnapshot) -> Unit) = object : LocationCallback() {
-        override fun onLocationResult(locationResult: LocationResult) {
-            for (location in locationResult.locations) {
-                if (isLocationAccurateEnough(location)) {
-                    onLocationUpdated(buildGpsSnapshot(location))
-                    fusedLocationClient.removeLocationUpdates(this)
-                }
-            }
         }
     }
 
