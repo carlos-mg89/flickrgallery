@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class PhotoDetailsViewModel(private val photoRepo: PhotoRepo) : ViewModel() {
-    // TODO: Implement the ViewModel
+
     var prueba:String =""
 
     private val _favoriteStatus = MutableLiveData<Boolean>(false)
@@ -22,7 +22,7 @@ class PhotoDetailsViewModel(private val photoRepo: PhotoRepo) : ViewModel() {
         _favoriteStatus.postValue(!isSaved)
     }
     fun savePhotoToList(photo: Photo){
-        //TODO: save photo to list
+
         viewModelScope.launch(Dispatchers.IO) {
             photoRepo.insertOnePhoto(photo)
         }
@@ -30,7 +30,7 @@ class PhotoDetailsViewModel(private val photoRepo: PhotoRepo) : ViewModel() {
     }
     fun deletePhotoInList(photo: Photo)
     {
-        //TODO: delete photo in db
+
         viewModelScope.launch(Dispatchers.IO) {
             photoRepo.deleteOnePhoto(photo)
         }
