@@ -13,19 +13,19 @@ class PhotoRepoImpl (database: Db) : PhotoRepo {
         return photoDao.getAllLiveData()
     }
 
-    override fun getAll(): List<Photo> {
+    override suspend fun getAll(): List<Photo> {
         return photoDao.getAll()
     }
 
-    override fun get(id: Int): Photo {
+    override suspend fun get(id: Int): Photo {
         return photoDao.get(id)
     }
 
-    override fun insertAll(photos: List<Photo>) {
+    override suspend fun insertAll(photos: List<Photo>) {
         photoDao.insertAll(photos)
     }
 
-    override fun delete(photo: Photo) {
+    override suspend fun delete(photo: Photo) {
         photoDao.delete(photo)
     }
 }

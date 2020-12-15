@@ -3,8 +3,8 @@ package com.example.flickrgallery.repo
 import com.example.flickrgallery.model.StoredLocation
 
 interface StoredLocationRepo {
-    fun findAll(): List<StoredLocation>
-    fun insert(storedLocation: StoredLocation)
-    fun update(storedLocation: StoredLocation)
-    fun delete(storedLocation: StoredLocation)
+    suspend fun findAll(): List<StoredLocation>
+    suspend fun insert(storedLocation: StoredLocation)
+    suspend fun update(storedLocation: StoredLocation)
+    suspend fun delete(storedLocation: StoredLocation)
 }

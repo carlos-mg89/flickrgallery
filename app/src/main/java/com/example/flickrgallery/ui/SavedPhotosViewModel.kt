@@ -10,7 +10,7 @@ class SavedPhotosViewModel(val photoRepo: PhotoRepo) : ViewModel() {
     val savedPhotos: LiveData<List<Photo>>
         get() = photoRepo.getAllLiveData()
 
-    fun deleteSavedPhoto(photo: Photo) {
+    suspend fun deleteSavedPhoto(photo: Photo) {
         photoRepo.delete(photo)
     }
 }

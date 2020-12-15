@@ -1,6 +1,5 @@
 package com.example.flickrgallery.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.flickrgallery.model.StoredLocation
 
@@ -8,14 +7,14 @@ import com.example.flickrgallery.model.StoredLocation
 interface StoredLocationDao {
 
     @Query("SELECT * FROM stored_locations ORDER BY id DESC")
-    fun findAll(): List<StoredLocation>
+    suspend fun findAll(): List<StoredLocation>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(storedLocation: StoredLocation)
+    suspend fun insert(storedLocation: StoredLocation)
 
     @Update
-    fun update(storedLocation: StoredLocation)
+    suspend fun update(storedLocation: StoredLocation)
 
     @Delete
-    fun delete(storedLocation: StoredLocation)
+    suspend fun delete(storedLocation: StoredLocation)
 }
