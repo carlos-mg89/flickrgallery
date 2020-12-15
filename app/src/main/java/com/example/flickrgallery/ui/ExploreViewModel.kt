@@ -2,22 +2,20 @@ package com.example.flickrgallery.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.flickrgallery.client.FlickrApiClient
 import com.example.flickrgallery.model.GpsSnapshot
 import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.model.StoredLocation
 import com.example.flickrgallery.repo.GpsRepo
 import com.example.flickrgallery.repo.StoredLocationRepo
-import kotlinx.coroutines.Dispatchers
+import com.example.flickrgallery.ui.common.ScopedViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class ExploreViewModel(
     private val gpsRepo: GpsRepo,
     private val storedLocationRepo: StoredLocationRepo
-) : ViewModel() {
+) : ScopedViewModel() {
 
     private val _exploreUiState = MutableLiveData(ExploreUiState())
     val exploreUiState: LiveData<ExploreUiState>
@@ -26,7 +24,7 @@ class ExploreViewModel(
     var gpsSnapshot = GpsSnapshot()
 
     fun proceedGettingUpdates() {
-        viewModelScope.launch(Dispatchers.Main) {
+        launch {
             if (gpsRepo.areUpdatesDisabled) {
                 gpsRepo.getPositionUpdates().collect(::onNewPositionReceived)
             }
@@ -48,7 +46,7 @@ class ExploreViewModel(
     }
 
     fun storeLocation(description: String = "") {
-        viewModelScope.launch(Dispatchers.IO) {
+        launch {
             val location = StoredLocation()
             location.latitude = gpsSnapshot.latitude
             location.longitude = gpsSnapshot.longitude

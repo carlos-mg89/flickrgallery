@@ -7,14 +7,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.SavedPhotosFragmentBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.repo.PhotoRepoImpl
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class SavedPhotosFragment : Fragment() {
 
@@ -60,9 +57,7 @@ class SavedPhotosFragment : Fragment() {
     }
 
     private fun onDeleteBtnClicked(): (Photo) -> Unit = {
-        lifecycleScope.launch(Dispatchers.IO) {
-            viewModel.deleteSavedPhoto(it)
-        }
+        viewModel.deleteSavedPhoto(it)
         Toast.makeText(
                 activity, R.string.saved_photos_delete_success, Toast.LENGTH_LONG
         ).show()
