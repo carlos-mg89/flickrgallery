@@ -1,16 +1,19 @@
 package com.example.flickrgallery.ui
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
 import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.repo.PhotoRepo
+import com.example.flickrgallery.ui.common.ScopedViewModel
+import kotlinx.coroutines.launch
 
-class SavedPhotosViewModel(val photoRepo: PhotoRepo) : ViewModel() {
+class SavedPhotosViewModel(private val photoRepo: PhotoRepo) : ScopedViewModel() {
 
     val savedPhotos: LiveData<List<Photo>>
         get() = photoRepo.getAllLiveData()
 
-    suspend fun deleteSavedPhoto(photo: Photo) {
-        photoRepo.delete(photo)
+    fun deleteSavedPhoto(photo: Photo) {
+        launch {
+            photoRepo.delete(photo)
+        }
     }
 }
