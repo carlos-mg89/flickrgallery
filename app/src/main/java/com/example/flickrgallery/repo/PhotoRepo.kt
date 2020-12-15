@@ -11,5 +11,5 @@ interface PhotoRepo {
     fun insertOnePhoto(photo: Photo)
     fun insertAllPhotos(photos: List<Photo>)
 
-    fun deleteOnePhoto(photo: String)
+    fun deleteOnePhoto(photo: Photo)
 }

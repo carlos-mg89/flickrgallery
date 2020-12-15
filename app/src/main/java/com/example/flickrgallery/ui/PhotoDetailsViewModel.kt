@@ -28,11 +28,11 @@ class PhotoDetailsViewModel(private val photoRepo: PhotoRepo) : ViewModel() {
         }
 
     }
-    fun deletePhotoInList(id: String)
+    fun deletePhotoInList(photo: Photo)
     {
         //TODO: delete photo in db
         viewModelScope.launch(Dispatchers.IO) {
-            photoRepo.deleteOnePhoto(id)
+            photoRepo.deleteOnePhoto(photo)
         }
 
     }

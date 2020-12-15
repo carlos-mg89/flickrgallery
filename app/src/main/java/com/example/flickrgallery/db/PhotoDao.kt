@@ -27,6 +27,7 @@ interface PhotoDao {
     @Query("DELETE FROM photos_table")
     fun deleteAll()
 
-    @Query(value = "DELETE FROM photos_table WHERE id = :id")
-    fun deleteOnePhoto(id: String)
+    @Delete
+    fun deleteOnePhoto(photo: Photo)
+
 }

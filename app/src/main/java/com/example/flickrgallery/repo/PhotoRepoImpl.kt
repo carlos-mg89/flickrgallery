@@ -22,7 +22,7 @@ class PhotoRepoImpl (private val database: Db) : PhotoRepo {
         database.photoDao().insertOnePhoto(photo)
     }
 
-    override fun deleteOnePhoto(id: String) {
-        database.photoDao().deleteOnePhoto(id)
+    override fun deleteOnePhoto(photo: Photo) {
+        database.photoDao().deleteOnePhoto(photo)
     }
 }

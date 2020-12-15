@@ -75,7 +75,7 @@ class PhotoDetailsFragment : Fragment() {
                 ContextCompat.getDrawable(requireContext(), R.drawable.photo_saved)
 
             } else {
-                viewModel.deletePhotoInList(photo.id)
+                viewModel.deletePhotoInList(photo)
                 ContextCompat.getDrawable(requireContext(), R.drawable.photo_no_saved)
 
             }
