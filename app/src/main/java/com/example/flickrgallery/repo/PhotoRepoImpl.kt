@@ -26,6 +26,14 @@ class PhotoRepoImpl (database: Db) : PhotoRepo {
     }
 
     override suspend fun delete(photo: Photo) {
-        photoDao.delete(photo)
+        TODO("Not yet implemented")
+    }
+
+    override fun insertOnePhoto(photo: Photo){
+        photoDao.insertOnePhoto(photo)
+    }
+
+    override fun deleteOnePhoto(photo: Photo) {
+        photoDao.deleteOnePhoto(photo)
     }
 }

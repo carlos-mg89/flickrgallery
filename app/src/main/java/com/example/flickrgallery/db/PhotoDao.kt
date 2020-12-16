@@ -8,23 +8,26 @@ import com.example.flickrgallery.model.Photo
 interface PhotoDao {
 
     @Query("SELECT * FROM photos_table ORDER BY id DESC")
-    fun getAllLiveData(): LiveData<List<Photo>>
-
-    @Query("SELECT * FROM photos_table")
-    suspend fun getAll(): List<Photo>
+    fun loadAllPhotos(): LiveData<List<Photo>>
 
     @Query("SELECT * FROM photos_table WHERE id = :id")
-    suspend fun get(id: Int): Photo
+    fun loadPhotoSync(id: Int): Photo
+
+    @Query("SELECT * FROM photos_table  WHERE is_saved = 1 ORDER BY id DESC")
+    fun loadAllSavedPhotos(): LiveData<List<Photo>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertAll(photos: List<Photo>)
+    fun insertAll(photos: List<Photo>)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertOnePhoto(photo: Photo)
 
     @Update
-    suspend fun update(photo: Photo)
-
-    @Delete
-    suspend fun delete(photo: Photo)
+    fun updatePhoto(photo: Photo)
 
     @Query("DELETE FROM photos_table")
-    suspend fun deleteAll()
+    fun deleteAll()
+
+    @Delete
+    fun deleteOnePhoto(photo: Photo)
 }

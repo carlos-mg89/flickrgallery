@@ -52,18 +52,13 @@ class PhotoDetailsFragment : Fragment() {
 
         val factory = PhotoDetailsViewModelFactory(photoRepo)
         viewModel = ViewModelProvider(this,factory).get(PhotoDetailsViewModel::class.java)
-        viewModel.prueba = "funciona"
-        subscribeUi(photo)
+        if (photo != null) {
+            subscribeUi(photo)
+        }
     }
 
-    private fun obtainCommentsPhoto(): ArrayList<String> {
-        val comments = ArrayList<String>()
-        comments.add("Pepe: Aliquam ex lectus, placerat eget rhoncus vel, convallis quis mi. Aenean neque nulla, suscipit non efficitur vitae, ultrices quis lectus. Nullam ultricies risus congue, rhoncus libero in, mattis eros. " +
-                "Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nulla facilisi.")
-
-        comments.add("Miguel: Sed mattis augue augue. Donec sit amet dapibus arcu. Pellentesque risus nisl, facilisis et fermentum in, sagittis et est. Suspendisse potenti. Donec metus elit, sagittis non tristique sit amet, imperdiet hendrerit ante. " +
-                "Integer vestibulum sagittis erat a aliquam. " )
-        return comments
+    private fun obtainCommentsPhoto(){
+        //TODO: Get comments from api
     }
 
     private fun subscribeUi(photo: Photo){
@@ -73,7 +68,7 @@ class PhotoDetailsFragment : Fragment() {
                 ContextCompat.getDrawable(requireContext(), R.drawable.photo_saved)
 
             } else {
-                //viewModel.deletePhotoInList(photo)
+                viewModel.deletePhotoInList(photo)
                 ContextCompat.getDrawable(requireContext(), R.drawable.photo_no_saved)
 
             }
