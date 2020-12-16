@@ -44,7 +44,7 @@ class StoredLocationsFragment : Fragment() {
     }
 
     private fun initViewModel() {
-        val database = Db.getDatabase(requireContext().applicationContext)
+        val database = Db.getDatabase(requireContext())
         val storedLocationRepo = StoredLocationRepoImpl(database)
         val factory = StoredLocationsViewModelFactory(storedLocationRepo)
         viewModel = ViewModelProvider(this, factory).get()
