@@ -11,4 +11,5 @@ interface PhotoRepo {
 
     suspend fun insertAll(photos: List<Photo>)
     suspend fun delete(photo: Photo)
+    suspend fun insert(photo: Photo)
 }

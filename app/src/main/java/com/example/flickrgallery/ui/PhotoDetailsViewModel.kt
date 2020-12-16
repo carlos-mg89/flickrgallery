@@ -9,7 +9,7 @@ import com.example.flickrgallery.ui.common.ScopedViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PhotoDetailsViewModel(photoRepo: PhotoRepo) : ScopedViewModel() {
+class PhotoDetailsViewModel(private val photoRepo: PhotoRepo) : ScopedViewModel() {
 
 
 
@@ -24,7 +24,7 @@ class PhotoDetailsViewModel(photoRepo: PhotoRepo) : ScopedViewModel() {
     fun savePhotoToList(photo: Photo){
 
         viewModelScope.launch(Dispatchers.IO) {
-            photoRepo.insertOnePhoto(photo)
+            photoRepo.insert(photo)
         }
 
     }
@@ -32,7 +32,7 @@ class PhotoDetailsViewModel(photoRepo: PhotoRepo) : ScopedViewModel() {
     {
 
         viewModelScope.launch(Dispatchers.IO) {
-            photoRepo.deleteOnePhoto(photo)
+            photoRepo.delete(photo)
         }
 
     }

@@ -20,12 +20,12 @@ interface PhotoDao {
     suspend fun insertAll(photos: List<Photo>)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertOnePhoto(photo: Photo)
+    fun insert(photo: Photo)
     @Update
     suspend fun update(photo: Photo)
 
     @Delete
-    suspend fun deleteOnePhoto(photo: Photo)
+    suspend fun delete(photo: Photo)
 
     @Query("DELETE FROM photos_table")
     suspend fun deleteAll()
