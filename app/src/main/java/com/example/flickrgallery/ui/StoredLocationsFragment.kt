@@ -8,14 +8,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
-import androidx.lifecycle.lifecycleScope
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.StoredLocationsFragmentBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.model.StoredLocation
 import com.example.flickrgallery.repo.StoredLocationRepoImpl
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class StoredLocationsFragment : Fragment() {
 
@@ -57,10 +54,7 @@ class StoredLocationsFragment : Fragment() {
     }
 
     private fun getPhotosFromLocationToDisplayThem(): (StoredLocation) -> Unit = {
-        lifecycleScope.launch(Dispatchers.IO) {
-            // TODO Pass the StoredLocation's latitude and longitude along with it's description
-            //  onto the Explore Fragment so it loads the photos
-        }
+        (activity as MainActivityCommunicator).onStoredLocationClicked(it)
     }
 
     private fun deleteStoredLocation(): (StoredLocation) -> Unit = {
