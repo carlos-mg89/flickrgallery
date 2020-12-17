@@ -14,7 +14,7 @@ interface PhotoDao {
     suspend fun getAll(): List<Photo>
 
     @Query("SELECT * FROM photos_table WHERE id = :id")
-    suspend fun get(id: Int): Photo
+    suspend fun get(id: String): Photo
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(photos: List<Photo>)

@@ -25,19 +25,20 @@ class PhotoDetailsFragment : Fragment() {
     private lateinit var binding: PhotoDetailsFragmentBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        savedInstanceState: Bundle?,
+    ): View {
 
         binding = PhotoDetailsFragmentBinding.inflate(inflater)
 
         val photo: Photo? = arguments?.getParcelable<Photo>(EXTRA_PHOTO)
-        if(photo != null){
-           Glide.with(this).load(photo.getMedium640Url()).into(binding.photo)
+        if (photo != null) {
+            Glide.with(this).load(photo.getMedium640Url()).into(binding.photo)
+
             binding.saveDataText.text = photo.savedDate.toString()
             binding.descriptionText.text = photo.title
             binding.commentsText.text = obtainCommentsPhoto().toString()
             binding.saveImageButton.setOnClickListener {
-                viewModel.toggleSaveStatus()
+                viewModel.toggleSaveStatus(photo)
             }
         }
 
@@ -49,26 +50,30 @@ class PhotoDetailsFragment : Fragment() {
         val database = Db.getDatabase(requireContext().applicationContext)
         val photoRepo = PhotoRepoImpl(database)
         val photo: Photo? = arguments?.getParcelable<Photo>(EXTRA_PHOTO)
-
         val factory = PhotoDetailsViewModelFactory(photoRepo)
-        viewModel = ViewModelProvider(this,factory).get(PhotoDetailsViewModel::class.java)
+        viewModel = ViewModelProvider(this, factory).get(PhotoDetailsViewModel::class.java)
+
         if (photo != null) {
-            subscribeUi(photo)
+            subscribeUi()
+            viewModel.getPhotoInitialState(photo)
+
         }
     }
 
-    private fun obtainCommentsPhoto(){
+    private fun obtainCommentsPhoto() {
         //TODO: Get comments from api
     }
 
-    private fun subscribeUi(photo: Photo){
+
+    private fun subscribeUi() {
+
         viewModel.favoriteStatus.observe(this.viewLifecycleOwner) { isSaved ->
             val drawable = if (isSaved) {
-                viewModel.savePhotoToList(photo)
+
                 ContextCompat.getDrawable(requireContext(), R.drawable.photo_saved)
 
             } else {
-                viewModel.deletePhotoInList(photo)
+
                 ContextCompat.getDrawable(requireContext(), R.drawable.photo_no_saved)
 
             }
@@ -76,5 +81,6 @@ class PhotoDetailsFragment : Fragment() {
 
         }
     }
+
 
 }

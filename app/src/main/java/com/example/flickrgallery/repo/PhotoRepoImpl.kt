@@ -17,7 +17,7 @@ class PhotoRepoImpl (database: Db) : PhotoRepo {
         return photoDao.getAll()
     }
 
-    override suspend fun get(id: Int): Photo {
+    override suspend fun get(id: String): Photo {
         return photoDao.get(id)
     }
 
