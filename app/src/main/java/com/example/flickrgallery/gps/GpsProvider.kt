@@ -50,7 +50,7 @@ class GpsProvider(context: Context) {
 
     private fun getLocationRequest(): LocationRequest {
         return LocationRequest.create().apply {
-            priority = LocationRequest.PRIORITY_LOW_POWER
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
             interval = SECONDS_TO_UPDATE_LOCATION
         }
     }
