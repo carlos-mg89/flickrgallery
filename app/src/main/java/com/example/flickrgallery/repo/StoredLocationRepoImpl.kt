@@ -1,23 +1,30 @@
 package com.example.flickrgallery.repo
 
+import androidx.lifecycle.LiveData
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.model.StoredLocation
 
 class StoredLocationRepoImpl (private val database: Db) : StoredLocationRepo {
 
-    override suspend fun findAll(): List<StoredLocation> {
-        return database.storedLocationDao().findAll()
+    private val storedLocationDao = database.storedLocationDao()
+
+    override fun getAllLiveData(): LiveData<List<StoredLocation>> {
+        return storedLocationDao.getAllLiveData()
+    }
+
+    override suspend fun getAll(): List<StoredLocation> {
+        return storedLocationDao.getAll()
     }
 
     override suspend fun insert(storedLocation: StoredLocation) {
-        database.storedLocationDao().insert(storedLocation)
+        storedLocationDao.insert(storedLocation)
     }
 
     override suspend fun update(storedLocation: StoredLocation) {
-        database.storedLocationDao().update(storedLocation)
+        storedLocationDao.update(storedLocation)
     }
 
     override suspend fun delete(storedLocation: StoredLocation) {
-        database.storedLocationDao().delete(storedLocation)
+        storedLocationDao.delete(storedLocation)
     }
 }

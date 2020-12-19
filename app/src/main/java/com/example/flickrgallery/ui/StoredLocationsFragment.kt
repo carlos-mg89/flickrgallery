@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import androidx.lifecycle.lifecycleScope
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.StoredLocationsFragmentBinding
@@ -14,12 +16,11 @@ import com.example.flickrgallery.model.StoredLocation
 import com.example.flickrgallery.repo.StoredLocationRepoImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class StoredLocationsFragment : Fragment() {
 
     private lateinit var binding: StoredLocationsFragmentBinding
-    private lateinit var storedLocationRepo: StoredLocationRepoImpl
+    private lateinit var viewModel: StoredLocationsViewModel
     private val storedLocationsAdapter = StoredLocationsAdapter(
             emptyList(),
             getPhotosFromLocationToDisplayThem(),
@@ -30,22 +31,28 @@ class StoredLocationsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = StoredLocationsFragmentBinding.inflate(layoutInflater)
-        storedLocationRepo = StoredLocationRepoImpl(Db.getDatabase(requireContext()))
         binding.recyclerView.adapter = storedLocationsAdapter
-
-        loadStoredLocationsIntoAdapter()
 
         return binding.root
     }
 
-    private fun loadStoredLocationsIntoAdapter() {
-        lifecycleScope.launch (Dispatchers.IO) {
-            val storedLocations = storedLocationRepo.findAll()
-            storedLocationsAdapter.storedLocations = storedLocations
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-            withContext(Dispatchers.Main){
-                storedLocationsAdapter.setItems(storedLocations)
-            }
+        initViewModel()
+        observeStoredLocations()
+    }
+
+    private fun initViewModel() {
+        val database = Db.getDatabase(requireContext())
+        val storedLocationRepo = StoredLocationRepoImpl(database)
+        val factory = StoredLocationsViewModelFactory(storedLocationRepo)
+        viewModel = ViewModelProvider(this, factory).get()
+    }
+
+    private fun observeStoredLocations() {
+        viewModel.storedLocations.observe(viewLifecycleOwner) { storedLocations ->
+            storedLocationsAdapter.setItems(storedLocations)
         }
     }
 
@@ -56,13 +63,10 @@ class StoredLocationsFragment : Fragment() {
         }
     }
 
-    private fun deleteStoredLocation(): (StoredLocation) -> Unit =
-            {
-                lifecycleScope.launch(Dispatchers.IO) {
-                    storedLocationRepo.delete(it)
-                }
-                Toast.makeText(
-                        activity, R.string.stored_location_delete_success, Toast.LENGTH_LONG
-                ).show()
-            }
+    private fun deleteStoredLocation(): (StoredLocation) -> Unit = {
+        viewModel.delete(it)
+        Toast.makeText(
+                activity, R.string.stored_location_delete_success, Toast.LENGTH_LONG
+        ).show()
+    }
 }
