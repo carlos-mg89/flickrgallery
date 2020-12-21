@@ -5,22 +5,54 @@ import androidx.lifecycle.MutableLiveData
 import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.repo.PhotoRepo
 import com.example.flickrgallery.ui.common.ScopedViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class PhotoDetailsViewModel(photoRepo: PhotoRepo) : ScopedViewModel() {
+class PhotoDetailsViewModel(private val photoRepo: PhotoRepo) : ScopedViewModel() {
 
-    // TODO: Implement the ViewModel
-    var prueba:String =""
 
     private val _favoriteStatus = MutableLiveData<Boolean>(false)
-    val favoriteStatus:LiveData<Boolean>
+    val favoriteStatus: LiveData<Boolean>
         get() = _favoriteStatus
 
-    fun toggleSaveStatus(){
-        val isSaved:Boolean = favoriteStatus.value!!
-        _favoriteStatus.postValue(!isSaved)
+
+    fun toggleSaveStatus(photo: Photo) {
+        launch(Dispatchers.IO) {
+            if (photoInDB(photo)) {
+                deletePhotoInList(photo)
+                _favoriteStatus.postValue(false)
+            } else {
+                savePhotoToList(photo)
+                _favoriteStatus.postValue(true)
+            }
+        }
     }
 
-    fun savePhotoToList(photo: Photo){
-        //TODO: save photo to list
+    fun getPhotoInitialState(photo: Photo) {
+        launch(Dispatchers.IO) {
+            _favoriteStatus.postValue(photoInDB(photo))
+        }
     }
+
+    private suspend fun photoInDB(photo: Photo): Boolean {
+        return if(photoRepo.get(photo.id)!=null){
+            photoRepo.get(photo.id).id == photo.id
+        } else false
+    }
+
+    private fun savePhotoToList(photo: Photo) {
+
+        launch(Dispatchers.IO) {
+            photoRepo.insert(photo)
+        }
+
+    }
+
+    private fun deletePhotoInList(photo: Photo) {
+        launch(Dispatchers.IO) {
+            photoRepo.delete(photo)
+        }
+
+    }
+
 }
