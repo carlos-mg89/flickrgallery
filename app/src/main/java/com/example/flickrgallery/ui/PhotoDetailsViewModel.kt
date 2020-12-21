@@ -2,7 +2,6 @@ package com.example.flickrgallery.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.repo.PhotoRepo
 import com.example.flickrgallery.ui.common.ScopedViewModel

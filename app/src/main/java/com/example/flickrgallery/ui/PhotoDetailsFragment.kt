@@ -20,9 +20,10 @@ class PhotoDetailsFragment : Fragment() {
     companion object {
         const val EXTRA_PHOTO = "PhotoDetailsFragment:photo"
     }
-
+    private lateinit var photo: Photo
     private lateinit var viewModel: PhotoDetailsViewModel
     private lateinit var binding: PhotoDetailsFragmentBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -30,7 +31,7 @@ class PhotoDetailsFragment : Fragment() {
 
         binding = PhotoDetailsFragmentBinding.inflate(inflater)
 
-        val photo: Photo? = arguments?.getParcelable<Photo>(EXTRA_PHOTO)
+        photo = arguments?.getParcelable<Photo>(EXTRA_PHOTO)!!
         if (photo != null) {
             Glide.with(this).load(photo.getMedium640Url()).into(binding.photo)
 
@@ -49,7 +50,7 @@ class PhotoDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val database = Db.getDatabase(requireContext().applicationContext)
         val photoRepo = PhotoRepoImpl(database)
-        val photo: Photo? = arguments?.getParcelable<Photo>(EXTRA_PHOTO)
+        photo = arguments?.getParcelable<Photo>(EXTRA_PHOTO)!!
         val factory = PhotoDetailsViewModelFactory(photoRepo)
         viewModel = ViewModelProvider(this, factory).get(PhotoDetailsViewModel::class.java)
 
