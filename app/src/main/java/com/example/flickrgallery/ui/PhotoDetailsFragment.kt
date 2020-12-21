@@ -20,6 +20,7 @@ class PhotoDetailsFragment : Fragment() {
     companion object {
         const val EXTRA_PHOTO = "PhotoDetailsFragment:photo"
     }
+
     private lateinit var photo: Photo
     private lateinit var viewModel: PhotoDetailsViewModel
     private lateinit var binding: PhotoDetailsFragmentBinding
@@ -30,18 +31,15 @@ class PhotoDetailsFragment : Fragment() {
     ): View {
 
         binding = PhotoDetailsFragmentBinding.inflate(inflater)
-
         photo = arguments?.getParcelable<Photo>(EXTRA_PHOTO)!!
-        if (photo != null) {
-            Glide.with(this).load(photo.getMedium640Url()).into(binding.photo)
-
-            binding.saveDataText.text = photo.savedDate.toString()
-            binding.descriptionText.text = photo.title
-            binding.commentsText.text = obtainCommentsPhoto().toString()
-            binding.saveImageButton.setOnClickListener {
-                viewModel.toggleSaveStatus(photo)
-            }
+        Glide.with(this).load(photo.getMedium640Url()).into(binding.photo)
+        binding.saveDataText.text = photo.savedDate.toString()
+        binding.descriptionText.text = photo.title
+        binding.commentsText.text = obtainCommentsPhoto().toString()
+        binding.saveImageButton.setOnClickListener {
+            viewModel.toggleSaveStatus(photo)
         }
+
 
         return binding.root
     }
@@ -50,15 +48,12 @@ class PhotoDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val database = Db.getDatabase(requireContext().applicationContext)
         val photoRepo = PhotoRepoImpl(database)
-        photo = arguments?.getParcelable<Photo>(EXTRA_PHOTO)!!
         val factory = PhotoDetailsViewModelFactory(photoRepo)
         viewModel = ViewModelProvider(this, factory).get(PhotoDetailsViewModel::class.java)
+        subscribeUi()
+        viewModel.getPhotoInitialState(photo)
 
-        if (photo != null) {
-            subscribeUi()
-            viewModel.getPhotoInitialState(photo)
 
-        }
     }
 
     private fun obtainCommentsPhoto() {
