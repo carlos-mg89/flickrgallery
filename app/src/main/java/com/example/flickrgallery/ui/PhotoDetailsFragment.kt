@@ -33,7 +33,7 @@ class PhotoDetailsFragment : Fragment() {
         Glide.with(this).load(photo.getMedium640Url()).into(binding.photo)
         binding.saveDataText.text = photo.savedDate.toString()
         binding.descriptionText.text = photo.title
-        binding.saveImageButton.setOnClickListener {
+        binding.saveImageFab.setOnClickListener {
             viewModel.toggleSaveStatus(photo)
         }
 
@@ -62,7 +62,7 @@ class PhotoDetailsFragment : Fragment() {
             } else {
                 R.drawable.photo_no_saved
             }
-            binding.saveImageButton.setImageResource(drawableRes)
+            binding.saveImageFab.setImageResource(drawableRes)
         }
     }
 
