@@ -8,7 +8,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
-import com.bumptech.glide.Glide
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.PhotoDetailsFragmentBinding
 import com.example.flickrgallery.db.Db
@@ -33,10 +32,9 @@ class PhotoDetailsFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.photo_details_fragment, container, false)
 
         photo = arguments?.getParcelable(EXTRA_PHOTO)!!
+        binding.lifecycleOwner = this
         binding.setPhoto(photo)
         binding.viewModel = viewModel
-
-        Glide.with(this).load(photo.getMedium640Url()).into(binding.photo)
 
         return binding.root
     }

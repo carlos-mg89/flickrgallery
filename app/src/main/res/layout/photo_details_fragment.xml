@@ -28,7 +28,8 @@
                 android:layout_height="match_parent"
                 android:contentDescription="@string/photo_details_photo"
                 android:scaleType="centerCrop"
-                tools:src="@tools:sample/avatars" />
+                tools:src="@tools:sample/avatars"
+                app:url="@{ photo.getMedium640Url() }"/>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/save_image_fab"
