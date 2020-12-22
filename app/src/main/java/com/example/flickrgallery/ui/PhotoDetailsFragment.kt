@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
@@ -58,12 +57,12 @@ class PhotoDetailsFragment : Fragment() {
 
     private fun subscribeUi() {
         viewModel.favoriteStatus.observe(this.viewLifecycleOwner) { isSaved ->
-            val drawable = if (isSaved) {
-                ContextCompat.getDrawable(requireContext(), R.drawable.photo_saved)
+            val drawableRes = if (isSaved) {
+                R.drawable.photo_saved
             } else {
-                ContextCompat.getDrawable(requireContext(), R.drawable.photo_no_saved)
+                R.drawable.photo_no_saved
             }
-            binding.saveImageButton.setImageDrawable(drawable)
+            binding.saveImageButton.setImageResource(drawableRes)
         }
     }
 
