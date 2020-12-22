@@ -14,7 +14,7 @@ class PhotoDetailsViewModel(private val photoRepo: PhotoRepo) : ScopedViewModel(
     val favoriteStatus: LiveData<Boolean>
         get() = _favoriteStatus
 
-    fun getPhotoInitialState(photo: Photo) {
+    fun checkIfPhotoExists(photo: Photo) {
         launch(Dispatchers.IO) {
             _favoriteStatus.postValue(isPhotoInDB(photo))
         }

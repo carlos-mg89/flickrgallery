@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
@@ -28,14 +29,12 @@ class PhotoDetailsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,
     ): View {
-        binding = PhotoDetailsFragmentBinding.inflate(inflater)
+        binding = DataBindingUtil.inflate(inflater, R.layout.photo_details_fragment, container, false)
+
         photo = arguments?.getParcelable(EXTRA_PHOTO)!!
+        binding.setPhoto(photo)
+
         Glide.with(this).load(photo.getMedium640Url()).into(binding.photo)
-        binding.saveDataText.text = photo.savedDate.toString()
-        binding.descriptionText.text = photo.title
-        binding.saveImageFab.setOnClickListener {
-            viewModel.toggleSaveStatus(photo)
-        }
 
         return binding.root
     }
@@ -45,7 +44,8 @@ class PhotoDetailsFragment : Fragment() {
 
         initViewModel()
         subscribeUi()
-        viewModel.getPhotoInitialState(photo)
+        setUiListeners()
+        viewModel.checkIfPhotoExists(photo)
     }
 
     private fun initViewModel() {
@@ -63,6 +63,12 @@ class PhotoDetailsFragment : Fragment() {
                 R.drawable.photo_no_saved
             }
             binding.saveImageFab.setImageResource(drawableRes)
+        }
+    }
+
+    private fun setUiListeners() {
+        binding.saveImageFab.setOnClickListener {
+            viewModel.toggleSaveStatus(photo)
         }
     }
 
