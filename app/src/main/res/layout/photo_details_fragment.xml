@@ -7,6 +7,9 @@
         <variable
             name="photo"
             type="com.example.flickrgallery.model.Photo" />
+        <variable
+            name="viewModel"
+            type="com.example.flickrgallery.ui.PhotoDetailsViewModel" />
     </data>
 
     <LinearLayout
@@ -38,7 +41,7 @@
                 android:contentDescription="@string/photo_details_save_btn"
                 android:src="@drawable/photo_no_saved"
                 app:fabSize="mini"
-                android:onClick="@{ viewModel.toggleSaveStatus(photo) }"/>
+                android:onClick="@{ () -> viewModel.toggleSaveStatus(photo) }" />
 
         </RelativeLayout>
 

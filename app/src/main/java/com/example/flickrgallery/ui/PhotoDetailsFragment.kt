@@ -29,23 +29,16 @@ class PhotoDetailsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,
     ): View {
+        initViewModel()
         binding = DataBindingUtil.inflate(inflater, R.layout.photo_details_fragment, container, false)
 
         photo = arguments?.getParcelable(EXTRA_PHOTO)!!
         binding.setPhoto(photo)
+        binding.viewModel = viewModel
 
         Glide.with(this).load(photo.getMedium640Url()).into(binding.photo)
 
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        initViewModel()
-        subscribeUi()
-        setUiListeners()
-        viewModel.checkIfPhotoExists(photo)
     }
 
     private fun initViewModel() {
@@ -53,6 +46,13 @@ class PhotoDetailsFragment : Fragment() {
         val photoRepo = PhotoRepoImpl(database)
         val factory = PhotoDetailsViewModelFactory(photoRepo)
         viewModel = ViewModelProvider(this, factory).get()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        subscribeUi()
+        viewModel.checkIfPhotoExists(photo)
     }
 
     private fun subscribeUi() {
@@ -63,12 +63,6 @@ class PhotoDetailsFragment : Fragment() {
                 R.drawable.photo_no_saved
             }
             binding.saveImageFab.setImageResource(drawableRes)
-        }
-    }
-
-    private fun setUiListeners() {
-        binding.saveImageFab.setOnClickListener {
-            viewModel.toggleSaveStatus(photo)
         }
     }
 
