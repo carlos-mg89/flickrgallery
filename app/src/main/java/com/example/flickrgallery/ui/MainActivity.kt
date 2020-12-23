@@ -6,9 +6,11 @@ import androidx.fragment.app.Fragment
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.ActivityMainBinding
 import com.example.flickrgallery.model.Photo
+import com.example.flickrgallery.model.StoredLocation
 
 interface MainActivityCommunicator {
     fun onPhotoClicked(photo: Photo)
+    fun onStoredLocationClicked(storedLocation: StoredLocation)
 }
 
 class MainActivity : AppCompatActivity(), MainActivityCommunicator {
@@ -62,5 +64,13 @@ class MainActivity : AppCompatActivity(), MainActivityCommunicator {
         bundle.putParcelable(PhotoDetailsFragment.EXTRA_PHOTO,photo)
         photoDetailsFragment.arguments = bundle
         replaceFragmentContainerWith(photoDetailsFragment)
+    }
+
+    override fun onStoredLocationClicked(storedLocation: StoredLocation) {
+        val exploreFragment = ExploreFragment()
+        exploreFragment.arguments = Bundle().apply {
+            putParcelable(ExploreFragment.EXTRA_STORED_LOCATION, storedLocation)
+        }
+        replaceFragmentContainerWith(exploreFragment)
     }
 }
