@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/exploreFragment">
+
+    <fragment
+        android:id="@+id/exploreFragment"
+        android:name="com.example.flickrgallery.ui.ExploreFragment"
+        android:label="fragment_explore"
+        tools:layout="@layout/fragment_explore" >
+        <action
+            android:id="@+id/action_exploreFragment_to_photoDetailsFragment"
+            app:destination="@id/photoDetailsFragment">
+        </action>
+        <argument
+            android:name="storedLocationArg"
+            app:argType="com.example.flickrgallery.model.StoredLocation"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+    <fragment
+        android:id="@+id/savedPhotosFragment"
+        android:name="com.example.flickrgallery.ui.SavedPhotosFragment"
+        android:label="SavedPhotosFragment" >
+        <action
+            android:id="@+id/action_savedPhotosFragment_to_photoDetailsFragment"
+            app:destination="@id/photoDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/photoDetailsFragment"
+        android:name="com.example.flickrgallery.ui.PhotoDetailsFragment"
+        android:label="photo_details_fragment"
+        tools:layout="@layout/photo_details_fragment" >
+        <argument
+            android:name="photoArg"
+            app:argType="com.example.flickrgallery.model.Photo"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+    <fragment
+        android:id="@+id/storedLocationsFragment"
+        android:name="com.example.flickrgallery.ui.StoredLocationsFragment"
+        android:label="StoredLocationsFragment" >
+        <action
+            android:id="@+id/action_storedLocationsFragment_to_exploreFragment"
+            app:destination="@id/exploreFragment" />
+    </fragment>
+</navigation>
