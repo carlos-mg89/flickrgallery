@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.PhotoDetailsFragmentBinding
@@ -24,6 +25,7 @@ class PhotoDetailsFragment : Fragment() {
     private lateinit var photo: Photo
     private lateinit var viewModel: PhotoDetailsViewModel
     private lateinit var binding: PhotoDetailsFragmentBinding
+    private val args: PhotoDetailsFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,7 +33,7 @@ class PhotoDetailsFragment : Fragment() {
     ): View {
 
         binding = PhotoDetailsFragmentBinding.inflate(inflater)
-        photo = arguments?.getParcelable<Photo>(EXTRA_PHOTO)!!
+        photo = args.photoArg!!
         Glide.with(this).load(photo.getMedium640Url()).into(binding.photo)
         binding.saveDataText.text = photo.savedDate.toString()
         binding.descriptionText.text = photo.title

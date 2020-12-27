@@ -7,11 +7,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.SavedPhotosFragmentBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.repo.PhotoRepoImpl
+import com.example.flickrgallery.ui.SavedPhotosFragmentDirections.Companion.actionSavedPhotosFragmentToPhotoDetailsFragment
 
 class SavedPhotosFragment : Fragment() {
 
@@ -53,7 +55,7 @@ class SavedPhotosFragment : Fragment() {
     }
 
     private fun onSavedPhotoClicked(): (Photo) -> Unit = {
-        (activity as MainActivityCommunicator).onPhotoClicked(it)
+        findNavController().navigate(actionSavedPhotosFragmentToPhotoDetailsFragment(it))
     }
 
     private fun onDeleteBtnClicked(): (Photo) -> Unit = {

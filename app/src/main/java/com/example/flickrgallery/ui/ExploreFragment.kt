@@ -10,12 +10,14 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.FragmentExploreBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.gps.GpsProvider
-import com.example.flickrgallery.model.StoredLocation
 import com.example.flickrgallery.repo.*
+import com.example.flickrgallery.ui.ExploreFragmentDirections.Companion.actionExploreFragmentToPhotoDetailsFragment
 import com.google.android.material.snackbar.Snackbar
 
 class ExploreFragment : Fragment() {
@@ -29,6 +31,7 @@ class ExploreFragment : Fragment() {
     private lateinit var binding: FragmentExploreBinding
     private lateinit var viewModel: ExploreViewModel
     private lateinit var photosAdapter: PhotosAdapter
+    private val args: ExploreFragmentArgs by navArgs()
 
     // Falta controlar el "Denegar siempre"
     private val requestPermissionLauncher = registerForActivityResult(
@@ -60,7 +63,7 @@ class ExploreFragment : Fragment() {
     }
 
     private fun decideHowToLoadPhotos() {
-        val storedLocation = arguments?.getParcelable(EXTRA_STORED_LOCATION) as StoredLocation?
+        val storedLocation = args.storedLocationArg
         if (storedLocation == null) {
             requestLocationPermissionAndGetPhotos()
         } else {
@@ -83,9 +86,8 @@ class ExploreFragment : Fragment() {
 
     private fun setupUi() {
         binding = FragmentExploreBinding.inflate(layoutInflater)
-        val activity = this.activity
         photosAdapter = PhotosAdapter(emptyList()) {
-            (activity as MainActivityCommunicator).onPhotoClicked(it)
+            findNavController().navigate(actionExploreFragmentToPhotoDetailsFragment(it))
         }
         binding.recyclerview.adapter = photosAdapter
 
