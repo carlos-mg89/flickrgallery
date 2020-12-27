@@ -18,14 +18,12 @@ import com.example.flickrgallery.repo.PhotoRepoImpl
 
 class PhotoDetailsFragment : Fragment() {
 
-    companion object {
-        const val EXTRA_PHOTO = "PhotoDetailsFragment:photo"
-    }
 
     private lateinit var photo: Photo
     private lateinit var viewModel: PhotoDetailsViewModel
     private lateinit var binding: PhotoDetailsFragmentBinding
     private val args: PhotoDetailsFragmentArgs by navArgs()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

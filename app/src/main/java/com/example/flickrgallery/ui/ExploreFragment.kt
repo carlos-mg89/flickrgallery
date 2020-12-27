@@ -22,9 +22,6 @@ import com.google.android.material.snackbar.Snackbar
 
 class ExploreFragment : Fragment() {
 
-    companion object {
-        const val EXTRA_STORED_LOCATION = "storedLocation"
-    }
 
     private lateinit var gpsRepo: GpsRepo
     private lateinit var storedLocationRepo: StoredLocationRepo
