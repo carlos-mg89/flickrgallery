@@ -44,7 +44,21 @@
         android:name="com.example.flickrgallery.ui.StoredLocationsFragment"
         android:label="StoredLocationsFragment" >
         <action
-            android:id="@+id/action_storedLocationsFragment_to_exploreFragment"
-            app:destination="@id/exploreFragment" />
+            android:id="@+id/action_storedLocationsFragment_to_storedLocationFragment"
+            app:destination="@id/storedLocationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/storedLocationFragment"
+        android:name="com.example.flickrgallery.ui.StoredLocationFragment"
+        android:label="fragment_stored_location"
+        tools:layout="@layout/stored_location_fragment" >
+        <action
+            android:id="@+id/action_storedLocationFragment_to_photoDetailsFragment"
+            app:destination="@id/photoDetailsFragment" />
+        <argument
+            android:name="storedLocationArg"
+            app:argType="com.example.flickrgallery.model.StoredLocation"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
 </navigation>

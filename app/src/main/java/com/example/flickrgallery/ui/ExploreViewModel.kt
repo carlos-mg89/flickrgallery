@@ -31,23 +31,6 @@ class ExploreViewModel(
         }
     }
 
-    fun loadPhotos(storedLocation: StoredLocation) {
-        setUiBusy()
-        val storedLocationGpsSnapshot = getGpsSnapshot(storedLocation)
-        launch {
-            val photos = getPhotos(storedLocationGpsSnapshot.latitude, storedLocationGpsSnapshot.longitude)
-            setUiPhotosReceivedForStoredLocation(photos)
-        }
-    }
-
-    private fun getGpsSnapshot(storedLocation: StoredLocation): GpsSnapshot {
-        return GpsSnapshot(
-                storedLocation.longitude,
-                storedLocation.latitude,
-                storedLocation.savedDate.time
-        )
-    }
-
     private suspend fun onNewPositionReceived(gpsSnapshot: GpsSnapshot) {
         setUiUpdatesEnabled()
         setUiBusy()
@@ -90,15 +73,6 @@ class ExploreViewModel(
         updateUiState {
             it.isProgressVisible = false
             it.isFabEnabled = true
-            it.photos = photos
-            return@updateUiState it
-        }
-    }
-
-    private fun setUiPhotosReceivedForStoredLocation(photos: List<Photo>) {
-        updateUiState {
-            it.isProgressVisible = false
-            it.isFabEnabled = false
             it.photos = photos
             return@updateUiState it
         }

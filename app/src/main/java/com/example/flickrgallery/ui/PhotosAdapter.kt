@@ -1,7 +1,6 @@
 package com.example.flickrgallery.ui
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -11,7 +10,7 @@ import com.example.flickrgallery.model.Photo
 class PhotosAdapter(
     var photos: List<Photo>,
     var photoOnClickListener: (Photo) -> Unit
-        ) :
+) :
     RecyclerView.Adapter<PhotosAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -22,7 +21,6 @@ class PhotosAdapter(
                 false
             )
         return ViewHolder(binding)
-
     }
 
     override fun getItemCount(): Int {
@@ -37,7 +35,7 @@ class PhotosAdapter(
     class ViewHolder(private val binding: MainItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(photo: Photo) {
-            Glide.with(binding.root.context).load(photo.getMedium640Url()).into(binding.photo);
+            Glide.with(binding.root.context).load(photo.getMedium640Url()).into(binding.photo)
         }
     }
 

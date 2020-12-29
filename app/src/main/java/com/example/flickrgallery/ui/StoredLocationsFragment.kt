@@ -14,7 +14,7 @@ import com.example.flickrgallery.databinding.StoredLocationsFragmentBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.model.StoredLocation
 import com.example.flickrgallery.repo.StoredLocationRepoImpl
-import com.example.flickrgallery.ui.StoredLocationsFragmentDirections.Companion.actionStoredLocationsFragmentToExploreFragment
+import com.example.flickrgallery.ui.StoredLocationsFragmentDirections.Companion.actionStoredLocationsFragmentToStoredLocationFragment
 
 class StoredLocationsFragment : Fragment() {
 
@@ -56,7 +56,7 @@ class StoredLocationsFragment : Fragment() {
     }
 
     private fun getPhotosFromLocationToDisplayThem(): (StoredLocation) -> Unit = {
-        findNavController().navigate(actionStoredLocationsFragmentToExploreFragment(it))
+        findNavController().navigate(actionStoredLocationsFragmentToStoredLocationFragment(it))
     }
 
     private fun deleteStoredLocation(): (StoredLocation) -> Unit = {

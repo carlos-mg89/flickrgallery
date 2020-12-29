@@ -11,7 +11,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.FragmentExploreBinding
 import com.example.flickrgallery.db.Db
@@ -28,7 +27,7 @@ class ExploreFragment : Fragment() {
     private lateinit var binding: FragmentExploreBinding
     private lateinit var viewModel: ExploreViewModel
     private lateinit var photosAdapter: PhotosAdapter
-    private val args: ExploreFragmentArgs by navArgs()
+
 
     // Falta controlar el "Denegar siempre"
     private val requestPermissionLauncher = registerForActivityResult(
@@ -55,17 +54,8 @@ class ExploreFragment : Fragment() {
         viewModel = buildViewModel()
         setupUi()
         subscribeUi()
-        decideHowToLoadPhotos()
+        requestLocationPermissionAndGetPhotos()
         return binding.root
-    }
-
-    private fun decideHowToLoadPhotos() {
-        val storedLocation = args.storedLocationArg
-        if (storedLocation == null) {
-            requestLocationPermissionAndGetPhotos()
-        } else {
-            viewModel.loadPhotos(storedLocation)
-        }
     }
 
     private fun requestLocationPermissionAndGetPhotos() {
