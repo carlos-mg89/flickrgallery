@@ -1,99 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.PhotoDetailsFragment"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
-        android:id="@+id/photo"
-        android:layout_width="match_parent"
-        android:layout_height="257dp"
-        android:contentDescription="@string/photo_details_photo"
-        android:scaleType="centerCrop"
-        tools:src="@tools:sample/avatars" />
-
-    <ImageButton
-        android:id="@+id/save_image_button"
-        style="@style/Widget.AppCompat.ImageButton"
-        android:layout_width="54dp"
-        android:layout_height="54dp"
-        android:layout_marginStart="310dp"
-        android:background="#00F44336"
-        android:baselineAlignBottom="false"
-        android:contentDescription="@string/photo_details_save_btn"
-        android:scaleType="centerInside"
-        android:src="@drawable/photo_no_saved"
-        android:textAlignment="textEnd" />
+    <data>
+        <variable
+            name="photo"
+            type="com.example.flickrgallery.model.Photo" />
+        <variable
+            name="viewModel"
+            type="com.example.flickrgallery.ui.PhotoDetailsViewModel" />
+    </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="20dp">
+        tools:context=".ui.PhotoDetailsFragment"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/description_label"
-            style="@style/detailPhotoTextViewStyle"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/photo_details_description"
-            android:textStyle="bold" />
+            android:layout_height="257dp">
 
-        <TextView
-            android:id="@+id/description_text"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:paddingTop="10dp" />
+            <ImageView
+                android:id="@+id/photo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/photo_details_photo"
+                android:scaleType="centerCrop"
+                tools:src="@tools:sample/avatars"
+                app:url="@{ photo.getMedium640Url() }"/>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/save_image_fab"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="10dp"
+                android:scaleType="centerInside"
+                android:contentDescription="@string/photo_details_save_btn"
+                android:src="@drawable/photo_no_saved"
+                app:fabSize="mini"
+                android:onClick="@{ () -> viewModel.toggleSaveStatus(photo) }" />
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="20dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="20dp">
 
             <TextView
-                android:id="@+id/label_save_data"
-                android:layout_width="wrap_content"
+                android:id="@+id/description_label"
+                style="@style/detailPhotoTextViewStyle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/photo_details_save_btn"
+                android:text="@string/photo_details_description"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/save_data_text"
-                android:layout_width="wrap_content"
+                android:id="@+id/description_text"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/comments_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="30dp"
-            android:text="@string/photo_details_comments"
-            android:textStyle="bold" />
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="148dp">
+                android:paddingTop="10dp"
+                android:text="@{ photo.title }"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
 
                 <TextView
-                    android:id="@+id/comments_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingTop="20dp" />
+                    android:id="@+id/label_save_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:text="@string/photo_details_saved_date"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/save_data_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{ photo.savedDate.toString() }"
+                    tools:text="@tools:sample/date/ddmmyy" />
+
             </LinearLayout>
-        </ScrollView>
+
+            <TextView
+                android:id="@+id/comments_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/photo_details_comments"
+                android:textStyle="bold" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/comments_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingTop="20dp"
+                        tools:text="@tools:sample/lorem/random"/>
+
+                </LinearLayout>
+            </ScrollView>
+
+        </LinearLayout>
 
     </LinearLayout>
-
-</LinearLayout>
+</layout>

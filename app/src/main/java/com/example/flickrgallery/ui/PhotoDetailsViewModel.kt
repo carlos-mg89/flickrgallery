@@ -10,49 +10,43 @@ import kotlinx.coroutines.launch
 
 class PhotoDetailsViewModel(private val photoRepo: PhotoRepo) : ScopedViewModel() {
 
-
-    private val _favoriteStatus = MutableLiveData<Boolean>(false)
+    private val _favoriteStatus = MutableLiveData(false)
     val favoriteStatus: LiveData<Boolean>
         get() = _favoriteStatus
 
+    fun checkIfPhotoExists(photo: Photo) {
+        launch(Dispatchers.IO) {
+            _favoriteStatus.postValue(isPhotoInDB(photo))
+        }
+    }
+
+    private suspend fun isPhotoInDB(photo: Photo): Boolean {
+        return photoRepo.get(photo.id) != null
+    }
 
     fun toggleSaveStatus(photo: Photo) {
         launch(Dispatchers.IO) {
-            if (photoInDB(photo)) {
+            val newFavoriteStatus = if (isPhotoInDB(photo)) {
                 deletePhotoInList(photo)
-                _favoriteStatus.postValue(false)
+                false
             } else {
                 savePhotoToList(photo)
-                _favoriteStatus.postValue(true)
+                true
             }
+            _favoriteStatus.postValue(newFavoriteStatus)
         }
-    }
-
-    fun getPhotoInitialState(photo: Photo) {
-        launch(Dispatchers.IO) {
-            _favoriteStatus.postValue(photoInDB(photo))
-        }
-    }
-
-    private suspend fun photoInDB(photo: Photo): Boolean {
-        return if(photoRepo.get(photo.id)!=null){
-            photoRepo.get(photo.id).id == photo.id
-        } else false
-    }
-
-    private fun savePhotoToList(photo: Photo) {
-
-        launch(Dispatchers.IO) {
-            photoRepo.insert(photo)
-        }
-
     }
 
     private fun deletePhotoInList(photo: Photo) {
         launch(Dispatchers.IO) {
             photoRepo.delete(photo)
         }
+    }
 
+    private fun savePhotoToList(photo: Photo) {
+        launch(Dispatchers.IO) {
+            photoRepo.insert(photo)
+        }
     }
 
 }
