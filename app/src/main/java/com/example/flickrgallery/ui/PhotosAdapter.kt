@@ -1,12 +1,12 @@
 package com.example.flickrgallery.ui
 
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.MainItemBinding
 import com.example.flickrgallery.model.Photo
+import com.example.flickrgallery.ui.common.bindingInflate
 
 class PhotosAdapter(
     var photos: List<Photo>,
@@ -15,14 +15,7 @@ class PhotosAdapter(
     RecyclerView.Adapter<PhotosAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = MainItemBinding
-            .inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-        return ViewHolder(binding)
-
+        return ViewHolder(parent.bindingInflate(R.layout.main_item,false))
     }
 
     override fun getItemCount(): Int {

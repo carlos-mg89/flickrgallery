@@ -8,14 +8,17 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.FragmentExploreBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.gps.GpsProvider
+import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.repo.*
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_explore.*
 
 class ExploreFragment : Fragment() {
 
@@ -48,7 +51,7 @@ class ExploreFragment : Fragment() {
     ): View? {
         buildDependencies()
         viewModel = buildViewModel()
-        setupUi()
+        setupUi(container)
         subscribeUi()
         requestLocationPermissionAndGetPhotos()
         return binding.root
@@ -59,16 +62,13 @@ class ExploreFragment : Fragment() {
     }
 
     private fun subscribeUi() {
-        viewModel.exploreUiState.observe(requireActivity()){
-            val visibility = if (it.isProgressVisible) VISIBLE else GONE
-            binding.exploreFragmentProgress.visibility = visibility
-            binding.exploreFragmentFab.isEnabled = it.isFabEnabled
-            photosAdapter.setItems(it.photos)
-        }
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
+     //TODO no carga las imagenes
     }
 
-    private fun setupUi() {
-        binding = FragmentExploreBinding.inflate(layoutInflater)
+    private fun setupUi(container: ViewGroup?) {
+        binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_explore, container ,false)
         val activity = this.activity
         photosAdapter = PhotosAdapter(emptyList()) {
             (activity as MainActivityCommunicator).onPhotoClicked(it)
