@@ -17,15 +17,13 @@ class PhotoRepoImpl (database: Db) : PhotoRepo {
         return photoDao.getAll()
     }
 
-    override suspend fun get(id: String): Photo {
+    override suspend fun get(id: String): Photo? {
         return photoDao.get(id)
     }
 
     override suspend fun insertAll(photos: List<Photo>) {
         photoDao.insertAll(photos)
     }
-
-
 
     override suspend fun insert(photo: Photo){
         photoDao.insert(photo)

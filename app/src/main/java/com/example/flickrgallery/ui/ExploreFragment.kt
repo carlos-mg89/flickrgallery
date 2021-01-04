@@ -16,11 +16,16 @@ import com.example.flickrgallery.databinding.FragmentExploreBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.gps.GpsProvider
 import com.example.flickrgallery.model.Photo
+import com.example.flickrgallery.model.StoredLocation
 import com.example.flickrgallery.repo.*
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_explore.*
 
 class ExploreFragment : Fragment() {
+
+    companion object {
+        const val EXTRA_STORED_LOCATION = "storedLocation"
+    }
 
     private lateinit var gpsRepo: GpsRepo
     private lateinit var storedLocationRepo: StoredLocationRepo
@@ -48,13 +53,22 @@ class ExploreFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         buildDependencies()
         viewModel = buildViewModel()
         setupUi(container)
         subscribeUi()
-        requestLocationPermissionAndGetPhotos()
+        decideHowToLoadPhotos()
         return binding.root
+    }
+
+    private fun decideHowToLoadPhotos() {
+        val storedLocation = arguments?.getParcelable(EXTRA_STORED_LOCATION) as StoredLocation?
+        if (storedLocation == null) {
+            requestLocationPermissionAndGetPhotos()
+        } else {
+            viewModel.loadPhotos(storedLocation)
+        }
     }
 
     private fun requestLocationPermissionAndGetPhotos() {
