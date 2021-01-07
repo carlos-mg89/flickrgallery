@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.databinding.DataBindingUtil
+
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.SavedPhotosFragmentBinding
 import com.example.flickrgallery.db.Db
@@ -26,7 +28,8 @@ class SavedPhotosFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = SavedPhotosFragmentBinding.inflate(layoutInflater)
+        //binding = SavedPhotosFragmentBinding.inflate(layoutInflater)
+        binding  = DataBindingUtil.inflate(inflater,R.layout.saved_photos_fragment,container,false)
         binding.recyclerView.adapter = savedPhotosAdapter
 
         return binding.root
