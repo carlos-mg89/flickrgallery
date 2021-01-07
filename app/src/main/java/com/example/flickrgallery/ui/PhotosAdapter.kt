@@ -2,17 +2,20 @@ package com.example.flickrgallery.ui
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.MainItemBinding
 import com.example.flickrgallery.model.Photo
+import com.example.flickrgallery.ui.common.basicDiffUtil
 import com.example.flickrgallery.ui.common.bindingInflate
 
 class PhotosAdapter(
-    var photos: List<Photo>,
     var photoOnClickListener: (Photo) -> Unit
-        ) :
-    RecyclerView.Adapter<PhotosAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<PhotosAdapter.ViewHolder>() {
+
+    var photos: List<Photo> by basicDiffUtil (
+        emptyList(),
+        areItemsTheSame = { old, new -> old.id == new.id }
+    )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(parent.bindingInflate(R.layout.main_item,false))
@@ -23,19 +26,10 @@ class PhotosAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(photos[position])
+        holder.binding.setPhoto(photos[position])
         holder.itemView.setOnClickListener{ photoOnClickListener(photos[position]) }
     }
 
-    class ViewHolder(private val binding: MainItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(photo: Photo) {
-            Glide.with(binding.root.context).load(photo.getMedium640Url()).into(binding.photo);
-        }
-    }
+    class ViewHolder(val binding: MainItemBinding) : RecyclerView.ViewHolder(binding.root)
 
-    fun setItems(photos: List<Photo>) {
-        this.photos = photos
-        notifyDataSetChanged()
-    }
 }
