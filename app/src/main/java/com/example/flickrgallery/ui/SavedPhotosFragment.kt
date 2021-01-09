@@ -20,7 +20,7 @@ class SavedPhotosFragment : Fragment() {
     private lateinit var binding: SavedPhotosFragmentBinding
     private lateinit var viewModel: SavedPhotosViewModel
     private val savedPhotosAdapter = SavedPhotosAdapter(
-            emptyList(),
+
             onSavedPhotoClicked(),
             onDeleteBtnClicked()
     )
@@ -30,6 +30,7 @@ class SavedPhotosFragment : Fragment() {
     ): View {
         //binding = SavedPhotosFragmentBinding.inflate(layoutInflater)
         binding  = DataBindingUtil.inflate(inflater,R.layout.saved_photos_fragment,container,false)
+        bindViewWithData()
         binding.recyclerView.adapter = savedPhotosAdapter
 
         return binding.root
@@ -39,7 +40,7 @@ class SavedPhotosFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initViewModel()
-        subscribeUi()
+        //subscribeUi()
     }
 
     private fun initViewModel() {
@@ -53,6 +54,10 @@ class SavedPhotosFragment : Fragment() {
         viewModel.savedPhotos.observe(viewLifecycleOwner) {
             savedPhotosAdapter.setItems(it)
         }
+    }
+    private fun bindViewWithData(){
+        binding.viewmodel = viewModel
+        binding.lifecycleOwner = this
     }
 
     private fun onSavedPhotoClicked(): (Photo) -> Unit = {
