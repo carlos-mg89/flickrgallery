@@ -4,12 +4,11 @@ import android.Manifest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.FragmentExploreBinding
 import com.example.flickrgallery.db.Db
@@ -28,7 +27,6 @@ class ExploreFragment : Fragment() {
     private lateinit var storedLocationRepo: StoredLocationRepo
     private lateinit var binding: FragmentExploreBinding
     private lateinit var viewModel: ExploreViewModel
-    private lateinit var photosAdapter: PhotosAdapter
 
     // Falta controlar el "Denegar siempre"
     private val requestPermissionLauncher = registerForActivityResult(
@@ -53,8 +51,9 @@ class ExploreFragment : Fragment() {
     ): View {
         buildDependencies()
         viewModel = buildViewModel()
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_explore, container ,false)
+        bindViewWithData()
         setupUi()
-        subscribeUi()
         decideHowToLoadPhotos()
         return binding.root
     }
@@ -72,30 +71,23 @@ class ExploreFragment : Fragment() {
         requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
-    private fun subscribeUi() {
-        viewModel.exploreUiState.observe(requireActivity()){
-            val visibility = if (it.isProgressVisible) VISIBLE else GONE
-            binding.exploreFragmentProgress.visibility = visibility
-            binding.exploreFragmentFab.isEnabled = it.isFabEnabled
-            photosAdapter.setItems(it.photos)
-        }
+    private fun bindViewWithData() {
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
     }
 
     private fun setupUi() {
-        binding = FragmentExploreBinding.inflate(layoutInflater)
         val activity = this.activity
-        photosAdapter = PhotosAdapter(emptyList()) {
+        binding.recyclerview.adapter = PhotosAdapter {
             (activity as MainActivityCommunicator).onPhotoClicked(it)
         }
-        binding.recyclerview.adapter = photosAdapter
-
         binding.exploreFragmentFab.setOnClickListener {
             viewModel.storeLocation(description = getRandomNumber().toString())
         }
     }
 
     private fun buildDependencies() {
-        val database = Db.getDatabase(requireContext().applicationContext)
+        val database = Db.getDatabase(requireContext())
         val gpsProvider = GpsProvider(requireContext())
         gpsRepo = GpsRepoImpl(gpsProvider)
         storedLocationRepo = StoredLocationRepoImpl(database)
