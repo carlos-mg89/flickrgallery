@@ -13,7 +13,6 @@ import com.example.flickrgallery.databinding.SavedPhotosFragmentBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.repo.PhotoRepoImpl
-import kotlinx.android.synthetic.main.main_item.*
 
 class SavedPhotosFragment : Fragment() {
 
@@ -50,8 +49,9 @@ class SavedPhotosFragment : Fragment() {
 
     private fun subscribeUi() {
         binding.recyclerView.adapter = SavedPhotosAdapter(
-            this.onDeleteBtnClicked(), this.onSavedPhotoClicked())
-
+            onPhotoItemClicked = onSavedPhotoClicked(),
+            onDeleteBtnClicked = onDeleteBtnClicked()
+        )
     }
 
     private fun onSavedPhotoClicked(): (Photo) -> Unit = {
