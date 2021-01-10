@@ -25,7 +25,6 @@ class SavedPhotosFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater,R.layout.saved_photos_fragment,container,false)
-        bindViewWhitData()
         return binding.root
     }
 
@@ -38,6 +37,7 @@ class SavedPhotosFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initViewModel()
+        bindViewWhitData()
         subscribeUi()
     }
 
