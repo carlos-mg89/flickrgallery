@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="viewmodel"
+            name="viewModel"
             type="com.example.flickrgallery.ui.SavedPhotosViewModel" />
     </data>
 
@@ -21,7 +21,9 @@
             android:scrollbars="vertical"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="1"
-            tools:listitem="@layout/saved_photos_item" />
+            app:items="@{viewModel.savedPhotos}"
+            tools:listitem="@layout/saved_photos_item"
+            />
 
     </LinearLayout>
 </layout>

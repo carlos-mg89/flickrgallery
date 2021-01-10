@@ -5,22 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.databinding.DataBindingUtil
-
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.SavedPhotosFragmentBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.repo.PhotoRepoImpl
+import kotlinx.android.synthetic.main.main_item.*
 
 class SavedPhotosFragment : Fragment() {
 
     private lateinit var binding: SavedPhotosFragmentBinding
     private lateinit var viewModel: SavedPhotosViewModel
     private val savedPhotosAdapter = SavedPhotosAdapter(
-
             onSavedPhotoClicked(),
             onDeleteBtnClicked()
     )
@@ -28,19 +27,21 @@ class SavedPhotosFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        //binding = SavedPhotosFragmentBinding.inflate(layoutInflater)
-        binding  = DataBindingUtil.inflate(inflater,R.layout.saved_photos_fragment,container,false)
-        bindViewWithData()
-        binding.recyclerView.adapter = savedPhotosAdapter
-
+        binding = DataBindingUtil.inflate(inflater,R.layout.saved_photos_fragment,container,false)
+        bindViewWhitData()
         return binding.root
+    }
+
+    private fun bindViewWhitData() {
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initViewModel()
-        //subscribeUi()
+        subscribeUi()
     }
 
     private fun initViewModel() {
@@ -51,13 +52,8 @@ class SavedPhotosFragment : Fragment() {
     }
 
     private fun subscribeUi() {
-        viewModel.savedPhotos.observe(viewLifecycleOwner) {
-            savedPhotosAdapter.setItems(it)
-        }
-    }
-    private fun bindViewWithData(){
-        binding.viewmodel = viewModel
-        binding.lifecycleOwner = this
+        binding.recyclerView.adapter = SavedPhotosAdapter(onDeleteBtnClicked = this.onDeleteBtnClicked(),onPhotoItemClicked = this.onSavedPhotoClicked())
+
     }
 
     private fun onSavedPhotoClicked(): (Photo) -> Unit = {

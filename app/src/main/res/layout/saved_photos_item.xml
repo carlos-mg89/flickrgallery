@@ -7,6 +7,9 @@
         <variable
             name="photo"
             type="com.example.flickrgallery.model.Photo" />
+        <variable
+            name="viewModel"
+            type="com.example.flickrgallery.ui.SavedPhotosViewModel" />
     </data>
 
     <LinearLayout
@@ -46,14 +49,17 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:textSize="20sp"
-                tools:text="12/12/2021 15:40" />
+                tools:text="12/12/2021 15:40"
+                android:text="@{ photo.savedDate.toString() }"/>
 
             <TextView
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                tools:text="Description" />
+                tools:text="Description"
+                android:text="@{ photo.title }"/>
+
 
         </LinearLayout>
 
@@ -71,7 +77,9 @@
                 android:layout_centerInParent="true"
                 android:contentDescription="@string/saved_photos_delete"
                 android:tint="#444444"
-                android:src="@drawable/ic_baseline_delete" />
+                android:src="@drawable/ic_baseline_delete"
+                android:onClick="@{ () -> viewModel.deleteSavedPhoto(photo) }" />
+
 
         </RelativeLayout>
 
