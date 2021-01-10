@@ -16,8 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:baselineAligned="false"
-        android:layout_weight="6">
+        android:baselineAligned="false">
 
         <RelativeLayout
             android:layout_weight="2"
@@ -77,8 +76,7 @@
                 android:layout_centerInParent="true"
                 android:contentDescription="@string/saved_photos_delete"
                 android:tint="#444444"
-                android:src="@drawable/ic_baseline_delete"
-                android:onClick="@{ () -> viewModel.deleteSavedPhoto(photo) }" />
+                android:src="@drawable/ic_baseline_delete"/>
 
 
         </RelativeLayout>
