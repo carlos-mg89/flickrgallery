@@ -1,0 +1,13 @@
+package com.example.flickrgallery.ui
+
+import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.example.flickrgallery.model.Photo
+
+
+@BindingAdapter("savedPhotos")
+fun RecyclerView.setSavedPhotos(photos: List<Photo>?) {
+    (adapter as? SavedPhotosAdapter)?.let {
+        it.photos = photos ?: emptyList()
+    }
+}
