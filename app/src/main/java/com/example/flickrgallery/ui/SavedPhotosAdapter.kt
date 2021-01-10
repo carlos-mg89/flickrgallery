@@ -24,9 +24,7 @@ class SavedPhotosAdapter(
         return ViewHolder(parent.bindingInflate(R.layout.saved_photos_item, false))
     }
 
-    override fun getItemCount(): Int {
-        return photos.count()
-    }
+    override fun getItemCount() = photos.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.setPhoto(photos[position])
