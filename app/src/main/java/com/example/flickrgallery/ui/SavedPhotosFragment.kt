@@ -52,7 +52,8 @@ class SavedPhotosFragment : Fragment() {
     }
 
     private fun subscribeUi() {
-        binding.recyclerView.adapter = SavedPhotosAdapter(onDeleteBtnClicked = this.onDeleteBtnClicked(),onPhotoItemClicked = this.onSavedPhotoClicked())
+        binding.recyclerView.adapter = SavedPhotosAdapter(
+            this.onDeleteBtnClicked(), this.onSavedPhotoClicked())
 
     }
 
