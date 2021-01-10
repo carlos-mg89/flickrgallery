@@ -19,10 +19,7 @@ class SavedPhotosFragment : Fragment() {
 
     private lateinit var binding: SavedPhotosFragmentBinding
     private lateinit var viewModel: SavedPhotosViewModel
-    private val savedPhotosAdapter = SavedPhotosAdapter(
-            onSavedPhotoClicked(),
-            onDeleteBtnClicked()
-    )
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
