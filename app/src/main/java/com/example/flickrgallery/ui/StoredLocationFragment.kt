@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.StoredLocationFragmentBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.model.Photo
@@ -27,9 +29,16 @@ class StoredLocationFragment : Fragment() {
     ): View {
         buildDependencies()
         buildViewModel()
+        binding = DataBindingUtil.inflate(inflater, R.layout.stored_location_fragment, container ,false)
+        bindViewWithData()
         setupUi()
         subscribeUi()
         return binding.root
+    }
+
+    private fun bindViewWithData() {
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
     }
 
     private fun subscribeUi() {
@@ -41,7 +50,6 @@ class StoredLocationFragment : Fragment() {
     }
 
     private fun setupUi() {
-        binding = StoredLocationFragmentBinding.inflate(layoutInflater)
         binding.photoList.photoOnClickListener = { navigateToDetail(it) }
     }
 

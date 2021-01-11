@@ -17,9 +17,14 @@ class PhotoListView @JvmOverloads constructor(
 
     private var binding: PhotoListViewBinding
     lateinit var photoOnClickListener: (Photo) -> Unit
-    private val adapter = PhotosAdapter(emptyList()) {
+    private val adapter = PhotosAdapter {
         photoOnClickListener(it)
     }
+    var locationPhotos: List<Photo> = emptyList()
+        set(value) {
+            adapter.photos = value
+            field = value
+        }
 
     init {
         val inflater = LayoutInflater.from(context)
@@ -30,6 +35,6 @@ class PhotoListView @JvmOverloads constructor(
     }
 
     fun swapItems(photos: List<Photo>){
-        adapter.setItems(photos)
+        adapter.photos = photos
     }
 }
