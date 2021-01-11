@@ -14,7 +14,6 @@ import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.FragmentExploreBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.gps.GpsProvider
-import com.example.flickrgallery.model.StoredLocation
 import com.example.flickrgallery.repo.*
 import com.example.flickrgallery.ui.ExploreFragmentDirections.Companion.actionExploreFragmentToPhotoDetailsFragment
 import com.google.android.material.snackbar.Snackbar
@@ -68,7 +67,6 @@ class ExploreFragment : Fragment() {
     }
 
     private fun setupUi() {
-        val activity = this.activity
         binding.recyclerview.adapter = PhotosAdapter {
             findNavController().navigate(actionExploreFragmentToPhotoDetailsFragment(it))
         }

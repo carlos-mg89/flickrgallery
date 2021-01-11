@@ -32,7 +32,6 @@ class StoredLocationFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.stored_location_fragment, container ,false)
         bindViewWithData()
         setupUi()
-        subscribeUi()
         return binding.root
     }
 
@@ -41,20 +40,13 @@ class StoredLocationFragment : Fragment() {
         binding.lifecycleOwner = this
     }
 
-    private fun subscribeUi() {
-        viewModel.storedLocationUiState.observe(requireActivity()){
-            val visibility = if (it.isProgressVisible) View.VISIBLE else View.GONE
-            binding.progress.visibility = visibility
-            binding.photoList.swapItems(it.photos)
-        }
-    }
-
     private fun setupUi() {
         binding.photoList.photoOnClickListener = { navigateToDetail(it) }
     }
 
     private fun navigateToDetail(photo: Photo) {
-        findNavController().navigate(StoredLocationFragmentDirections.actionStoredLocationFragmentToPhotoDetailsFragment(photo))
+        findNavController().navigate(StoredLocationFragmentDirections
+                .actionStoredLocationFragmentToPhotoDetailsFragment(photo))
     }
 
     private fun buildViewModel() {
