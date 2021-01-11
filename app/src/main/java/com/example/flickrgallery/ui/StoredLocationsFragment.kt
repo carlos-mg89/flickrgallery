@@ -8,11 +8,13 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
+import androidx.navigation.fragment.findNavController
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.StoredLocationsFragmentBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.model.StoredLocation
 import com.example.flickrgallery.repo.StoredLocationRepoImpl
+import com.example.flickrgallery.ui.StoredLocationsFragmentDirections.Companion.actionStoredLocationsFragmentToStoredLocationFragment
 
 class StoredLocationsFragment : Fragment() {
 
@@ -54,7 +56,7 @@ class StoredLocationsFragment : Fragment() {
     }
 
     private fun getPhotosFromLocationToDisplayThem(): (StoredLocation) -> Unit = {
-        (activity as MainActivityCommunicator).onStoredLocationClicked(it)
+        findNavController().navigate(actionStoredLocationsFragmentToStoredLocationFragment(it))
     }
 
     private fun deleteStoredLocation(): (StoredLocation) -> Unit = {
