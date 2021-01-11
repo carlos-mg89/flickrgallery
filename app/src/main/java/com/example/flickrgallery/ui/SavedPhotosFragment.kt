@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.flickrgallery.R
@@ -17,25 +18,25 @@ class SavedPhotosFragment : Fragment() {
 
     private lateinit var binding: SavedPhotosFragmentBinding
     private lateinit var viewModel: SavedPhotosViewModel
-    private val savedPhotosAdapter = SavedPhotosAdapter(
-            emptyList(),
-            onSavedPhotoClicked(),
-            onDeleteBtnClicked()
-    )
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = SavedPhotosFragmentBinding.inflate(layoutInflater)
-        binding.recyclerView.adapter = savedPhotosAdapter
-
+        binding = DataBindingUtil.inflate(inflater,R.layout.saved_photos_fragment,container,false)
         return binding.root
+    }
+
+    private fun bindViewWhitData() {
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initViewModel()
+        bindViewWhitData()
         subscribeUi()
     }
 
@@ -47,9 +48,10 @@ class SavedPhotosFragment : Fragment() {
     }
 
     private fun subscribeUi() {
-        viewModel.savedPhotos.observe(viewLifecycleOwner) {
-            savedPhotosAdapter.setItems(it)
-        }
+        binding.recyclerView.adapter = SavedPhotosAdapter(
+            onPhotoItemClicked = onSavedPhotoClicked(),
+            onDeleteBtnClicked = onDeleteBtnClicked()
+        )
     }
 
     private fun onSavedPhotoClicked(): (Photo) -> Unit = {
