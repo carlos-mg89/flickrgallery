@@ -14,6 +14,7 @@ import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.FragmentExploreBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.gps.GpsProvider
+import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.repo.*
 import com.example.flickrgallery.ui.ExploreFragmentDirections.Companion.actionExploreFragmentToPhotoDetailsFragment
 import com.google.android.material.snackbar.Snackbar
@@ -67,12 +68,15 @@ class ExploreFragment : Fragment() {
     }
 
     private fun setupUi() {
-        binding.recyclerview.adapter = PhotosAdapter {
-            findNavController().navigate(actionExploreFragmentToPhotoDetailsFragment(it))
-        }
+        binding.photoList.photoOnClickListener = { navigateToDetail(it) }
+
         binding.exploreFragmentFab.setOnClickListener {
             viewModel.storeLocation(description = getRandomNumber().toString())
         }
+    }
+
+    private fun navigateToDetail(photo: Photo) {
+        findNavController().navigate(actionExploreFragmentToPhotoDetailsFragment(photo))
     }
 
     private fun buildDependencies() {
