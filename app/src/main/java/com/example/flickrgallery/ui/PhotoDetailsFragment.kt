@@ -8,9 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
-import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.PhotoDetailsFragmentBinding
 import com.example.flickrgallery.db.Db
