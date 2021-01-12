@@ -68,7 +68,9 @@ class ExploreFragment : Fragment() {
     }
 
     private fun setupUi() {
-        binding.photoList.photoOnClickListener = { navigateToDetail(it) }
+        binding.recyclerview.adapter = PhotosAdapter {
+            navigateToDetail(it)
+        }
 
         binding.exploreFragmentFab.setOnClickListener {
             viewModel.storeLocation(description = getRandomNumber().toString())
