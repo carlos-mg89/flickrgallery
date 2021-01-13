@@ -8,25 +8,25 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.*
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.FragmentExploreBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.gps.GpsProvider
-import com.example.flickrgallery.model.StoredLocation
+import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.repo.*
+import com.example.flickrgallery.ui.ExploreFragmentDirections.Companion.actionExploreFragmentToPhotoDetailsFragment
 import com.google.android.material.snackbar.Snackbar
 
 class ExploreFragment : Fragment() {
 
-    companion object {
-        const val EXTRA_STORED_LOCATION = "storedLocation"
-    }
 
     private lateinit var gpsRepo: GpsRepo
     private lateinit var storedLocationRepo: StoredLocationRepo
     private lateinit var binding: FragmentExploreBinding
     private lateinit var viewModel: ExploreViewModel
+
 
     // Falta controlar el "Denegar siempre"
     private val requestPermissionLauncher = registerForActivityResult(
@@ -54,17 +54,8 @@ class ExploreFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_explore, container ,false)
         bindViewWithData()
         setupUi()
-        decideHowToLoadPhotos()
+        requestLocationPermissionAndGetPhotos()
         return binding.root
-    }
-
-    private fun decideHowToLoadPhotos() {
-        val storedLocation = arguments?.getParcelable(EXTRA_STORED_LOCATION) as StoredLocation?
-        if (storedLocation == null) {
-            requestLocationPermissionAndGetPhotos()
-        } else {
-            viewModel.loadPhotos(storedLocation)
-        }
     }
 
     private fun requestLocationPermissionAndGetPhotos() {
@@ -77,13 +68,17 @@ class ExploreFragment : Fragment() {
     }
 
     private fun setupUi() {
-        val activity = this.activity
         binding.recyclerview.adapter = PhotosAdapter {
-            (activity as MainActivityCommunicator).onPhotoClicked(it)
+            navigateToDetail(it)
         }
+
         binding.exploreFragmentFab.setOnClickListener {
             viewModel.storeLocation(description = getRandomNumber().toString())
         }
+    }
+
+    private fun navigateToDetail(photo: Photo) {
+        findNavController().navigate(actionExploreFragmentToPhotoDetailsFragment(photo))
     }
 
     private fun buildDependencies() {

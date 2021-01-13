@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
+import androidx.navigation.fragment.navArgs
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.PhotoDetailsFragmentBinding
 import com.example.flickrgallery.db.Db
@@ -17,13 +18,12 @@ import com.example.flickrgallery.repo.PhotoRepoImpl
 
 class PhotoDetailsFragment : Fragment() {
 
-    companion object {
-        const val EXTRA_PHOTO = "PhotoDetailsFragment:photo"
-    }
 
     private lateinit var photo: Photo
     private lateinit var viewModel: PhotoDetailsViewModel
     private lateinit var binding: PhotoDetailsFragmentBinding
+    private val args: PhotoDetailsFragmentArgs by navArgs()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,
@@ -31,7 +31,7 @@ class PhotoDetailsFragment : Fragment() {
         initViewModel()
         binding = DataBindingUtil.inflate(inflater, R.layout.photo_details_fragment, container, false)
 
-        photo = arguments?.getParcelable(EXTRA_PHOTO)!!
+        photo = args.photoArg!!
         binding.lifecycleOwner = this
         binding.setPhoto(photo)
         binding.viewModel = viewModel
