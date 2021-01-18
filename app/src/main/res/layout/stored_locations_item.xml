@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textSize="20sp"
-            android:text="@{storedLocation.savedDate.toString()}"
+            android:text="@{storedLocation.savedDateString}"
             tools:text="12/12/2021 15:40" />
 
             <TextView
