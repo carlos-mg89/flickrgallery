@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
@@ -20,26 +20,15 @@ class StoredLocationsFragment : Fragment() {
 
     private lateinit var binding: StoredLocationsFragmentBinding
     private lateinit var viewModel: StoredLocationsViewModel
-    private val storedLocationsAdapter = StoredLocationsAdapter(
-            emptyList(),
-            getPhotosFromLocationToDisplayThem(),
-            deleteStoredLocation()
-    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = StoredLocationsFragmentBinding.inflate(layoutInflater)
-        binding.recyclerView.adapter = storedLocationsAdapter
-
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+        binding = DataBindingUtil.inflate(inflater, R.layout.stored_locations_fragment, container ,false)
         initViewModel()
-        observeStoredLocations()
+        subscribeUi()
+        bindViewWithData()
+        return binding.root
     }
 
     private fun initViewModel() {
@@ -49,20 +38,22 @@ class StoredLocationsFragment : Fragment() {
         viewModel = ViewModelProvider(this, factory).get()
     }
 
-    private fun observeStoredLocations() {
-        viewModel.storedLocations.observe(viewLifecycleOwner) { storedLocations ->
-            storedLocationsAdapter.setItems(storedLocations)
+    private fun subscribeUi() {
+        viewModel.navigateToStoredLocation.observe(requireActivity()) { event ->
+            event.getContentIfNotHandled()?.let {
+                navigateToStoredLocation(it)
+            }
         }
     }
 
-    private fun getPhotosFromLocationToDisplayThem(): (StoredLocation) -> Unit = {
-        findNavController().navigate(actionStoredLocationsFragmentToStoredLocationFragment(it))
+    private fun bindViewWithData() {
+        binding.viewModel = viewModel
+        binding.recyclerView.adapter = StoredLocationsAdapter(viewModel)
+        binding.lifecycleOwner = this
     }
 
-    private fun deleteStoredLocation(): (StoredLocation) -> Unit = {
-        viewModel.delete(it)
-        Toast.makeText(
-                activity, R.string.stored_location_delete_success, Toast.LENGTH_LONG
-        ).show()
+    private fun navigateToStoredLocation(storedLocation: StoredLocation) {
+        findNavController()
+            .navigate(actionStoredLocationsFragmentToStoredLocationFragment(storedLocation))
     }
 }
