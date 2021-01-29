@@ -11,14 +11,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.StoredLocationFragmentBinding
-import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.model.Photo
-import com.example.flickrgallery.repo.StoredLocationRepo
-import com.example.flickrgallery.repo.StoredLocationRepoImpl
 
 class StoredLocationFragment : Fragment() {
 
-    private lateinit var storedLocationRepo: StoredLocationRepo
     private lateinit var binding: StoredLocationFragmentBinding
     private lateinit var viewModel: StoredLocationViewModel
     private val args: StoredLocationFragmentArgs by navArgs()
@@ -27,7 +23,6 @@ class StoredLocationFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        buildDependencies()
         buildViewModel()
         binding = DataBindingUtil.inflate(inflater, R.layout.stored_location_fragment, container ,false)
         bindViewWithData()
@@ -54,10 +49,5 @@ class StoredLocationFragment : Fragment() {
     private fun buildViewModel() {
         viewModel = ViewModelProvider(this).get(StoredLocationViewModel::class.java)
         viewModel.loadPhotos(args.storedLocationArg!!)
-    }
-
-    private fun buildDependencies() {
-        val database = Db.getDatabase(requireContext().applicationContext)
-        storedLocationRepo = StoredLocationRepoImpl(database)
     }
 }
