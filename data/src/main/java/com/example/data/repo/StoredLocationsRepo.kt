@@ -1,5 +1,6 @@
 package com.example.data.repo
 
+import com.example.data.entities.Location
 import com.example.data.source.LocationDataSource
 import com.example.data.source.StoredLocationsDataSource
 import com.example.domain.StoredLocation
@@ -10,9 +11,8 @@ class StoredLocationsRepo(
     private val storedLocationsDataSource: StoredLocationsDataSource,
     private val locationDataSource: LocationDataSource
 ) {
-    fun getAll(): Flow<List<StoredLocation>> {
-        return storedLocationsDataSource.getAll()
-    }
+
+    suspend fun getAll(): Flow<List<StoredLocation>> = storedLocationsDataSource.getAll()
 
     suspend fun insert(storedLocation: StoredLocation) =
         storedLocationsDataSource.insert(storedLocation)
@@ -22,11 +22,11 @@ class StoredLocationsRepo(
     }
 
     @ExperimentalCoroutinesApi
-    fun getPositionUpdates(): Flow<StoredLocation> {
-        return locationDataSource.getPositionUpdates()
-    }
+    fun getPositionUpdates(): Flow<Location> = locationDataSource.getPositionUpdates()
 
     fun setLocationUpdatesEnabled(enabled: Boolean) {
         locationDataSource.areUpdatesDisabled = enabled
     }
+
+    fun areUpdatesDisabled(): Boolean = locationDataSource.areUpdatesDisabled
 }

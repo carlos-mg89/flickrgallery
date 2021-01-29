@@ -10,23 +10,23 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.*
+import com.example.data.repo.StoredLocationsRepo
 import com.example.flickrgallery.R
+import com.example.flickrgallery.data.source.FusedLocationDataSource
+import com.example.flickrgallery.data.source.StoredLocationsRoomDataSource
 import com.example.flickrgallery.databinding.FragmentExploreBinding
 import com.example.flickrgallery.db.Db
-import com.example.flickrgallery.gps.GpsProvider
 import com.example.flickrgallery.model.Photo
-import com.example.flickrgallery.repo.*
 import com.example.flickrgallery.ui.ExploreFragmentDirections.Companion.actionExploreFragmentToPhotoDetailsFragment
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalCoroutinesApi
 class ExploreFragment : Fragment() {
 
-
-    private lateinit var gpsRepo: GpsRepo
-    private lateinit var storedLocationRepo: StoredLocationRepo
+    private lateinit var storedLocationsRepo: StoredLocationsRepo
     private lateinit var binding: FragmentExploreBinding
     private lateinit var viewModel: ExploreViewModel
-
 
     // Falta controlar el "Denegar siempre"
     private val requestPermissionLauncher = registerForActivityResult(
@@ -83,13 +83,16 @@ class ExploreFragment : Fragment() {
 
     private fun buildDependencies() {
         val database = Db.getDatabase(requireContext())
-        val gpsProvider = GpsProvider(requireContext())
-        gpsRepo = GpsRepoImpl(gpsProvider)
-        storedLocationRepo = StoredLocationRepoImpl(database)
+        val fusedLocationDataSource = FusedLocationDataSource(requireContext())
+        val storedLocationsDataSource = StoredLocationsRoomDataSource(database)
+        storedLocationsRepo = StoredLocationsRepo(
+            storedLocationsDataSource,
+            fusedLocationDataSource
+        )
     }
 
     private fun buildViewModel(): ExploreViewModel {
-        val factory = ExploreViewModelFactory(gpsRepo, storedLocationRepo)
+        val factory = ExploreViewModelFactory(storedLocationsRepo)
         return ViewModelProvider(this, factory).get(ExploreViewModel::class.java)
     }
 

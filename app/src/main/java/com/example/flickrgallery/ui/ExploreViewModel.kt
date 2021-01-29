@@ -2,40 +2,41 @@ package com.example.flickrgallery.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.data.entities.Location
+import com.example.data.repo.StoredLocationsRepo
+import com.example.domain.StoredLocation
 import com.example.flickrgallery.client.FlickrApiClient
-import com.example.flickrgallery.model.GpsSnapshot
 import com.example.flickrgallery.model.Photo
-import com.example.flickrgallery.model.StoredLocation
-import com.example.flickrgallery.repo.GpsRepo
-import com.example.flickrgallery.repo.StoredLocationRepo
 import com.example.flickrgallery.ui.common.ScopedViewModel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
+
 
 class ExploreViewModel(
-    private val gpsRepo: GpsRepo,
-    private val storedLocationRepo: StoredLocationRepo
+    private val storedLocationsRepo: StoredLocationsRepo
 ) : ScopedViewModel() {
 
     private val _exploreUiState = MutableLiveData(ExploreUiState())
     val exploreUiState: LiveData<ExploreUiState>
         get() = _exploreUiState
 
-    var gpsSnapshot = GpsSnapshot()
+    var location = Location()
 
+    @ExperimentalCoroutinesApi
     fun proceedGettingUpdates() {
         launch {
-            if (gpsRepo.areUpdatesDisabled) {
-                gpsRepo.getPositionUpdates().collect(::onNewPositionReceived)
+            if (storedLocationsRepo.areUpdatesDisabled()) {
+                storedLocationsRepo.getPositionUpdates().collect(::onNewPositionReceived)
             }
         }
     }
 
-    private suspend fun onNewPositionReceived(gpsSnapshot: GpsSnapshot) {
+    private suspend fun onNewPositionReceived(location: Location) {
         setUiUpdatesEnabled()
         setUiBusy()
-        this.gpsSnapshot = gpsSnapshot
-        val photos = getPhotos(gpsSnapshot.latitude, gpsSnapshot.longitude)
+        this.location = location
+        val photos = getPhotos(location.latitude, location.longitude)
         setUiPhotosReceived(photos)
     }
 
@@ -47,10 +48,10 @@ class ExploreViewModel(
     fun storeLocation(description: String = "") {
         launch {
             val location = StoredLocation()
-            location.latitude = gpsSnapshot.latitude
-            location.longitude = gpsSnapshot.longitude
+            location.latitude = this@ExploreViewModel.location.latitude
+            location.longitude = this@ExploreViewModel.location.longitude
             location.description = description
-            storedLocationRepo.insert(location)
+            storedLocationsRepo.insert(location)
         }
     }
 
