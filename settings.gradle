@@ -1,2 +1,2 @@
-include ':app'
+include ':domain', ':usecases', ':data', ':app'
 rootProject.name = "Flickr Gallery"
