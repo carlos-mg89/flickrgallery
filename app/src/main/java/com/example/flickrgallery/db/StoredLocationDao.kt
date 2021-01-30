@@ -2,7 +2,7 @@ package com.example.flickrgallery.db
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.domain.StoredLocation
+import com.example.flickrgallery.model.StoredLocation
 import kotlinx.coroutines.flow.Flow
 
 @Dao
