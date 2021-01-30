@@ -1,26 +1,27 @@
 package com.example.flickrgallery.ui
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.flickrgallery.R
+import com.example.domain.StoredLocation
 import com.example.flickrgallery.databinding.StoredLocationsItemBinding
-import com.example.flickrgallery.model.StoredLocation
 import com.example.flickrgallery.ui.common.basicDiffUtil
-import com.example.flickrgallery.ui.common.bindingInflate
 
 class StoredLocationsAdapter(
         private val viewModel: StoredLocationsViewModel
 ) :
     RecyclerView.Adapter<StoredLocationsAdapter.ViewHolder>() {
 
+    private lateinit var binding: StoredLocationsItemBinding
     var storedLocations: List<StoredLocation> by basicDiffUtil (
         emptyList(),
         areItemsTheSame = { old, new -> old.id == new.id }
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(parent.bindingInflate(R.layout.stored_locations_item, false))
+        binding = StoredLocationsItemBinding
+                .inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
@@ -29,21 +30,20 @@ class StoredLocationsAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val storesLocation = storedLocations[position]
-        holder.binding.storedLocation = storesLocation
         holder.binding.container.setOnClickListener{
             viewModel.onStoredLocationClicked(storesLocation)
         }
         holder.binding.deleteBtn.setOnClickListener {
             viewModel.onStoredLocationDeleteClicked(storesLocation)
         }
+        holder.bind(storesLocation)
     }
 
-    class ViewHolder(val binding: StoredLocationsItemBinding): RecyclerView.ViewHolder(binding.root)
-}
+    class ViewHolder(val binding: StoredLocationsItemBinding): RecyclerView.ViewHolder(binding.root) {
 
-@BindingAdapter("storedLocations")
-fun RecyclerView.setStoredLocations(storedLocations: List<StoredLocation>?) {
-    (adapter as? StoredLocationsAdapter)?.let {
-        it.storedLocations = storedLocations ?: emptyList()
+        fun bind(storedLocation: StoredLocation) {
+            binding.savedDate.text = storedLocation.savedDateString
+            binding.description.text = storedLocation.description
+        }
     }
 }

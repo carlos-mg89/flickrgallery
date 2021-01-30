@@ -27,7 +27,9 @@ class ExploreViewModel(
     fun proceedGettingUpdates() {
         launch {
             if (storedLocationsRepo.areUpdatesDisabled()) {
-                storedLocationsRepo.getPositionUpdates().collect(::onNewPositionReceived)
+                storedLocationsRepo.getPositionUpdates().collect {
+                    onNewPositionReceived(it)
+                }
             }
         }
     }
