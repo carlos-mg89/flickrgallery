@@ -10,9 +10,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.*
+import com.example.data.repo.PhotosRepo
 import com.example.data.repo.StoredLocationsRepo
+import com.example.data.source.PhotosLocalDataSource
 import com.example.flickrgallery.R
 import com.example.flickrgallery.data.source.FusedLocationDataSource
+import com.example.flickrgallery.data.source.PhotosFlickerDataSource
+import com.example.flickrgallery.data.source.PhotosRoomDataSource
 import com.example.flickrgallery.data.source.StoredLocationsRoomDataSource
 import com.example.flickrgallery.databinding.FragmentExploreBinding
 import com.example.flickrgallery.db.Db
@@ -27,6 +31,7 @@ class ExploreFragment : Fragment() {
     private lateinit var storedLocationsRepo: StoredLocationsRepo
     private lateinit var binding: FragmentExploreBinding
     private lateinit var viewModel: ExploreViewModel
+    private lateinit var photosRepo: PhotosRepo
 
     // Falta controlar el "Denegar siempre"
     private val requestPermissionLauncher = registerForActivityResult(
@@ -85,14 +90,17 @@ class ExploreFragment : Fragment() {
         val database = Db.getDatabase(requireContext())
         val fusedLocationDataSource = FusedLocationDataSource(requireContext())
         val storedLocationsDataSource = StoredLocationsRoomDataSource(database)
+        val photosLocalDataSource = PhotosRoomDataSource(database)
+        val photosRemoteDataSource = PhotosFlickerDataSource()
         storedLocationsRepo = StoredLocationsRepo(
             storedLocationsDataSource,
             fusedLocationDataSource
         )
+        photosRepo = PhotosRepo(photosLocalDataSource,photosRemoteDataSource)
     }
 
     private fun buildViewModel(): ExploreViewModel {
-        val factory = ExploreViewModelFactory(storedLocationsRepo)
+        val factory = ExploreViewModelFactory(storedLocationsRepo, photosRepo)
         return ViewModelProvider(this, factory).get(ExploreViewModel::class.java)
     }
 

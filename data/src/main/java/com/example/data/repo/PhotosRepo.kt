@@ -4,20 +4,13 @@ import com.example.data.source.PhotosLocalDataSource
 import com.example.data.source.PhotosRemoteDataSource
 import com.example.domain.Photo
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 class PhotosRepo(
     private val local: PhotosLocalDataSource,
     private val remote: PhotosRemoteDataSource
 ){
 
-    private val _photosNearby: MutableStateFlow<List<Photo>> = MutableStateFlow(emptyList())
-    val photosNearby: StateFlow<List<Photo>> = _photosNearby
-
-    suspend fun updatePhotosForLocation(latitude: Double, longitude: Double) {
-        _photosNearby.value = remote.getPhotosNearby(latitude = latitude, longitude = longitude)
-    }
+    suspend fun getPhotosNearby(latitude:Double, longitude: Double): List<Photo> = remote.getPhotosNearby(latitude, longitude)
 
     suspend fun getAllSavedPhotos(): Flow<List<Photo>> = local.getAll()
 
