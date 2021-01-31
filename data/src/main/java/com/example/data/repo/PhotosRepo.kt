@@ -15,13 +15,13 @@ class PhotosRepo(
     private val _photosNearby: MutableStateFlow<List<Photo>> = MutableStateFlow(emptyList())
     val photosNearby: StateFlow<List<Photo>> = _photosNearby
 
-    fun updatePhotosForLocation(latitude: Double, longitude: Double) {
+    suspend fun updatePhotosForLocation(latitude: Double, longitude: Double) {
         _photosNearby.value = remote.getPhotosNearby(latitude = latitude, longitude = longitude)
     }
 
-    fun getAllSavedPhotos(): Flow<List<Photo>> = local.getAll()
+    suspend fun getAllSavedPhotos(): Flow<List<Photo>> = local.getAll()
 
-    fun getSavedPhoto(id: String) = local.get(id)
+    suspend fun getSavedPhoto(id: String) = local.get(id)
 
     suspend fun insertSavedPhoto(photo: Photo) = local.insert(photo)
 

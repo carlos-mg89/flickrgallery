@@ -4,7 +4,7 @@ import com.example.domain.Photo
 
 interface PhotosRemoteDataSource {
 
-    fun getPhotosNearby(
+    suspend fun getPhotosNearby(
         latitude: Double,
         longitude: Double,
         radiusKm: Double = DEFAULT_RADIUS_KILOMETERS,
