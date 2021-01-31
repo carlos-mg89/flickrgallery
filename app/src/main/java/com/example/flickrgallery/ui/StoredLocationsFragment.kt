@@ -18,13 +18,16 @@ import com.example.flickrgallery.data.source.toFrameworkStoredLocation
 import com.example.flickrgallery.databinding.StoredLocationsFragmentBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.ui.StoredLocationsFragmentDirections.Companion.actionStoredLocationsFragmentToStoredLocationFragment
+import com.example.usecases.DeleteStoredLocation
+import com.example.usecases.GetStoredLocations
 
 
 class StoredLocationsFragment : Fragment() {
 
     private lateinit var binding: StoredLocationsFragmentBinding
     private lateinit var viewModel: StoredLocationsViewModel
-    private lateinit var storedLocationsRepo: StoredLocationsRepo
+    private lateinit var getStoredLocations: GetStoredLocations
+    private lateinit var deleteStoredLocation: DeleteStoredLocation
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -41,11 +44,13 @@ class StoredLocationsFragment : Fragment() {
         val database = Db.getDatabase(requireContext())
         val fusedLocationDataSource = FusedLocationDataSource(requireContext())
         val storedLocationsDataSource = StoredLocationsRoomDataSource(database)
-        storedLocationsRepo = StoredLocationsRepo(storedLocationsDataSource, fusedLocationDataSource)
+        val storedLocationsRepo = StoredLocationsRepo(storedLocationsDataSource, fusedLocationDataSource)
+        getStoredLocations = GetStoredLocations(storedLocationsRepo)
+        deleteStoredLocation = DeleteStoredLocation(storedLocationsRepo)
     }
 
     private fun initViewModel() {
-        val factory = StoredLocationsViewModelFactory(storedLocationsRepo)
+        val factory = StoredLocationsViewModelFactory(getStoredLocations, deleteStoredLocation)
         viewModel = ViewModelProvider(this, factory).get()
         viewModel.startCollectingStoredLocations()
     }

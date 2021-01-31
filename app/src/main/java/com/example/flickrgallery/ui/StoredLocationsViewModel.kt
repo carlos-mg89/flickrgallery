@@ -2,15 +2,17 @@ package com.example.flickrgallery.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.data.repo.StoredLocationsRepo
 import com.example.domain.StoredLocation
 import com.example.flickrgallery.ui.common.Event
 import com.example.flickrgallery.ui.common.ScopedViewModel
+import com.example.usecases.DeleteStoredLocation
+import com.example.usecases.GetStoredLocations
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class StoredLocationsViewModel(
-    private val storedLocationsRepo: StoredLocationsRepo
+        private val getStoredLocations: GetStoredLocations,
+        private val deleteStoredLocation: DeleteStoredLocation
 ) : ScopedViewModel() {
 
     private val _storedLocations = MutableLiveData<List<StoredLocation>>(emptyList())
@@ -23,7 +25,7 @@ class StoredLocationsViewModel(
 
     fun startCollectingStoredLocations() {
         launch {
-            storedLocationsRepo.getAll().collect {
+            getStoredLocations.invoke().collect {
                 _storedLocations.value = it
             }
         }
@@ -34,6 +36,8 @@ class StoredLocationsViewModel(
     }
 
     fun onStoredLocationDeleteClicked(storedLocation: StoredLocation) {
-        launch { storedLocationsRepo.delete(storedLocation) }
+        launch {
+            deleteStoredLocation.invoke(storedLocation)
+        }
     }
 }
