@@ -9,17 +9,21 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.data.repo.PhotosRepo
 import com.example.flickrgallery.R
+import com.example.flickrgallery.data.source.PhotosFlickerDataSource
+import com.example.flickrgallery.data.source.PhotosRoomDataSource
 import com.example.flickrgallery.databinding.SavedPhotosFragmentBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.model.Photo
-import com.example.flickrgallery.repo.PhotoRepoImpl
+
 import com.example.flickrgallery.ui.SavedPhotosFragmentDirections.Companion.actionSavedPhotosFragmentToPhotoDetailsFragment
 
 class SavedPhotosFragment : Fragment() {
 
     private lateinit var binding: SavedPhotosFragmentBinding
     private lateinit var viewModel: SavedPhotosViewModel
+    private lateinit var photosRepo: PhotosRepo
 
 
     override fun onCreateView(
@@ -37,15 +41,21 @@ class SavedPhotosFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        buildDependencies()
         initViewModel()
         bindViewWhitData()
         subscribeUi()
     }
 
+    private fun buildDependencies() {
+        val database = Db.getDatabase(requireContext())
+        val photosLocalDataSource = PhotosRoomDataSource(database)
+        val photosRemoteDataSource = PhotosFlickerDataSource()
+        photosRepo = PhotosRepo(photosLocalDataSource,photosRemoteDataSource)
+    }
+
     private fun initViewModel() {
-        val database = Db.getDatabase(requireContext().applicationContext)
-        val photoRepo = PhotoRepoImpl(database)
-        val factory = SavedPhotosViewModelFactory(photoRepo)
+        val factory = SavedPhotosViewModelFactory(photosRepo)
         viewModel = ViewModelProvider(this, factory).get(SavedPhotosViewModel::class.java)
     }
 
