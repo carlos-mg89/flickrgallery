@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.data.repo.PhotosRepo
 import com.example.flickrgallery.data.source.toRoomPhoto
-import com.example.flickrgallery.model.GpsSnapshot
 import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.model.StoredLocation
 import com.example.flickrgallery.ui.common.ScopedViewModel
@@ -17,28 +16,17 @@ class StoredLocationViewModel(private val photosRepo: PhotosRepo) : ScopedViewMo
     val storedLocationUiState: LiveData<StoredLocationState>
         get() = _storedLocationUiState
 
-
     fun loadPhotos(storedLocation: StoredLocation) {
         setUiBusy()
-        val storedLocationGpsSnapshot = getGpsSnapshot(storedLocation)
         launch {
-            val photos =
-                getPhotos(storedLocationGpsSnapshot.latitude, storedLocationGpsSnapshot.longitude)
+            val photos = getPhotos(storedLocation)
             setUiPhotosReceivedForStoredLocation(photos)
         }
     }
 
-    private suspend fun getPhotos(latitude: Double, longitude: Double): List<Photo> {
-        val photos = photosRepo.getPhotosNearby(latitude, longitude)
+    private suspend fun getPhotos(storedLocation: StoredLocation): List<Photo> {
+        val photos = photosRepo.getPhotosNearby(storedLocation.latitude, storedLocation.longitude)
         return photos.map { it.toRoomPhoto() }
-    }
-
-    private fun getGpsSnapshot(storedLocation: StoredLocation): GpsSnapshot {
-        return GpsSnapshot(
-            storedLocation.longitude,
-            storedLocation.latitude,
-            storedLocation.savedDate.time
-        )
     }
 
     private fun setUiBusy() {
