@@ -9,17 +9,20 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import androidx.navigation.fragment.navArgs
+import com.example.data.repo.PhotosRepo
 import com.example.flickrgallery.R
+import com.example.flickrgallery.data.source.PhotosFlickerDataSource
+import com.example.flickrgallery.data.source.PhotosRoomDataSource
 import com.example.flickrgallery.databinding.PhotoDetailsFragmentBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.model.Photo
-import com.example.flickrgallery.repo.PhotoRepoImpl
 
 
 class PhotoDetailsFragment : Fragment() {
 
 
     private lateinit var photo: Photo
+    private lateinit var photosRepo: PhotosRepo
     private lateinit var viewModel: PhotoDetailsViewModel
     private lateinit var binding: PhotoDetailsFragmentBinding
     private val args: PhotoDetailsFragmentArgs by navArgs()
@@ -28,6 +31,7 @@ class PhotoDetailsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,
     ): View {
+        buildDependencies()
         initViewModel()
         binding = DataBindingUtil.inflate(inflater, R.layout.photo_details_fragment, container, false)
 
@@ -39,10 +43,15 @@ class PhotoDetailsFragment : Fragment() {
         return binding.root
     }
 
+    private fun buildDependencies() {
+        val database = Db.getDatabase(requireContext())
+        val photosLocalDataSource = PhotosRoomDataSource(database)
+        val photosRemoteDataSource = PhotosFlickerDataSource()
+        photosRepo = PhotosRepo(photosLocalDataSource,photosRemoteDataSource)
+    }
+
     private fun initViewModel() {
-        val database = Db.getDatabase(requireContext().applicationContext)
-        val photoRepo = PhotoRepoImpl(database)
-        val factory = PhotoDetailsViewModelFactory(photoRepo)
+        val factory = PhotoDetailsViewModelFactory(photosRepo)
         viewModel = ViewModelProvider(this, factory).get()
     }
 

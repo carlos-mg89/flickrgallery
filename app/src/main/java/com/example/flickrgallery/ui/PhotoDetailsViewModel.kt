@@ -2,13 +2,14 @@ package com.example.flickrgallery.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.data.repo.PhotosRepo
+import com.example.flickrgallery.data.source.toDomainPhoto
 import com.example.flickrgallery.model.Photo
-import com.example.flickrgallery.repo.PhotoRepo
 import com.example.flickrgallery.ui.common.ScopedViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PhotoDetailsViewModel(private val photoRepo: PhotoRepo) : ScopedViewModel() {
+class PhotoDetailsViewModel(private val photosRepo: PhotosRepo) : ScopedViewModel() {
 
     private val _favoriteStatus = MutableLiveData(false)
     val favoriteStatus: LiveData<Boolean>
@@ -21,7 +22,7 @@ class PhotoDetailsViewModel(private val photoRepo: PhotoRepo) : ScopedViewModel(
     }
 
     private suspend fun isPhotoInDB(photo: Photo): Boolean {
-        return photoRepo.get(photo.id) != null
+        return photosRepo.getSavedPhoto(photo.id) != null
     }
 
     fun toggleSaveStatus(photo: Photo) {
@@ -39,13 +40,13 @@ class PhotoDetailsViewModel(private val photoRepo: PhotoRepo) : ScopedViewModel(
 
     private fun deletePhotoInList(photo: Photo) {
         launch(Dispatchers.IO) {
-            photoRepo.delete(photo)
+            photosRepo.deleteSavedPhoto(photo.toDomainPhoto())
         }
     }
 
     private fun savePhotoToList(photo: Photo) {
         launch(Dispatchers.IO) {
-            photoRepo.insert(photo)
+            photosRepo.insertSavedPhoto(photo.toDomainPhoto())
         }
     }
 
