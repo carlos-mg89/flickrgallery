@@ -16,13 +16,14 @@ import com.example.flickrgallery.data.source.PhotosRoomDataSource
 import com.example.flickrgallery.databinding.StoredLocationFragmentBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.model.Photo
+import com.example.usecases.GetStoredLocationPhotos
 
 class StoredLocationFragment : Fragment() {
 
     private lateinit var binding: StoredLocationFragmentBinding
     private lateinit var viewModel: StoredLocationViewModel
     private val args: StoredLocationFragmentArgs by navArgs()
-    private lateinit var photosRepo: PhotosRepo
+    private lateinit var getStoredLocationPhotos: GetStoredLocationPhotos
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,7 +41,8 @@ class StoredLocationFragment : Fragment() {
         val database = Db.getDatabase(requireContext())
         val photosLocalDataSource = PhotosRoomDataSource(database)
         val photosRemoteDataSource = PhotosFlickerDataSource()
-        photosRepo = PhotosRepo(photosLocalDataSource,photosRemoteDataSource)
+        val photosRepo = PhotosRepo(photosLocalDataSource,photosRemoteDataSource)
+        getStoredLocationPhotos = GetStoredLocationPhotos(photosRepo)
     }
 
     private fun bindViewWithData() {
@@ -60,7 +62,7 @@ class StoredLocationFragment : Fragment() {
     }
 
     private fun buildViewModel() {
-        val factory = StoredLocationViewModelFactory(photosRepo)
+        val factory = StoredLocationViewModelFactory(getStoredLocationPhotos)
         viewModel = ViewModelProvider(this, factory).get(StoredLocationViewModel::class.java)
         viewModel.loadPhotos(args.storedLocationArg!!)
     }

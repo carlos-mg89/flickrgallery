@@ -2,14 +2,14 @@ package com.example.flickrgallery.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.data.repo.PhotosRepo
+import com.example.usecases.GetStoredLocationPhotos
 
 
 @Suppress("UNCHECKED_CAST")
 class StoredLocationViewModelFactory constructor(
-    private val photosRepo: PhotosRepo
+    private val getStoredLocationPhotos: GetStoredLocationPhotos
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>) =
-            StoredLocationViewModel(photosRepo) as T
+            StoredLocationViewModel(getStoredLocationPhotos) as T
 }
 

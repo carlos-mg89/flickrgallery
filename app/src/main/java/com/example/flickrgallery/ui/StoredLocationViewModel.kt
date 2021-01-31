@@ -2,15 +2,18 @@ package com.example.flickrgallery.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.data.repo.PhotosRepo
+import com.example.flickrgallery.data.source.toDomainStoredLocation
 import com.example.flickrgallery.data.source.toRoomPhoto
 import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.model.StoredLocation
 import com.example.flickrgallery.ui.common.ScopedViewModel
+import com.example.usecases.GetStoredLocationPhotos
 import kotlinx.coroutines.launch
 
 
-class StoredLocationViewModel(private val photosRepo: PhotosRepo) : ScopedViewModel() {
+class StoredLocationViewModel(
+        private val getStoredLocationPhotos: GetStoredLocationPhotos
+) : ScopedViewModel() {
 
     private val _storedLocationUiState = MutableLiveData(StoredLocationState())
     val storedLocationUiState: LiveData<StoredLocationState>
@@ -25,7 +28,7 @@ class StoredLocationViewModel(private val photosRepo: PhotosRepo) : ScopedViewMo
     }
 
     private suspend fun getPhotos(storedLocation: StoredLocation): List<Photo> {
-        val photos = photosRepo.getPhotosNearby(storedLocation.latitude, storedLocation.longitude)
+        val photos = getStoredLocationPhotos.invoke(storedLocation.toDomainStoredLocation())
         return photos.map { it.toRoomPhoto() }
     }
 
