@@ -19,7 +19,7 @@ class FusedLocationDataSource(context: Context) : LocationDataSource {
     override var areUpdatesDisabled: Boolean = true
 
     companion object {
-        const val ACCEPTABLE_MINIMUM_LOCATION_ACCURACY = 10
+        const val ACCEPTABLE_MINIMUM_LOCATION_ACCURACY = 25
         private const val SECONDS_TO_UPDATE_LOCATION = 1 * 1000L
     }
 
