@@ -28,10 +28,8 @@ class ExploreViewModel(
     @ExperimentalCoroutinesApi
     fun proceedGettingUpdates() {
         launch {
-            if (storedLocationsRepo.areUpdatesDisabled()) {
-                storedLocationsRepo.getPositionUpdates().collect {
-                    onNewPositionReceived(it)
-                }
+            storedLocationsRepo.getPositionUpdates().collect {
+                onNewPositionReceived(it)
             }
         }
     }

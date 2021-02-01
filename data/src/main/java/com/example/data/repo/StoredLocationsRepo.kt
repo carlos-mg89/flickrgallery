@@ -23,10 +23,4 @@ class StoredLocationsRepo(
 
     @ExperimentalCoroutinesApi
     fun getPositionUpdates(): Flow<Location> = locationDataSource.getPositionUpdates()
-
-    fun setLocationUpdatesEnabled(enabled: Boolean) {
-        locationDataSource.areUpdatesDisabled = enabled
-    }
-
-    fun areUpdatesDisabled(): Boolean = locationDataSource.areUpdatesDisabled
 }
