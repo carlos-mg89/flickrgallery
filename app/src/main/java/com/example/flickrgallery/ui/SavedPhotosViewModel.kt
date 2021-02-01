@@ -2,15 +2,17 @@ package com.example.flickrgallery.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.data.repo.PhotosRepo
 import com.example.flickrgallery.data.source.toDomainPhoto
 import com.example.flickrgallery.data.source.toRoomPhoto
 import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.ui.common.ScopedViewModel
+import com.example.usecases.DeleteSavedPhoto
+import com.example.usecases.GetSavedPhotos
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class SavedPhotosViewModel(private val photoRepo: PhotosRepo) : ScopedViewModel() {
+class SavedPhotosViewModel(private val getSavedPhotos: GetSavedPhotos,
+                           private val deleteSavedPhoto: DeleteSavedPhoto) : ScopedViewModel() {
 
     private val _savedPhotos = MutableLiveData<List<Photo>>(emptyList())
     val savedPhotos: LiveData<List<Photo>>
@@ -22,15 +24,15 @@ class SavedPhotosViewModel(private val photoRepo: PhotosRepo) : ScopedViewModel(
     
     private fun startCollectingPhotos() {
         launch {
-            photoRepo.getAllSavedPhotos().collect {domainPhotos->
-                _savedPhotos.value = domainPhotos.map { it.toRoomPhoto() }
+            getSavedPhotos.invoke().collect {
+                _savedPhotos.value = it.map { photoDomain -> photoDomain.toRoomPhoto() }
             }
         }
     }
 
-    fun deleteSavedPhoto(photo: Photo) {
+    fun deleteSavedPhoto(photoRoom: Photo) {
         launch {
-            photoRepo.deleteSavedPhoto(photo.toDomainPhoto())
+            deleteSavedPhoto.invoke(photoRoom.toDomainPhoto())
         }
     }
 }

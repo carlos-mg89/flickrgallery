@@ -18,12 +18,16 @@ import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.model.Photo
 
 import com.example.flickrgallery.ui.SavedPhotosFragmentDirections.Companion.actionSavedPhotosFragmentToPhotoDetailsFragment
+import com.example.usecases.DeleteSavedPhoto
+import com.example.usecases.GetSavedPhotos
 
 class SavedPhotosFragment : Fragment() {
 
     private lateinit var binding: SavedPhotosFragmentBinding
     private lateinit var viewModel: SavedPhotosViewModel
     private lateinit var photosRepo: PhotosRepo
+    private lateinit var getSavedPhotos: GetSavedPhotos
+    private lateinit var deleteSavedPhotos: DeleteSavedPhoto
 
 
     override fun onCreateView(
@@ -52,10 +56,12 @@ class SavedPhotosFragment : Fragment() {
         val photosLocalDataSource = PhotosRoomDataSource(database)
         val photosRemoteDataSource = PhotosFlickerDataSource()
         photosRepo = PhotosRepo(photosLocalDataSource,photosRemoteDataSource)
+        getSavedPhotos = GetSavedPhotos(photosRepo)
+        deleteSavedPhotos = DeleteSavedPhoto(photosRepo)
     }
 
     private fun initViewModel() {
-        val factory = SavedPhotosViewModelFactory(photosRepo)
+        val factory = SavedPhotosViewModelFactory(getSavedPhotos,deleteSavedPhotos)
         viewModel = ViewModelProvider(this, factory).get(SavedPhotosViewModel::class.java)
     }
 
