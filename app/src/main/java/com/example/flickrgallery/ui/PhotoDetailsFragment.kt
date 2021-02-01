@@ -16,6 +16,9 @@ import com.example.flickrgallery.data.source.PhotosRoomDataSource
 import com.example.flickrgallery.databinding.PhotoDetailsFragmentBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.model.Photo
+import com.example.usecases.GetSelectedPhoto
+import com.example.usecases.MarkPhotoAsFavorite
+import com.example.usecases.UnMarkPhotoAsFavorite
 
 
 class PhotoDetailsFragment : Fragment() {
@@ -26,6 +29,9 @@ class PhotoDetailsFragment : Fragment() {
     private lateinit var viewModel: PhotoDetailsViewModel
     private lateinit var binding: PhotoDetailsFragmentBinding
     private val args: PhotoDetailsFragmentArgs by navArgs()
+    private lateinit var getSelectedPhoto: GetSelectedPhoto
+    private lateinit var markPhotoAsFavorite: MarkPhotoAsFavorite
+    private lateinit var unMarkPhotoAsFavorite: UnMarkPhotoAsFavorite
 
 
     override fun onCreateView(
@@ -48,10 +54,13 @@ class PhotoDetailsFragment : Fragment() {
         val photosLocalDataSource = PhotosRoomDataSource(database)
         val photosRemoteDataSource = PhotosFlickerDataSource()
         photosRepo = PhotosRepo(photosLocalDataSource,photosRemoteDataSource)
+        getSelectedPhoto = GetSelectedPhoto(photosRepo)
+        markPhotoAsFavorite = MarkPhotoAsFavorite(photosRepo)
+        unMarkPhotoAsFavorite = UnMarkPhotoAsFavorite(photosRepo)
     }
 
     private fun initViewModel() {
-        val factory = PhotoDetailsViewModelFactory(photosRepo)
+        val factory = PhotoDetailsViewModelFactory(getSelectedPhoto, markPhotoAsFavorite, unMarkPhotoAsFavorite)
         viewModel = ViewModelProvider(this, factory).get()
     }
 
