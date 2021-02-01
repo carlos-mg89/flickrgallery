@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.*
 import com.example.data.repo.PhotosRepo
 import com.example.data.repo.StoredLocationsRepo
-import com.example.data.source.PhotosLocalDataSource
 import com.example.flickrgallery.R
 import com.example.flickrgallery.data.source.FusedLocationDataSource
 import com.example.flickrgallery.data.source.PhotosFlickerDataSource
@@ -22,6 +21,9 @@ import com.example.flickrgallery.databinding.FragmentExploreBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.ui.ExploreFragmentDirections.Companion.actionExploreFragmentToPhotoDetailsFragment
+import com.example.usecases.GetCurrentLocation
+import com.example.usecases.GetCurrentLocationPhotos
+import com.example.usecases.SaveStoredLocation
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -31,7 +33,9 @@ class ExploreFragment : Fragment() {
     private lateinit var storedLocationsRepo: StoredLocationsRepo
     private lateinit var binding: FragmentExploreBinding
     private lateinit var viewModel: ExploreViewModel
-    private lateinit var photosRepo: PhotosRepo
+    private lateinit var getCurrentLocation: GetCurrentLocation
+    private lateinit var saveStoredLocation: SaveStoredLocation
+    private lateinit var getCurrentLocationPhotos: GetCurrentLocationPhotos
 
     // Falta controlar el "Denegar siempre"
     private val requestPermissionLauncher = registerForActivityResult(
@@ -92,15 +96,21 @@ class ExploreFragment : Fragment() {
         val storedLocationsDataSource = StoredLocationsRoomDataSource(database)
         val photosLocalDataSource = PhotosRoomDataSource(database)
         val photosRemoteDataSource = PhotosFlickerDataSource()
+        val photosRepo = PhotosRepo(photosLocalDataSource,photosRemoteDataSource)
+
         storedLocationsRepo = StoredLocationsRepo(
             storedLocationsDataSource,
             fusedLocationDataSource
         )
-        photosRepo = PhotosRepo(photosLocalDataSource,photosRemoteDataSource)
+        getCurrentLocation = GetCurrentLocation(storedLocationsRepo)
+        saveStoredLocation = SaveStoredLocation(storedLocationsRepo)
+        getCurrentLocationPhotos = GetCurrentLocationPhotos(photosRepo)
     }
 
     private fun buildViewModel(): ExploreViewModel {
-        val factory = ExploreViewModelFactory(storedLocationsRepo, photosRepo)
+        val factory = ExploreViewModelFactory(
+            getCurrentLocation, saveStoredLocation, getCurrentLocationPhotos
+        )
         return ViewModelProvider(this, factory).get(ExploreViewModel::class.java)
     }
 

@@ -3,20 +3,22 @@ package com.example.flickrgallery.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.data.entities.Location
-import com.example.data.repo.PhotosRepo
-import com.example.data.repo.StoredLocationsRepo
 import com.example.domain.StoredLocation
 import com.example.flickrgallery.data.source.toRoomPhoto
 import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.ui.common.ScopedViewModel
+import com.example.usecases.GetCurrentLocation
+import com.example.usecases.GetCurrentLocationPhotos
+import com.example.usecases.SaveStoredLocation
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 
 class ExploreViewModel(
-    private val storedLocationsRepo: StoredLocationsRepo,
-    private val photosRepo: PhotosRepo
+        private val getCurrentLocation: GetCurrentLocation,
+        private val saveStoredLocation: SaveStoredLocation,
+        private val getCurrentLocationPhotos: GetCurrentLocationPhotos
 ) : ScopedViewModel() {
 
     private val _exploreUiState = MutableLiveData(ExploreUiState())
@@ -28,7 +30,7 @@ class ExploreViewModel(
     @ExperimentalCoroutinesApi
     fun proceedGettingUpdates() {
         launch {
-            storedLocationsRepo.getPositionUpdates().collect {
+            getCurrentLocation.invoke().collect {
                 onNewPositionReceived(it)
             }
         }
@@ -38,7 +40,7 @@ class ExploreViewModel(
         setUiUpdatesEnabled()
         setUiBusy()
         this.location = location
-        val photos = photosRepo.getPhotosNearby(location.latitude, location.longitude)
+        val photos = getCurrentLocationPhotos.invoke(location.latitude, location.longitude)
         setUiPhotosReceived(photos.map { it.toRoomPhoto() })
     }
 
@@ -48,7 +50,7 @@ class ExploreViewModel(
             location.latitude = this@ExploreViewModel.location.latitude
             location.longitude = this@ExploreViewModel.location.longitude
             location.description = description
-            storedLocationsRepo.insert(location)
+            saveStoredLocation.invoke(location)
         }
     }
 
