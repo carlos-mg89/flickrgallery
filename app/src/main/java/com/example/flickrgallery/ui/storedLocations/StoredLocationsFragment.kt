@@ -1,4 +1,4 @@
-package com.example.flickrgallery.ui
+package com.example.flickrgallery.ui.storedLocations
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,7 +17,6 @@ import com.example.flickrgallery.data.source.StoredLocationsRoomDataSource
 import com.example.flickrgallery.data.source.toFrameworkStoredLocation
 import com.example.flickrgallery.databinding.StoredLocationsFragmentBinding
 import com.example.flickrgallery.db.Db
-import com.example.flickrgallery.ui.StoredLocationsFragmentDirections.Companion.actionStoredLocationsFragmentToStoredLocationFragment
 import com.example.usecases.DeleteStoredLocation
 import com.example.usecases.GetStoredLocations
 
@@ -76,6 +75,6 @@ class StoredLocationsFragment : Fragment() {
     private fun navigateToStoredLocation(storedLocation: StoredLocation) {
         val frameworkStoredLocation = storedLocation.toFrameworkStoredLocation()
         findNavController()
-            .navigate(actionStoredLocationsFragmentToStoredLocationFragment(frameworkStoredLocation))
+            .navigate(StoredLocationsFragmentDirections.actionStoredLocationsFragmentToStoredLocationFragment(frameworkStoredLocation))
     }
 }

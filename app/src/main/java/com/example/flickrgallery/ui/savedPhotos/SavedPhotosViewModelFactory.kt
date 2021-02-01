@@ -1,4 +1,4 @@
-package com.example.flickrgallery.ui
+package com.example.flickrgallery.ui.savedPhotos
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

@@ -5,14 +5,14 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.flickrgallery.ui.ExploreViewModel" />
+            type="com.example.flickrgallery.ui.explore.ExploreViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:theme="@style/Theme.MaterialComponents.DayNight"
-        tools:context=".ui.ExploreFragment">
+        tools:context=".ui.explore.ExploreFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview"

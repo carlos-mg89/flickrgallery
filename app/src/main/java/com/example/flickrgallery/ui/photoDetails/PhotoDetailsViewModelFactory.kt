@@ -1,8 +1,7 @@
-package com.example.flickrgallery.ui
+package com.example.flickrgallery.ui.photoDetails
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.data.repo.PhotosRepo
 import com.example.usecases.GetSelectedPhoto
 import com.example.usecases.MarkPhotoAsFavorite
 import com.example.usecases.UnMarkPhotoAsFavorite

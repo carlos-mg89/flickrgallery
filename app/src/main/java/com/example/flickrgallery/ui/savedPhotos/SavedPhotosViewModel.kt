@@ -1,4 +1,4 @@
-package com.example.flickrgallery.ui
+package com.example.flickrgallery.ui.savedPhotos
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

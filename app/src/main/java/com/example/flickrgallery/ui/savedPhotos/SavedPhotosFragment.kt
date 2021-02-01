@@ -1,4 +1,4 @@
-package com.example.flickrgallery.ui
+package com.example.flickrgallery.ui.savedPhotos
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,8 +16,6 @@ import com.example.flickrgallery.data.source.PhotosRoomDataSource
 import com.example.flickrgallery.databinding.SavedPhotosFragmentBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.model.Photo
-
-import com.example.flickrgallery.ui.SavedPhotosFragmentDirections.Companion.actionSavedPhotosFragmentToPhotoDetailsFragment
 import com.example.usecases.DeleteSavedPhoto
 import com.example.usecases.GetSavedPhotos
 
@@ -73,7 +71,7 @@ class SavedPhotosFragment : Fragment() {
     }
 
     private fun onSavedPhotoClicked(): (Photo) -> Unit = {
-        findNavController().navigate(actionSavedPhotosFragmentToPhotoDetailsFragment(it))
+        findNavController().navigate(SavedPhotosFragmentDirections.actionSavedPhotosFragmentToPhotoDetailsFragment(it))
     }
 
     private fun onDeleteBtnClicked(): (Photo) -> Unit = {

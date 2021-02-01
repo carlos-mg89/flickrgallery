@@ -1,4 +1,4 @@
-package com.example.flickrgallery.ui
+package com.example.flickrgallery.ui.explore
 
 import android.Manifest
 import android.os.Bundle
@@ -20,7 +20,7 @@ import com.example.flickrgallery.data.source.StoredLocationsRoomDataSource
 import com.example.flickrgallery.databinding.FragmentExploreBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.model.Photo
-import com.example.flickrgallery.ui.ExploreFragmentDirections.Companion.actionExploreFragmentToPhotoDetailsFragment
+import com.example.flickrgallery.ui.common.PhotosAdapter
 import com.example.usecases.GetCurrentLocation
 import com.example.usecases.GetCurrentLocationPhotos
 import com.example.usecases.SaveStoredLocation
@@ -87,7 +87,7 @@ class ExploreFragment : Fragment() {
     }
 
     private fun navigateToDetail(photo: Photo) {
-        findNavController().navigate(actionExploreFragmentToPhotoDetailsFragment(photo))
+        findNavController().navigate(ExploreFragmentDirections.actionExploreFragmentToPhotoDetailsFragment(photo))
     }
 
     private fun buildDependencies() {

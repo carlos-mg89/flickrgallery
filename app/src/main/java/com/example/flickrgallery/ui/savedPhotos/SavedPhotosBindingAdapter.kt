@@ -1,4 +1,4 @@
-package com.example.flickrgallery.ui
+package com.example.flickrgallery.ui.savedPhotos
 
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView

@@ -1,4 +1,4 @@
-package com.example.flickrgallery.ui
+package com.example.flickrgallery.ui.storedLocations
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

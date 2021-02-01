@@ -1,12 +1,10 @@
-package com.example.flickrgallery.ui
+package com.example.flickrgallery.ui.common
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.MainItemBinding
 import com.example.flickrgallery.model.Photo
-import com.example.flickrgallery.ui.common.basicDiffUtil
-import com.example.flickrgallery.ui.common.bindingInflate
 
 class PhotosAdapter(
     var photoOnClickListener: (Photo) -> Unit

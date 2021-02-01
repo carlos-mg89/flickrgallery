@@ -1,4 +1,4 @@
-package com.example.flickrgallery.ui
+package com.example.flickrgallery.ui.storedLocationPhotos
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,6 +16,7 @@ import com.example.flickrgallery.data.source.PhotosRoomDataSource
 import com.example.flickrgallery.databinding.StoredLocationFragmentBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.model.Photo
+import com.example.flickrgallery.ui.common.PhotosAdapter
 import com.example.usecases.GetStoredLocationPhotos
 
 class StoredLocationFragment : Fragment() {
@@ -57,8 +58,11 @@ class StoredLocationFragment : Fragment() {
     }
 
     private fun navigateToDetail(photo: Photo) {
-        findNavController().navigate(StoredLocationFragmentDirections
-                .actionStoredLocationFragmentToPhotoDetailsFragment(photo))
+        findNavController().navigate(
+            StoredLocationFragmentDirections.actionStoredLocationFragmentToPhotoDetailsFragment(
+                photo
+            )
+        )
     }
 
     private fun buildViewModel() {

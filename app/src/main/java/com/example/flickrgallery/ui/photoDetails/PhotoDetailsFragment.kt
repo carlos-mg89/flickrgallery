@@ -1,4 +1,4 @@
-package com.example.flickrgallery.ui
+package com.example.flickrgallery.ui.photoDetails
 
 import android.os.Bundle
 import android.view.LayoutInflater
