@@ -17,6 +17,7 @@ import com.example.flickrgallery.data.source.StoredLocationsRoomDataSource
 import com.example.flickrgallery.data.source.toFrameworkStoredLocation
 import com.example.flickrgallery.databinding.StoredLocationsFragmentBinding
 import com.example.flickrgallery.db.Db
+import com.example.flickrgallery.ui.storedLocations.StoredLocationsFragmentDirections.Companion.actionStoredLocationsFragmentToStoredLocationFragment
 import com.example.usecases.DeleteStoredLocation
 import com.example.usecases.GetStoredLocations
 
@@ -31,11 +32,13 @@ class StoredLocationsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.stored_locations_fragment, container ,false)
+        binding = StoredLocationsFragmentBinding.inflate(layoutInflater)
+
         setUpDependencies()
         initViewModel()
         subscribeUi()
         bindViewWithData()
+
         return binding.root
     }
 
@@ -63,9 +66,7 @@ class StoredLocationsFragment : Fragment() {
     }
 
     private fun bindViewWithData() {
-        binding.viewModel = viewModel
         binding.recyclerView.adapter = StoredLocationsAdapter(viewModel)
-        binding.lifecycleOwner = this
 
         viewModel.storedLocations.observe(requireActivity()) { storedLocations ->
             (binding.recyclerView.adapter as? StoredLocationsAdapter)?.storedLocations = storedLocations
@@ -75,6 +76,6 @@ class StoredLocationsFragment : Fragment() {
     private fun navigateToStoredLocation(storedLocation: StoredLocation) {
         val frameworkStoredLocation = storedLocation.toFrameworkStoredLocation()
         findNavController()
-            .navigate(StoredLocationsFragmentDirections.actionStoredLocationsFragmentToStoredLocationFragment(frameworkStoredLocation))
+            .navigate(actionStoredLocationsFragmentToStoredLocationFragment(frameworkStoredLocation))
     }
 }
