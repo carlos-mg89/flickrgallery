@@ -21,6 +21,7 @@ import com.example.flickrgallery.databinding.FragmentExploreBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.ui.common.PhotosAdapter
+import com.example.flickrgallery.ui.explore.ExploreFragmentDirections.Companion.actionExploreFragmentToPhotoDetailsFragment
 import com.example.usecases.GetCurrentLocation
 import com.example.usecases.GetCurrentLocationPhotos
 import com.example.usecases.SaveStoredLocation
@@ -87,7 +88,7 @@ class ExploreFragment : Fragment() {
     }
 
     private fun navigateToDetail(photo: Photo) {
-        findNavController().navigate(ExploreFragmentDirections.actionExploreFragmentToPhotoDetailsFragment(photo))
+        findNavController().navigate(actionExploreFragmentToPhotoDetailsFragment(photo))
     }
 
     private fun buildDependencies() {

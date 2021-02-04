@@ -16,6 +16,7 @@ import com.example.flickrgallery.data.source.PhotosRoomDataSource
 import com.example.flickrgallery.databinding.SavedPhotosFragmentBinding
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.model.Photo
+import com.example.flickrgallery.ui.savedPhotos.SavedPhotosFragmentDirections.Companion.actionSavedPhotosFragmentToPhotoDetailsFragment
 import com.example.usecases.DeleteSavedPhoto
 import com.example.usecases.GetSavedPhotos
 
@@ -71,7 +72,7 @@ class SavedPhotosFragment : Fragment() {
     }
 
     private fun onSavedPhotoClicked(): (Photo) -> Unit = {
-        findNavController().navigate(SavedPhotosFragmentDirections.actionSavedPhotosFragmentToPhotoDetailsFragment(it))
+        findNavController().navigate(actionSavedPhotosFragmentToPhotoDetailsFragment(it))
     }
 
     private fun onDeleteBtnClicked(): (Photo) -> Unit = {
