@@ -10,7 +10,8 @@ class PhotosRepo(
     private val remote: PhotosRemoteDataSource
 ){
 
-    suspend fun getPhotosNearby(latitude:Double, longitude: Double): List<Photo> = remote.getPhotosNearby(latitude, longitude)
+    suspend fun getPhotosNearby(latitude:Double, longitude: Double): List<Photo> =
+            remote.getPhotosNearby(latitude, longitude)
 
     suspend fun getAllSavedPhotos(): Flow<List<Photo>> = local.getAll()
 
