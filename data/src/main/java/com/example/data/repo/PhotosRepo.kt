@@ -13,7 +13,7 @@ class PhotosRepo(
     suspend fun getPhotosNearby(latitude:Double, longitude: Double): List<Photo> =
             remote.getPhotosNearby(latitude, longitude)
 
-    suspend fun getAllSavedPhotos(): Flow<List<Photo>> = local.getAll()
+    fun getAllSavedPhotos(): Flow<List<Photo>> = local.getAll()
 
     suspend fun getSavedPhoto(id: String) = local.get(id)
 

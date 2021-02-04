@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 class GetStoredLocations(private val storedLocationsRepo: StoredLocationsRepo) {
 
-    suspend fun invoke(): Flow<List<StoredLocation>> = storedLocationsRepo.getAll()
+    fun invoke(): Flow<List<StoredLocation>> = storedLocationsRepo.getAll()
 }

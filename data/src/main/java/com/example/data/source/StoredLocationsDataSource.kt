@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface StoredLocationsDataSource {
 
-    suspend fun getAll(): Flow<List<StoredLocation>>
+    fun getAll(): Flow<List<StoredLocation>>
     suspend fun insert(storedLocation: StoredLocation)
     suspend fun update(storedLocation: StoredLocation)
     suspend fun delete(storedLocation: StoredLocation)

@@ -13,7 +13,7 @@ class StoredLocationsRoomDataSource (database: Db) : StoredLocationsDataSource {
 
     private var storedLocationDao: StoredLocationDao = database.storedLocationDao()
 
-    override suspend fun getAll(): Flow<List<DomainStoredLocation>> = flow {
+    override fun getAll(): Flow<List<DomainStoredLocation>> = flow {
         storedLocationDao.getAllFlow().collect { frameworkStoredLocations ->
             emit(frameworkStoredLocations.map { it.toDomainStoredLocation() })
         }

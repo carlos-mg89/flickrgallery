@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 class GetSavedPhotos(private val photosRepo: PhotosRepo) {
 
-    suspend fun invoke(): Flow<List<Photo>> = photosRepo.getAllSavedPhotos()
+    fun invoke(): Flow<List<Photo>> = photosRepo.getAllSavedPhotos()
 
 }

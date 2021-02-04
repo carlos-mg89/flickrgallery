@@ -12,7 +12,7 @@ class StoredLocationsRepo(
     private val locationDataSource: LocationDataSource
 ) {
 
-    suspend fun getAll(): Flow<List<StoredLocation>> = storedLocationsDataSource.getAll()
+    fun getAll(): Flow<List<StoredLocation>> = storedLocationsDataSource.getAll()
 
     suspend fun insert(storedLocation: StoredLocation) =
         storedLocationsDataSource.insert(storedLocation)

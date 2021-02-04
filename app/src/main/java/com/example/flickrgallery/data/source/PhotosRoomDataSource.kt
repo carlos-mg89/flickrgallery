@@ -12,7 +12,7 @@ class PhotosRoomDataSource(database: Db): PhotosLocalDataSource {
 
     private val photoDao = database.photoDao()
 
-    override suspend fun getAll(): Flow<List<DomainPhoto>> = flow {
+    override fun getAll(): Flow<List<DomainPhoto>> = flow {
         photoDao.getAllFlow().collect { frameworkPhotos ->
             emit(frameworkPhotos.map { it.toDomainPhoto() })
         }

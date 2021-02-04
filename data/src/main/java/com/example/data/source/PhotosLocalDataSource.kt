@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface PhotosLocalDataSource {
 
-    suspend fun getAll(): Flow<List<Photo>>
+    fun getAll(): Flow<List<Photo>>
     suspend fun get(id: String): Photo?
     suspend fun insert(photo: Photo)
     suspend fun delete(photo: Photo)
