@@ -9,13 +9,13 @@
             type="com.example.flickrgallery.model.Photo" />
         <variable
             name="viewModel"
-            type="com.example.flickrgallery.ui.PhotoDetailsViewModel" />
+            type="com.example.flickrgallery.ui.photoDetails.PhotoDetailsViewModel" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.PhotoDetailsFragment"
+        tools:context=".ui.photoDetails.PhotoDetailsFragment"
         android:orientation="vertical">
 
         <RelativeLayout

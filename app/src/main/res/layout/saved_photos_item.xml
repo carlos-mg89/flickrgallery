@@ -9,7 +9,7 @@
             type="com.example.flickrgallery.model.Photo" />
         <variable
             name="viewModel"
-            type="com.example.flickrgallery.ui.SavedPhotosViewModel" />
+            type="com.example.flickrgallery.ui.savedPhotos.SavedPhotosViewModel" />
     </data>
 
     <LinearLayout

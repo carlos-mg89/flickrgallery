@@ -1,63 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-        <variable
-            name="storedLocation"
-            type="com.example.flickrgallery.model.StoredLocation" />
-    </data>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="?android:attr/selectableItemBackground"
+    android:baselineAligned="false">
 
     <LinearLayout
-        android:id="@+id/container"
+        android:layout_weight="5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/saved_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="?android:attr/selectableItemBackground">
-
-        <LinearLayout
-            android:layout_weight="5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:orientation="vertical">
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:text="@{storedLocation.savedDateString}"
+        tools:text="12/12/2021 15:40" />
 
         <TextView
-            android:id="@+id/saved_date"
+            android:id="@+id/description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:text="@{storedLocation.savedDateString}"
-            tools:text="12/12/2021 15:40" />
-
-            <TextView
-                android:id="@+id/description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{storedLocation.description}"
-                tools:text="Description" />
-
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:paddingTop="15dp"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/delete_btn"
-                android:layout_height="48dp"
-                android:layout_width="48dp"
-                android:layout_centerInParent="true"
-                android:contentDescription="@string/stored_location_delete"
-                android:tint="#444444"
-                android:background="?android:attr/selectableItemBackground"
-                android:src="@drawable/ic_baseline_delete" />
-
-        </RelativeLayout>
+            android:text="@{storedLocation.description}"
+            tools:text="Description" />
 
     </LinearLayout>
-</layout>
+
+    <RelativeLayout
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:paddingTop="15dp"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/delete_btn"
+            android:layout_height="48dp"
+            android:layout_width="48dp"
+            android:layout_centerInParent="true"
+            android:contentDescription="@string/stored_location_delete"
+            android:tint="#444444"
+            android:background="?android:attr/selectableItemBackground"
+            android:src="@drawable/ic_baseline_delete" />
+
+    </RelativeLayout>
+
+</LinearLayout>

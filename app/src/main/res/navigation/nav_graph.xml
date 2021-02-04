@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/exploreFragment"
-        android:name="com.example.flickrgallery.ui.ExploreFragment"
+        android:name="com.example.flickrgallery.ui.explore.ExploreFragment"
         android:label="fragment_explore"
         tools:layout="@layout/fragment_explore" >
         <action
@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/savedPhotosFragment"
-        android:name="com.example.flickrgallery.ui.SavedPhotosFragment"
+        android:name="com.example.flickrgallery.ui.savedPhotos.SavedPhotosFragment"
         android:label="SavedPhotosFragment" >
         <action
             android:id="@+id/action_savedPhotosFragment_to_photoDetailsFragment"
@@ -30,7 +30,7 @@
     </fragment>
     <fragment
         android:id="@+id/photoDetailsFragment"
-        android:name="com.example.flickrgallery.ui.PhotoDetailsFragment"
+        android:name="com.example.flickrgallery.ui.photoDetails.PhotoDetailsFragment"
         android:label="photo_details_fragment"
         tools:layout="@layout/photo_details_fragment" >
         <argument
@@ -41,7 +41,7 @@
     </fragment>
     <fragment
         android:id="@+id/storedLocationsFragment"
-        android:name="com.example.flickrgallery.ui.StoredLocationsFragment"
+        android:name="com.example.flickrgallery.ui.storedLocations.StoredLocationsFragment"
         android:label="StoredLocationsFragment" >
         <action
             android:id="@+id/action_storedLocationsFragment_to_storedLocationFragment"
@@ -49,7 +49,7 @@
     </fragment>
     <fragment
         android:id="@+id/storedLocationFragment"
-        android:name="com.example.flickrgallery.ui.StoredLocationFragment"
+        android:name="com.example.flickrgallery.ui.storedLocationPhotos.StoredLocationFragment"
         android:label="fragment_stored_location"
         tools:layout="@layout/stored_location_fragment" >
         <action

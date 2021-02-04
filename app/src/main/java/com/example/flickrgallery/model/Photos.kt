@@ -1,8 +1,5 @@
 package com.example.flickrgallery.model
 
-
-
-
 data class Photos(
     val page: Int,
     val pages: String,

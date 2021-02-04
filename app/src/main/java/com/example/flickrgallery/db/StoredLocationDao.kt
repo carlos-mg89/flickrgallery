@@ -1,17 +1,14 @@
 package com.example.flickrgallery.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.flickrgallery.model.StoredLocation
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface StoredLocationDao {
 
     @Query("SELECT * FROM stored_locations ORDER BY id DESC")
-    fun getAllLiveData(): LiveData<List<StoredLocation>>
-
-    @Query("SELECT * FROM stored_locations ORDER BY id DESC")
-    suspend fun getAll(): List<StoredLocation>
+    fun getAllFlow(): Flow<List<StoredLocation>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(storedLocation: StoredLocation)
