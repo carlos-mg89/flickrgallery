@@ -3,7 +3,7 @@ package com.example.flickrgallery.data.source
 import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location as FrameworkLocation
-import com.example.data.entities.Location as DataLocation
+import com.example.data.model.Location as DataLocation
 import com.example.data.source.LocationDataSource
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest

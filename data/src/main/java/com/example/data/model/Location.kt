@@ -1,4 +1,4 @@
-package com.example.data.entities
+package com.example.data.model
 
 data class Location(
     val longitude: Double = 0.0,

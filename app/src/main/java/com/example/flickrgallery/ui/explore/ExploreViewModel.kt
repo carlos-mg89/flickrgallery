@@ -2,7 +2,7 @@ package com.example.flickrgallery.ui.explore
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.data.entities.Location
+import com.example.data.model.Location
 import com.example.domain.StoredLocation
 import com.example.flickrgallery.data.source.toRoomPhoto
 import com.example.flickrgallery.model.Photo

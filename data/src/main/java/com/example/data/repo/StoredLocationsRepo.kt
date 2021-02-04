@@ -1,6 +1,6 @@
 package com.example.data.repo
 
-import com.example.data.entities.Location
+import com.example.data.model.Location
 import com.example.data.source.LocationDataSource
 import com.example.data.source.StoredLocationsDataSource
 import com.example.domain.StoredLocation
