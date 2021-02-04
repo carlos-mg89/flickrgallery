@@ -3,8 +3,7 @@ package com.example.flickrgallery.data.source
 import com.example.data.source.PhotosLocalDataSource
 import com.example.flickrgallery.db.Db
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import com.example.domain.Photo as DomainPhoto
 import com.example.flickrgallery.model.Photo as RoomPhoto
 
@@ -12,10 +11,8 @@ class PhotosRoomDataSource(database: Db): PhotosLocalDataSource {
 
     private val photoDao = database.photoDao()
 
-    override fun getAll(): Flow<List<DomainPhoto>> = flow {
-        photoDao.getAllFlow().collect { frameworkPhotos ->
-            emit(frameworkPhotos.map { it.toDomainPhoto() })
-        }
+    override fun getAll(): Flow<List<DomainPhoto>> = photoDao.getAllFlow().map {
+        it.map { frameworkPhoto -> frameworkPhoto.toDomainPhoto() }
     }
 
     override suspend fun get(id: String): DomainPhoto? {

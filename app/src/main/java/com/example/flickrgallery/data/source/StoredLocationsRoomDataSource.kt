@@ -6,17 +6,14 @@ import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.db.StoredLocationDao
 import com.example.flickrgallery.model.StoredLocation as FrameworkStoredLocation
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 class StoredLocationsRoomDataSource (database: Db) : StoredLocationsDataSource {
 
     private var storedLocationDao: StoredLocationDao = database.storedLocationDao()
 
-    override fun getAll(): Flow<List<DomainStoredLocation>> = flow {
-        storedLocationDao.getAllFlow().collect { frameworkStoredLocations ->
-            emit(frameworkStoredLocations.map { it.toDomainStoredLocation() })
-        }
+    override fun getAll(): Flow<List<DomainStoredLocation>> = storedLocationDao.getAllFlow().map {
+        it.map { frameworkStoredLocation -> frameworkStoredLocation.toDomainStoredLocation() }
     }
 
     override suspend fun insert(storedLocation: DomainStoredLocation) {
