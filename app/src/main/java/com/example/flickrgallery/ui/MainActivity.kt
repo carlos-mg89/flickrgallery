@@ -1,14 +1,14 @@
 package com.example.flickrgallery.ui
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.ActivityMainBinding
+import org.koin.androidx.scope.ScopeActivity
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ScopeActivity() {
 
     private lateinit var binding: ActivityMainBinding
 

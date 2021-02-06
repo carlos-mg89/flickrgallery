@@ -23,6 +23,10 @@ class StoredLocationsViewModel(
     val navigateToStoredLocation : LiveData<Event<StoredLocation>>
         get() = _navigateToStoredLocation
 
+    init {
+        startCollectingStoredLocations()
+    }
+
     fun startCollectingStoredLocations() {
         launch {
             getStoredLocations.invoke().collect {

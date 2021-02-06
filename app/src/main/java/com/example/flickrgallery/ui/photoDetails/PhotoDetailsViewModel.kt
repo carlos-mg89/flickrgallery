@@ -15,7 +15,7 @@ class PhotoDetailsViewModel(
     private val getSelectedPhoto: GetSelectedPhoto,
     private val markPhotoAsFavorite: MarkPhotoAsFavorite,
     private val unMarkPhotoAsFavorite: UnMarkPhotoAsFavorite
-    ) : ScopedViewModel() {
+) : ScopedViewModel() {
 
     private val _favoriteStatus = MutableLiveData(false)
     val favoriteStatus: LiveData<Boolean>
