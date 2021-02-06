@@ -7,32 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.lifecycle.*
-import com.example.data.repo.PhotosRepo
-import com.example.data.repo.StoredLocationsRepo
 import com.example.flickrgallery.R
-import com.example.flickrgallery.data.source.FusedLocationDataSource
-import com.example.flickrgallery.data.source.PhotosFlickerDataSource
-import com.example.flickrgallery.data.source.PhotosRoomDataSource
-import com.example.flickrgallery.data.source.StoredLocationsRoomDataSource
 import com.example.flickrgallery.databinding.FragmentExploreBinding
-import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.ui.common.PhotosAdapter
 import com.example.flickrgallery.ui.explore.ExploreFragmentDirections.Companion.actionExploreFragmentToPhotoDetailsFragment
-import com.example.usecases.GetCurrentLocation
-import com.example.usecases.GetCurrentLocationPhotos
-import com.example.usecases.SaveStoredLocation
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.koin.androidx.scope.ScopeFragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @ExperimentalCoroutinesApi
-class ExploreFragment : Fragment() {
+class ExploreFragment : ScopeFragment() {
 
     private lateinit var binding: FragmentExploreBinding
-    private val viewModel: ExploreViewModel by viewModel()
+    val viewModel: ExploreViewModel by viewModel()
 
     // Falta controlar el "Denegar siempre"
     private val requestPermissionLauncher = registerForActivityResult(
@@ -55,7 +45,6 @@ class ExploreFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModel = buildViewModel()
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_explore, container ,false)
         bindViewWithData()
         setupUi()
@@ -84,13 +73,6 @@ class ExploreFragment : Fragment() {
 
     private fun navigateToDetail(photo: Photo) {
         findNavController().navigate(actionExploreFragmentToPhotoDetailsFragment(photo))
-    }
-
-    private fun buildViewModel(): ExploreViewModel {
-        val factory = ExploreViewModelFactory(
-            GetCurrentLocation, saveStoredLocation, getCurrentLocationPhotos
-        )
-        return ViewModelProvider(this, factory).get(ExploreViewModel::class.java)
     }
 
     private fun getRandomNumber(): Int {

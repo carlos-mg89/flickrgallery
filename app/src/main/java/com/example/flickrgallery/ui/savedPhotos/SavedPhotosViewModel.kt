@@ -11,8 +11,10 @@ import com.example.usecases.GetSavedPhotos
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class SavedPhotosViewModel(private val getSavedPhotos: GetSavedPhotos,
-                           private val deleteSavedPhoto: DeleteSavedPhoto) : ScopedViewModel() {
+class SavedPhotosViewModel(
+    private val getSavedPhotos: GetSavedPhotos,
+    private val deleteSavedPhoto: DeleteSavedPhoto
+) : ScopedViewModel() {
 
     private val _savedPhotos = MutableLiveData<List<Photo>>(emptyList())
     val savedPhotos: LiveData<List<Photo>>

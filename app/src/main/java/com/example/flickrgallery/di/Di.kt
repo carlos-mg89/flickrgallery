@@ -12,8 +12,19 @@ import com.example.flickrgallery.data.source.PhotosRoomDataSource
 import com.example.flickrgallery.data.source.StoredLocationsRoomDataSource
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.ui.MainActivity
+import com.example.flickrgallery.ui.explore.ExploreFragment
+import com.example.flickrgallery.ui.explore.ExploreViewModel
+import com.example.flickrgallery.ui.photoDetails.PhotoDetailsFragment
+import com.example.flickrgallery.ui.photoDetails.PhotoDetailsViewModel
+import com.example.flickrgallery.ui.savedPhotos.SavedPhotosFragment
+import com.example.flickrgallery.ui.savedPhotos.SavedPhotosViewModel
+import com.example.flickrgallery.ui.storedLocationPhotos.StoredLocationFragment
+import com.example.flickrgallery.ui.storedLocationPhotos.StoredLocationViewModel
+import com.example.flickrgallery.ui.storedLocations.StoredLocationsFragment
+import com.example.flickrgallery.ui.storedLocations.StoredLocationsViewModel
 import com.example.usecases.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -35,9 +46,21 @@ val repoModule = module {
 
 @ExperimentalCoroutinesApi
 val scopedModule = module {
-    viewModel
-    scope(named<MainActivity>()) {
-
+    scope(named<MainActivity>()) {  }
+    scope(named<ExploreFragment>()) {
+        viewModel { ExploreViewModel(get(), get(), get()) }
+    }
+    scope(named<PhotoDetailsFragment>()) {
+        viewModel { PhotoDetailsViewModel(get(), get(), get()) }
+    }
+    scope(named<SavedPhotosFragment>()) {
+        viewModel { SavedPhotosViewModel(get(), get()) }
+    }
+    scope(named<StoredLocationFragment>()) {
+        viewModel { StoredLocationViewModel(get()) }
+    }
+    scope(named<StoredLocationsFragment>()) {
+        viewModel { StoredLocationsViewModel(get(), get()) }
     }
 }
 
