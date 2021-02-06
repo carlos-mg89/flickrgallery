@@ -17,16 +17,12 @@ abstract class Db : RoomDatabase() {
     abstract fun storedLocationDao(): StoredLocationDao
 
     companion object {
-        private var INSTANCE: Db? = null
+
         private const val DATABASE_NAME = "location-scout.db"
 
-        fun getDatabase(context: Context): Db {
-            if (INSTANCE == null) {
-                INSTANCE = Room.databaseBuilder(
-                        context.applicationContext, Db::class.java, DATABASE_NAME
-                ).build()
-            }
-            return INSTANCE!!
-        }
+        fun getDatabase(context: Context) = Room.databaseBuilder(
+            context.applicationContext,
+            Db::class.java, DATABASE_NAME
+        ).build()
     }
 }

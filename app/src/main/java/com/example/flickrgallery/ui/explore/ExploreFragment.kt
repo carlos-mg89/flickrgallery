@@ -31,12 +31,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @ExperimentalCoroutinesApi
 class ExploreFragment : Fragment() {
 
-    private lateinit var storedLocationsRepo: StoredLocationsRepo
     private lateinit var binding: FragmentExploreBinding
-    private lateinit var viewModel: ExploreViewModel
-    private lateinit var getCurrentLocation: GetCurrentLocation
-    private lateinit var saveStoredLocation: SaveStoredLocation
-    private lateinit var getCurrentLocationPhotos: GetCurrentLocationPhotos
+    private val viewModel: ExploreViewModel by viewModel()
 
     // Falta controlar el "Denegar siempre"
     private val requestPermissionLauncher = registerForActivityResult(
@@ -59,7 +55,6 @@ class ExploreFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        buildDependencies()
         viewModel = buildViewModel()
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_explore, container ,false)
         bindViewWithData()
@@ -91,26 +86,9 @@ class ExploreFragment : Fragment() {
         findNavController().navigate(actionExploreFragmentToPhotoDetailsFragment(photo))
     }
 
-    private fun buildDependencies() {
-        val database = Db.getDatabase(requireContext())
-        val fusedLocationDataSource = FusedLocationDataSource(requireContext())
-        val storedLocationsDataSource = StoredLocationsRoomDataSource(database)
-        val photosLocalDataSource = PhotosRoomDataSource(database)
-        val photosRemoteDataSource = PhotosFlickerDataSource()
-        val photosRepo = PhotosRepo(photosLocalDataSource,photosRemoteDataSource)
-
-        storedLocationsRepo = StoredLocationsRepo(
-            storedLocationsDataSource,
-            fusedLocationDataSource
-        )
-        getCurrentLocation = GetCurrentLocation(storedLocationsRepo)
-        saveStoredLocation = SaveStoredLocation(storedLocationsRepo)
-        getCurrentLocationPhotos = GetCurrentLocationPhotos(photosRepo)
-    }
-
     private fun buildViewModel(): ExploreViewModel {
         val factory = ExploreViewModelFactory(
-            getCurrentLocation, saveStoredLocation, getCurrentLocationPhotos
+            GetCurrentLocation, saveStoredLocation, getCurrentLocationPhotos
         )
         return ViewModelProvider(this, factory).get(ExploreViewModel::class.java)
     }
