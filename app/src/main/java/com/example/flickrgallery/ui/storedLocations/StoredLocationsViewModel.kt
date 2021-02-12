@@ -27,7 +27,7 @@ class StoredLocationsViewModel(
         startCollectingStoredLocations()
     }
 
-    fun startCollectingStoredLocations() {
+    private fun startCollectingStoredLocations() {
         launch {
             getStoredLocations.invoke().collect {
                 _storedLocations.value = it
