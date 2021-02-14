@@ -23,13 +23,17 @@ import com.example.flickrgallery.ui.storedLocationPhotos.StoredLocationViewModel
 import com.example.flickrgallery.ui.storedLocations.StoredLocationsFragment
 import com.example.flickrgallery.ui.storedLocations.StoredLocationsViewModel
 import com.example.usecases.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
+
 val appModule = module {
     single { Db.getDatabase(get()) }
+    single<CoroutineDispatcher> { Dispatchers.Main }
 }
 
 val dataSourceModule = module {
@@ -60,7 +64,7 @@ val scopedModule = module {
         viewModel { StoredLocationViewModel(get()) }
     }
     scope(named<StoredLocationsFragment>()) {
-        viewModel { StoredLocationsViewModel(get(), get()) }
+        viewModel { StoredLocationsViewModel(get(), get(), get()) }
     }
 }
 
