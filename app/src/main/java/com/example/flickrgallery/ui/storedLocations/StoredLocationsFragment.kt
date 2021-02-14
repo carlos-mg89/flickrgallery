@@ -23,10 +23,14 @@ class StoredLocationsFragment : ScopeFragment() {
     ): View {
         binding = StoredLocationsFragmentBinding.inflate(layoutInflater)
 
+        setUpUi()
         subscribeUi()
-        bindViewWithData()
 
         return binding.root
+    }
+
+    private fun setUpUi() {
+        binding.recyclerView.adapter = StoredLocationsAdapter(viewModel)
     }
 
     private fun subscribeUi() {
@@ -35,11 +39,6 @@ class StoredLocationsFragment : ScopeFragment() {
                 navigateToStoredLocation(it)
             }
         }
-    }
-
-    private fun bindViewWithData() {
-        binding.recyclerView.adapter = StoredLocationsAdapter(viewModel)
-
         viewModel.storedLocations.observe(requireActivity()) { storedLocations ->
             (binding.recyclerView.adapter as? StoredLocationsAdapter)?.storedLocations = storedLocations
         }
