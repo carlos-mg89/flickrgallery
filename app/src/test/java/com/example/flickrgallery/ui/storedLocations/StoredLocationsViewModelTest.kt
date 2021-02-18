@@ -82,7 +82,6 @@ class StoredLocationsViewModelTest {
 
             whenever(getStoredLocations.invoke()).thenReturn(flowOf(storedLocations))
             vm.storedLocations.observeForever(storedLocationsObserver)
-
             vm.startCollectingStoredLocations()
 
             verify(storedLocationsObserver).onChanged(storedLocations)
