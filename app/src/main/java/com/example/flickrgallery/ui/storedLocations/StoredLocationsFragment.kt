@@ -34,6 +34,7 @@ class StoredLocationsFragment : ScopeFragment() {
     }
 
     private fun subscribeUi() {
+        viewModel.startCollectingStoredLocations()
         viewModel.navigateToStoredLocation.observe(requireActivity()) { event ->
             event.getContentIfNotHandled()?.let {
                 navigateToStoredLocation(it)
