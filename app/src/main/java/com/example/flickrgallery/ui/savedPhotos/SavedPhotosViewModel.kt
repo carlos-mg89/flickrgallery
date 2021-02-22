@@ -5,16 +5,18 @@ import androidx.lifecycle.MutableLiveData
 import com.example.flickrgallery.data.source.toDomainPhoto
 import com.example.flickrgallery.data.source.toRoomPhoto
 import com.example.flickrgallery.model.Photo
-import com.example.flickrgallery.ui.common.ScopedViewModel
+import com.example.flickrgallery.ui.common.ScopedViewModelWithCustomDispatcher
 import com.example.usecases.DeleteSavedPhoto
 import com.example.usecases.GetSavedPhotos
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class SavedPhotosViewModel(
     private val getSavedPhotos: GetSavedPhotos,
-    private val deleteSavedPhoto: DeleteSavedPhoto
-) : ScopedViewModel() {
+    private val deleteSavedPhoto: DeleteSavedPhoto,
+    uiDispatcher: CoroutineDispatcher
+) : ScopedViewModelWithCustomDispatcher(uiDispatcher) {
 
     private val _savedPhotos = MutableLiveData<List<Photo>>(emptyList())
     val savedPhotos: LiveData<List<Photo>>
@@ -23,7 +25,7 @@ class SavedPhotosViewModel(
     init {
         startCollectingPhotos()
     }
-    
+
     private fun startCollectingPhotos() {
         launch {
             getSavedPhotos.invoke().collect {
