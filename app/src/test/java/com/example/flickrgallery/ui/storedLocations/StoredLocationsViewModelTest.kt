@@ -5,7 +5,6 @@ import androidx.lifecycle.Observer
 import com.example.domain.StoredLocation
 import com.example.usecases.DeleteStoredLocation
 import com.example.usecases.GetStoredLocations
-import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers
