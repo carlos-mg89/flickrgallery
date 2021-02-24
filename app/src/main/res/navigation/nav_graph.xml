@@ -35,7 +35,7 @@
         tools:layout="@layout/photo_details_fragment" >
         <argument
             android:name="photoArg"
-            app:argType="com.example.flickrgallery.model.Photo"
+            app:argType="com.example.domain.Photo"
             app:nullable="true"
             android:defaultValue="@null" />
     </fragment>

@@ -2,9 +2,7 @@ package com.example.flickrgallery.ui.savedPhotos
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.flickrgallery.data.source.toDomainPhoto
-import com.example.flickrgallery.data.source.toRoomPhoto
-import com.example.flickrgallery.model.Photo
+import com.example.domain.Photo
 import com.example.flickrgallery.ui.common.ScopedViewModelWithCustomDispatcher
 import com.example.usecases.DeleteSavedPhoto
 import com.example.usecases.GetSavedPhotos
@@ -22,21 +20,17 @@ class SavedPhotosViewModel(
     val savedPhotos: LiveData<List<Photo>>
         get() = _savedPhotos
 
-    init {
-        startCollectingPhotos()
-    }
-
-    private fun startCollectingPhotos() {
+    fun startCollectingPhotos() {
         launch {
             getSavedPhotos.invoke().collect {
-                _savedPhotos.value = it.map { photoDomain -> photoDomain.toRoomPhoto() }
+                _savedPhotos.value = it
             }
         }
     }
 
-    fun deleteSavedPhoto(photoRoom: Photo) {
+    fun deleteSavedPhoto(photo: Photo) {
         launch {
-            deleteSavedPhoto.invoke(photoRoom.toDomainPhoto())
+            deleteSavedPhoto.invoke(photo)
         }
     }
 }

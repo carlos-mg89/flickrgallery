@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.navArgs
+import com.example.domain.Photo
 import com.example.flickrgallery.R
+import com.example.flickrgallery.data.source.toRoomPhoto
 import com.example.flickrgallery.databinding.PhotoDetailsFragmentBinding
-import com.example.flickrgallery.model.Photo
+
 import org.koin.androidx.scope.ScopeFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -27,7 +29,7 @@ class PhotoDetailsFragment : ScopeFragment() {
 
         photo = args.photoArg!!
         binding.lifecycleOwner = this
-        binding.setPhoto(photo)
+        binding.setPhoto(photo.toRoomPhoto())
         binding.viewModel = viewModel
 
         return binding.root
@@ -37,7 +39,7 @@ class PhotoDetailsFragment : ScopeFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         subscribeUi()
-        viewModel.checkIfPhotoExists(photo)
+        viewModel.checkIfPhotoExists(photo.toRoomPhoto())
     }
 
     private fun subscribeUi() {
