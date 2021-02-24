@@ -25,13 +25,14 @@ class DeleteSavedPhotoTest {
 
 
     @Test
-    fun `DeleteSavedPhoto calls `() {
+    fun `After DeleteSavedPhoto invoke method is call, photosRepo calls method deleteSavedPhoto`() {
         runBlocking {
             val photo = Photo().apply {
                 id = "1"
                 title = "Title test"
                 isSaved = true
             }
+
             deleteSavedPhoto.invoke(photo)
 
             verify(photosRepo).deleteSavedPhoto(photo)

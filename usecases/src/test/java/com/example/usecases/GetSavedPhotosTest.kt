@@ -3,7 +3,9 @@ package com.example.usecases
 import com.example.data.repo.PhotosRepo
 import com.example.testshared.mockedPhoto
 import com.nhaarman.mockitokotlin2.whenever
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -26,8 +28,8 @@ class GetSavedPhotosTest {
     }
 
     @Test
-    fun `GetSavedPhotos calls `() {
-        //GIVEN
+    fun `After GetSavedPhotos calls invoke, result's photos are the same than listPhotos`() {
+
         val photoA = mockedPhoto.apply {
             this.isSaved = true
             this.id = "1"
@@ -37,15 +39,12 @@ class GetSavedPhotosTest {
             this.id = "2"
         }
 
-        val listPhotos = listOf(photoA, photoB)
+        val listPhotos = flowOf(listOf(photoA, photoB))
 
-        val flow = flow {
-            emit(listPhotos)
-        }
-        whenever(photosRepo.getAllSavedPhotos()).thenReturn(flow)
-        //WHEN
+        whenever(photosRepo.getAllSavedPhotos()).thenReturn(listPhotos)
+
         val result = getSavedPhotos.invoke()
-        //THEN
-        assertEquals(flow, result)
+
+        assertEquals(listPhotos, result)
     }
 }
