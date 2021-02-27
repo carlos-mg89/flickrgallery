@@ -37,7 +37,6 @@ class ExploreViewModel(
     }
 
     private suspend fun onNewPositionReceived(location: Location) {
-        setUiUpdatesEnabled()
         setUiBusy()
         this.location = location
         val photos = getCurrentLocationPhotos.invoke(location.latitude, location.longitude)
@@ -58,13 +57,6 @@ class ExploreViewModel(
         updateUiState {
             it.isProgressVisible = true
             it.isFabEnabled = false
-            return@updateUiState it
-        }
-    }
-
-    private fun setUiUpdatesEnabled(){
-        updateUiState {
-            it.isFabEnabled = true
             return@updateUiState it
         }
     }

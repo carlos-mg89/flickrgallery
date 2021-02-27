@@ -44,7 +44,6 @@ class ExploreViewModelTest {
     private lateinit var captor: ArgumentCaptor<ExploreUiState>
 
     private val initialState = ExploreUiState(isProgressVisible = false, isFabEnabled = false)
-    private val fabBuggyState = ExploreUiState(isProgressVisible = false, isFabEnabled = true)
     private val loadingState = ExploreUiState(isProgressVisible = true, isFabEnabled = false)
     private val finishedState = ExploreUiState(photos = listOf(photo.toRoomPhoto()), isProgressVisible = false, isFabEnabled = true)
 
@@ -61,6 +60,7 @@ class ExploreViewModelTest {
     @Test
     fun `proceedGettingUpdates con Captor FAIL`() {
         // Se recogen 4 interacciones, pero son la misma: la que debería ser la última
+        // El viewmodel pasa correctamente el estado
         runBlocking {
             whenever(getCurrentLocationPhotos.invoke(any(), any())).thenReturn(listOf(photo))
             whenever(getCurrentLocation.invoke()).thenReturn(listOf(Location()).asFlow())
@@ -71,9 +71,8 @@ class ExploreViewModelTest {
 
             val values = captor.allValues
             assertEquals(initialState, values[0])
-            assertEquals(fabBuggyState, values[0])
-            assertEquals(loadingState, values[0])
-            assertEquals(finishedState, values[0])
+            assertEquals(loadingState, values[1])
+            assertEquals(finishedState, values[2])
         }
     }
 
@@ -88,7 +87,6 @@ class ExploreViewModelTest {
             verify(observer, times(4)).onChanged(any())
 
             verify(observer).onChanged(initialState)
-            verify(observer).onChanged(fabBuggyState)
             verify(observer).onChanged(loadingState)
             verify(observer).onChanged(finishedState)
         }
@@ -105,7 +103,6 @@ class ExploreViewModelTest {
 
             val order = inOrder(observer)
             order.verify(observer).onChanged(initialState)
-            order.verify(observer).onChanged(fabBuggyState)
             order.verify(observer).onChanged(loadingState)
             order.verify(observer).onChanged(finishedState)
         }
@@ -132,16 +129,11 @@ class ExploreViewModelTest {
                         assertTrue("Fotos no vacias", state.photos.isEmpty())
                     }
                     1 -> {
-                        assertTrue("FAB visible", state.isFabEnabled)
-                        assertFalse("Progress oculto", state.isProgressVisible)
-                        assertTrue("Fotos no vacias", state.photos.isEmpty())
-                    }
-                    2 -> {
                         assertFalse("FAB visible", state.isFabEnabled)
                         assertTrue("Progress oculto", state.isProgressVisible)
                         assertTrue("Fotos no vacias", state.photos.isEmpty())
                     }
-                    3 -> {
+                    2 -> {
                         assertTrue("FAB visible", state.isFabEnabled)
                         assertFalse("Progress oculto", state.isProgressVisible)
                         assertTrue("Fotos no vacias", state.photos.isNotEmpty())
