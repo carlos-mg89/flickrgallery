@@ -67,7 +67,7 @@ class ExploreViewModelTest {
 
             viewModel.exploreUiState.observeForever(observer)
             viewModel.proceedGettingUpdates()
-            verify(observer, times(4)).onChanged(captor.capture())
+            verify(observer, times(3)).onChanged(captor.capture())
 
             val values = captor.allValues
             assertEquals(initialState, values[0])
@@ -84,7 +84,7 @@ class ExploreViewModelTest {
 
             viewModel.exploreUiState.observeForever(observer)
             viewModel.proceedGettingUpdates()
-            verify(observer, times(4)).onChanged(any())
+            verify(observer, times(3)).onChanged(any())
 
             verify(observer).onChanged(initialState)
             verify(observer).onChanged(loadingState)
