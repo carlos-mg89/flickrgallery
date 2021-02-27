@@ -29,14 +29,14 @@ class StoredLocationsAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val storesLocation = storedLocations[position]
+        val storedLocation = storedLocations[position]
         holder.binding.container.setOnClickListener{
-            viewModel.onStoredLocationClicked(storesLocation)
+            viewModel.onStoredLocationClicked(storedLocation)
         }
         holder.binding.deleteBtn.setOnClickListener {
-            viewModel.onStoredLocationDeleteClicked(storesLocation)
+            viewModel.onStoredLocationDeleteClicked(storedLocation)
         }
-        holder.bind(storesLocation)
+        holder.bind(storedLocation)
     }
 
     class ViewHolder(val binding: StoredLocationsItemBinding): RecyclerView.ViewHolder(binding.root) {
