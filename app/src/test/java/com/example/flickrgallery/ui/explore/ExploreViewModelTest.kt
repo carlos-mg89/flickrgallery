@@ -37,7 +37,6 @@ class ExploreViewModelTest {
     lateinit var getCurrentLocationPhotos: GetCurrentLocationPhotos
     private val photo = Photo()
     lateinit var viewModel: ExploreViewModel
-    // no usados
     @Mock
     lateinit var observer: Observer<ExploreUiState>
 
@@ -72,6 +71,9 @@ class ExploreViewModelTest {
 
             val values = captor.allValues
             assertEquals(initialState, values[0])
+            assertEquals(fabBuggyState, values[0])
+            assertEquals(loadingState, values[0])
+            assertEquals(finishedState, values[0])
         }
     }
 
@@ -132,6 +134,11 @@ class ExploreViewModelTest {
                     1 -> {
                         assertTrue("FAB visible", state.isFabEnabled)
                         assertFalse("Progress oculto", state.isProgressVisible)
+                        assertTrue("Fotos no vacias", state.photos.isEmpty())
+                    }
+                    2 -> {
+                        assertFalse("FAB visible", state.isFabEnabled)
+                        assertTrue("Progress oculto", state.isProgressVisible)
                         assertTrue("Fotos no vacias", state.photos.isEmpty())
                     }
                     3 -> {

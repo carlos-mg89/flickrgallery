@@ -80,7 +80,7 @@ class ExploreViewModel(
 
     private fun updateUiState(updateUi: (ExploreUiState) -> ExploreUiState) {
         val newState = updateUi(_exploreUiState.value!!)
-        _exploreUiState.postValue(newState)
+        _exploreUiState.value = newState
     }
 }
 
