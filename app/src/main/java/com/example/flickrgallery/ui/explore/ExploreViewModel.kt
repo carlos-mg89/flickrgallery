@@ -3,13 +3,13 @@ package com.example.flickrgallery.ui.explore
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.data.model.Location
+import com.example.domain.Photo
 import com.example.domain.StoredLocation
-import com.example.flickrgallery.data.source.toRoomPhoto
-import com.example.flickrgallery.model.Photo
-import com.example.flickrgallery.ui.common.ScopedViewModel
+import com.example.flickrgallery.ui.common.ScopedViewModelWithCustomDispatcher
 import com.example.usecases.GetCurrentLocation
 import com.example.usecases.GetCurrentLocationPhotos
 import com.example.usecases.SaveStoredLocation
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -18,11 +18,12 @@ import kotlinx.coroutines.launch
 class ExploreViewModel(
         private val getCurrentLocation: GetCurrentLocation,
         private val saveStoredLocation: SaveStoredLocation,
-        private val getCurrentLocationPhotos: GetCurrentLocationPhotos
-) : ScopedViewModel() {
+        private val getCurrentLocationPhotos: GetCurrentLocationPhotos,
+        uiDispatcher: CoroutineDispatcher
+) : ScopedViewModelWithCustomDispatcher(uiDispatcher) {
 
-    private val _exploreUiState = MutableLiveData(ExploreUiState())
-    val exploreUiState: LiveData<ExploreUiState>
+    private val _exploreUiState = MutableLiveData<UiState>(UiState.Initial)
+    val exploreUiState: LiveData<UiState>
         get() = _exploreUiState
 
     var location = Location()
@@ -37,10 +38,10 @@ class ExploreViewModel(
     }
 
     private suspend fun onNewPositionReceived(location: Location) {
-        setUiBusy()
+        setUiLoading()
         this.location = location
         val photos = getCurrentLocationPhotos.invoke(location.latitude, location.longitude)
-        setUiPhotosReceived(photos.map { it.toRoomPhoto() })
+        setPhotosReceivedState(photos)
     }
 
     fun storeLocation(description: String = "") {
@@ -53,31 +54,19 @@ class ExploreViewModel(
         }
     }
 
-    private fun setUiBusy(){
-        updateUiState {
-            it.isProgressVisible = true
-            it.isFabEnabled = false
-            return@updateUiState it
-        }
+    private fun setUiLoading() = launch {
+        _exploreUiState.value = UiState.Loading
     }
 
-    private fun setUiPhotosReceived(photos: List<Photo>){
-        updateUiState {
-            it.isProgressVisible = false
-            it.isFabEnabled = true
-            it.photos = photos
-            return@updateUiState it
-        }
+    private fun setPhotosReceivedState(photos: List<Photo>) = launch {
+        _exploreUiState.value = UiState.Finished(photos)
     }
 
-    private fun updateUiState(updateUi: (ExploreUiState) -> ExploreUiState) {
-        val newState = updateUi(_exploreUiState.value!!)
-        _exploreUiState.value = newState
+    sealed class UiState (val photos: List<Photo>) {
+        object Initial : UiState(emptyList())
+        object Loading : UiState(emptyList())
+        class Finished(photos: List<Photo>) : UiState(photos)
+
+        fun isProgressBarVisible() = this is Loading
     }
 }
-
-data class ExploreUiState(
-    var photos: List<Photo> = emptyList(),
-    var isProgressVisible: Boolean = false,
-    var isFabEnabled: Boolean = false
-)

@@ -2,8 +2,7 @@ package com.example.flickrgallery.ui.photoDetails
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.flickrgallery.data.source.toDomainPhoto
-import com.example.flickrgallery.model.Photo
+import com.example.domain.Photo
 import com.example.flickrgallery.ui.common.ScopedViewModel
 import com.example.usecases.GetSelectedPhoto
 import com.example.usecases.MarkPhotoAsFavorite
@@ -46,13 +45,13 @@ class PhotoDetailsViewModel(
 
     private fun deletePhotoInList(photo: Photo) {
         launch(Dispatchers.IO) {
-            unMarkPhotoAsFavorite.invoke(photo.toDomainPhoto())
+            unMarkPhotoAsFavorite.invoke(photo)
         }
     }
 
     private fun savePhotoToList(photo: Photo) {
         launch(Dispatchers.IO) {
-            markPhotoAsFavorite.invoke(photo.toDomainPhoto())
+            markPhotoAsFavorite.invoke(photo)
         }
     }
 

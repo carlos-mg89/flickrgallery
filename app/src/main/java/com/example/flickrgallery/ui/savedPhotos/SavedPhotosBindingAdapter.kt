@@ -2,7 +2,7 @@ package com.example.flickrgallery.ui.savedPhotos
 
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.flickrgallery.model.Photo
+import com.example.domain.Photo
 
 
 @BindingAdapter("savedPhotos")

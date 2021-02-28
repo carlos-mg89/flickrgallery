@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
+import com.example.domain.Photo
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.SavedPhotosFragmentBinding
-import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.ui.savedPhotos.SavedPhotosFragmentDirections.Companion.actionSavedPhotosFragmentToPhotoDetailsFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.androidx.scope.ScopeFragment

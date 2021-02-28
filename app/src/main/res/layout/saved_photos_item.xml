@@ -6,7 +6,7 @@
     <data>
         <variable
             name="photo"
-            type="com.example.flickrgallery.model.Photo" />
+            type="com.example.domain.Photo" />
         <variable
             name="viewModel"
             type="com.example.flickrgallery.ui.savedPhotos.SavedPhotosViewModel" />
@@ -26,7 +26,7 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/photo"
+                android:id="@+id/photoImgView"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:layout_centerInParent="true"

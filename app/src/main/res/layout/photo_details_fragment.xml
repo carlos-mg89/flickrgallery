@@ -6,7 +6,7 @@
     <data>
         <variable
             name="photo"
-            type="com.example.flickrgallery.model.Photo" />
+            type="com.example.domain.Photo" />
         <variable
             name="viewModel"
             type="com.example.flickrgallery.ui.photoDetails.PhotoDetailsViewModel" />
@@ -23,7 +23,7 @@
             android:layout_height="257dp">
 
             <ImageView
-                android:id="@+id/photo"
+                android:id="@+id/detailPhoto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/photo_details_photo"

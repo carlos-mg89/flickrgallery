@@ -8,9 +8,10 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
+import com.example.domain.Photo
 import com.example.flickrgallery.R
+import com.example.flickrgallery.data.source.toRoomPhoto
 import com.example.flickrgallery.databinding.FragmentExploreBinding
-import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.ui.common.PhotosAdapter
 import com.example.flickrgallery.ui.explore.ExploreFragmentDirections.Companion.actionExploreFragmentToPhotoDetailsFragment
 import com.google.android.material.snackbar.Snackbar

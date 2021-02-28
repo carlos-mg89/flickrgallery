@@ -2,9 +2,8 @@ package com.example.flickrgallery.ui.storedLocationPhotos
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.domain.Photo
 import com.example.flickrgallery.data.source.toDomainStoredLocation
-import com.example.flickrgallery.data.source.toRoomPhoto
-import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.model.StoredLocation
 import com.example.flickrgallery.ui.common.ScopedViewModel
 import com.example.usecases.GetStoredLocationPhotos
@@ -28,8 +27,7 @@ class StoredLocationViewModel(
     }
 
     private suspend fun getPhotos(storedLocation: StoredLocation): List<Photo> {
-        val photos = getStoredLocationPhotos.invoke(storedLocation.toDomainStoredLocation())
-        return photos.map { it.toRoomPhoto() }
+        return getStoredLocationPhotos.invoke(storedLocation.toDomainStoredLocation())
     }
 
     private fun setUiBusy() {

@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.navArgs
+import com.example.domain.Photo
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.PhotoDetailsFragmentBinding
-import com.example.flickrgallery.model.Photo
 import org.koin.androidx.scope.ScopeFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
