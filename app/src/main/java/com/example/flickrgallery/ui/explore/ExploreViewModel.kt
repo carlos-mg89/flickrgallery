@@ -6,10 +6,11 @@ import com.example.data.model.Location
 import com.example.domain.StoredLocation
 import com.example.flickrgallery.data.source.toRoomPhoto
 import com.example.flickrgallery.model.Photo
-import com.example.flickrgallery.ui.common.ScopedViewModel
+import com.example.flickrgallery.ui.common.ScopedViewModelWithCustomDispatcher
 import com.example.usecases.GetCurrentLocation
 import com.example.usecases.GetCurrentLocationPhotos
 import com.example.usecases.SaveStoredLocation
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -18,8 +19,9 @@ import kotlinx.coroutines.launch
 class ExploreViewModel(
         private val getCurrentLocation: GetCurrentLocation,
         private val saveStoredLocation: SaveStoredLocation,
-        private val getCurrentLocationPhotos: GetCurrentLocationPhotos
-) : ScopedViewModel() {
+        private val getCurrentLocationPhotos: GetCurrentLocationPhotos,
+        uiDispatcher: CoroutineDispatcher
+) : ScopedViewModelWithCustomDispatcher(uiDispatcher) {
 
     private val _exploreUiState = MutableLiveData(ExploreUiState())
     val exploreUiState: LiveData<ExploreUiState>

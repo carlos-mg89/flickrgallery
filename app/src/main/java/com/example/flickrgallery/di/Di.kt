@@ -52,7 +52,7 @@ val repoModule = module {
 val scopedModule = module {
     scope(named<MainActivity>()) {  }
     scope(named<ExploreFragment>()) {
-        viewModel { ExploreViewModel(get(), get(), get()) }
+        viewModel { ExploreViewModel(get(), get(), get(), get()) }
     }
     scope(named<PhotoDetailsFragment>()) {
         viewModel { PhotoDetailsViewModel(get(), get(), get()) }
