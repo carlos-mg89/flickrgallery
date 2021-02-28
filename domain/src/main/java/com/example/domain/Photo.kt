@@ -1,8 +1,10 @@
 package com.example.domain
 
+import java.io.Serializable
 import java.util.*
 
-class Photo {
+
+class Photo: Serializable {
 
     var id: String = ""
     var farm: Int = -1
@@ -29,7 +31,7 @@ class Photo {
         return getBaseImageUrl().toString() + MEDIUM_640_IMAGE_SUFFIX
     }
 
-    private fun getBaseImageUrl(): StringBuffer? {
+    private fun getBaseImageUrl(): StringBuffer {
         val buffer = StringBuffer()
         buffer.append("$FLICKR_URL_PREFIX${farm}$FLICKR_URL_BASE_DOMAIN${server}/${id}_${secret}")
         return buffer
