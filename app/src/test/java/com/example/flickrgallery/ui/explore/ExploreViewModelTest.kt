@@ -19,6 +19,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentCaptor
+import org.mockito.BDDMockito
 import org.mockito.Captor
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
@@ -31,19 +32,18 @@ class ExploreViewModelTest {
     @get: Rule
     val rule = InstantTaskExecutorRule()
 
+    private val mockedDomainPhotos = listOf(Photo())
+    private val mockedFrameworkPhotos = listOf(Photo().toRoomPhoto())
+
     @Mock
     lateinit var getCurrentLocation: GetCurrentLocation
     @Mock
     lateinit var saveStoredLocation: SaveStoredLocation
     @Mock
     lateinit var getCurrentLocationPhotos: GetCurrentLocationPhotos
-    private val mockedDomainPhotos = listOf(Photo())
-    private val mockedFrameworkPhotos = listOf(Photo().toRoomPhoto())
 
-    @Captor
-    private lateinit var captor: ArgumentCaptor<ExploreUiState>
     @Mock
-    lateinit var observer: Observer<ExploreUiState>
+    lateinit var stateObserver: Observer<ExploreUiState>
 
     lateinit var viewModel: ExploreViewModel
 
@@ -74,54 +74,28 @@ class ExploreViewModelTest {
     }
 
     @Test
-    fun `proceedGettingUpdates con Captor FAIL`() {
-        // Se recogen 4 interacciones, pero son la misma: la que debería ser la última
-        // El viewmodel pasa correctamente el estado
+    fun `after proceedGettingUpdates is called, the state goes from initial to loading and to finished`() {
         runBlocking {
             whenever(getCurrentLocationPhotos.invoke(any(), any())).thenReturn(mockedDomainPhotos)
             whenever(getCurrentLocation.invoke()).thenReturn(listOf(Location()).asFlow())
 
-            viewModel.exploreUiState.observeForever(observer)
-            viewModel.proceedGettingUpdates()
-            verify(observer, times(3)).onChanged(captor.capture())
-
-            val values = captor.allValues
-            assertEquals(initialState, values[0])
-            assertEquals(loadingState, values[1])
-            assertEquals(finishedState, values[2])
-        }
-    }
-
-    @Test
-    fun `proceedGettingUpdates solo verify FAIL`() {
-        runBlocking {
-            whenever(getCurrentLocationPhotos.invoke(any(), any())).thenReturn(mockedDomainPhotos)
-            whenever(getCurrentLocation.invoke()).thenReturn(listOf(Location()).asFlow())
-
-            viewModel.exploreUiState.observeForever(observer)
-            viewModel.proceedGettingUpdates()
-            verify(observer, times(3)).onChanged(any())
-
-            verify(observer).onChanged(initialState)
-            verify(observer).onChanged(loadingState)
-            verify(observer).onChanged(finishedState)
-        }
-    }
-
-    @Test
-    fun `proceedGettingUpdates verify in order FAIL`() {
-        runBlocking {
-            whenever(getCurrentLocationPhotos.invoke(any(), any())).thenReturn(mockedDomainPhotos)
-            whenever(getCurrentLocation.invoke()).thenReturn(listOf(Location()).asFlow())
-
-            viewModel.exploreUiState.observeForever(observer)
+            viewModel.exploreUiState.observeForever(stateObserver)
             viewModel.proceedGettingUpdates()
 
-            observer.inOrder {
-                verify(observer).onChanged(initialState)
-                verify(observer).onChanged(loadingState)
-                verify(observer).onChanged(finishedState)
-            }
+            val captor: ArgumentCaptor<ExploreUiState> = ArgumentCaptor.forClass(ExploreUiState::class.java)
+            verify(stateObserver, times(3)).onChanged(captor.capture())
+
+            assertEquals(initialState.isFabEnabled, captor.firstValue.isFabEnabled)
+            assertEquals(initialState.isProgressVisible, captor.firstValue.isProgressVisible)
+            assertEquals(initialState.photos.size, captor.firstValue.photos.size)
+
+            assertEquals(loadingState.isFabEnabled, captor.secondValue.isFabEnabled)
+            assertEquals(loadingState.isProgressVisible, captor.secondValue.isProgressVisible)
+            assertEquals(loadingState.photos.size, captor.secondValue.photos.size)
+
+            assertEquals(finishedState.isFabEnabled, captor.thirdValue.isFabEnabled)
+            assertEquals(finishedState.isProgressVisible, captor.thirdValue.isProgressVisible)
+            assertEquals(finishedState.photos.size, captor.thirdValue.photos.size)
         }
     }
 

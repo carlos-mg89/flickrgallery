@@ -55,26 +55,19 @@ class ExploreViewModel(
         }
     }
 
-    private fun setUiBusy(){
-        updateUiState {
-            it.isProgressVisible = true
-            it.isFabEnabled = false
-            return@updateUiState it
-        }
+    private fun setUiBusy() {
+        _exploreUiState.value = ExploreUiState(
+                isProgressVisible = true,
+                isFabEnabled = false,
+        )
     }
 
     private fun setUiPhotosReceived(photos: List<Photo>){
-        updateUiState {
-            it.isProgressVisible = false
-            it.isFabEnabled = true
-            it.photos = photos
-            return@updateUiState it
-        }
-    }
-
-    private fun updateUiState(updateUi: (ExploreUiState) -> ExploreUiState) {
-        val newState = updateUi(_exploreUiState.value!!)
-        _exploreUiState.postValue(newState)
+        _exploreUiState.value = ExploreUiState(
+                isProgressVisible = false,
+                isFabEnabled = true,
+                photos = photos
+        )
     }
 }
 
