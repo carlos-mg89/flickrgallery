@@ -3,7 +3,7 @@ package com.example.flickrgallery.ui.common
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
-interface ScopeWithDispatcher: CoroutineScope {
+interface ScopeWithDispatcher : CoroutineScope {
 
     class Impl (override val uiDispatcher: CoroutineDispatcher) : ScopeWithDispatcher {
         override lateinit var job: Job

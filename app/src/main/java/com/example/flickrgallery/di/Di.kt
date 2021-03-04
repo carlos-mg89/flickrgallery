@@ -30,6 +30,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
+
 val appModule = module {
     single { Db.getDatabase(get()) }
     single<CoroutineDispatcher> { Dispatchers.Main }
@@ -51,7 +52,7 @@ val repoModule = module {
 val scopedModule = module {
     scope(named<MainActivity>()) {  }
     scope(named<ExploreFragment>()) {
-        viewModel { ExploreViewModel(get(), get(), get()) }
+        viewModel { ExploreViewModel(get(), get(), get(), get()) }
     }
     scope(named<PhotoDetailsFragment>()) {
         viewModel { PhotoDetailsViewModel(get(), get(), get()) }
@@ -63,7 +64,7 @@ val scopedModule = module {
         viewModel { StoredLocationViewModel(get()) }
     }
     scope(named<StoredLocationsFragment>()) {
-        viewModel { StoredLocationsViewModel(get(), get()) }
+        viewModel { StoredLocationsViewModel(get(), get(), get()) }
     }
 }
 

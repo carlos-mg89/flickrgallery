@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 
 
- abstract class ScopedViewModelWithCustomDispatcher(uiDispatcher: CoroutineDispatcher) : ViewModel(),
+abstract class ScopedViewModelWithCustomDispatcher (uiDispatcher: CoroutineDispatcher) : ViewModel(),
     ScopeWithDispatcher by ScopeWithDispatcher.Impl(uiDispatcher) {
 
     init {
