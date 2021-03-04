@@ -1,16 +1,15 @@
 package com.example.flickrgallery.model
 
-import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.android.parcel.Parcelize
+import java.io.Serializable
 import java.text.DateFormat
 import java.util.*
 
+
 @Entity(tableName = "stored_locations")
-@Parcelize
-class StoredLocation : Parcelable {
+class StoredLocation: Serializable {
 
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0

@@ -1,2 +1,3 @@
+include ':testShared'
 include ':domain', ':usecases', ':data', ':app'
 rootProject.name = "Flickr Gallery"

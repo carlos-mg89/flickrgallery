@@ -58,7 +58,7 @@ val scopedModule = module {
         viewModel { PhotoDetailsViewModel(get(), get(), get()) }
     }
     scope(named<SavedPhotosFragment>()) {
-        viewModel { SavedPhotosViewModel(get(), get()) }
+        viewModel { SavedPhotosViewModel(get(), get(), get()) }
     }
     scope(named<StoredLocationFragment>()) {
         viewModel { StoredLocationViewModel(get()) }

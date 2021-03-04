@@ -9,6 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.example.flickrgallery.R
+import com.example.flickrgallery.data.source.toDomainPhoto
 import com.example.flickrgallery.databinding.FragmentExploreBinding
 import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.ui.common.PhotosAdapter
@@ -72,7 +73,7 @@ class ExploreFragment : ScopeFragment() {
     }
 
     private fun navigateToDetail(photo: Photo) {
-        findNavController().navigate(actionExploreFragmentToPhotoDetailsFragment(photo))
+        findNavController().navigate(actionExploreFragmentToPhotoDetailsFragment(photo.toDomainPhoto()))
     }
 
     private fun getRandomNumber(): Int {
