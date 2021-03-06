@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.example.flickrgallery.R
 import com.example.flickrgallery.data.source.toDomainPhoto
 import com.example.flickrgallery.databinding.FragmentExploreBinding
+import com.example.flickrgallery.databinding.InputTextDialogBinding
 import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.ui.common.PhotosAdapter
 import com.example.flickrgallery.ui.explore.ExploreFragmentDirections.Companion.actionExploreFragmentToPhotoDetailsFragment
@@ -68,7 +70,9 @@ class ExploreFragment : ScopeFragment() {
         }
 
         binding.exploreFragmentFab.setOnClickListener {
-            viewModel.storeLocation(description = getRandomNumber().toString())
+            showNewLocationInputDialog(onSaveDescriptionClicked = { description ->
+                viewModel.storeLocation(description = description)
+            })
         }
     }
 
@@ -76,10 +80,25 @@ class ExploreFragment : ScopeFragment() {
         findNavController().navigate(actionExploreFragmentToPhotoDetailsFragment(photo.toDomainPhoto()))
     }
 
-    private fun getRandomNumber(): Int {
-        val min = 1
-        val max = 100
-        val randomDouble = Math.random() * (max - min + 1) + min
-        return randomDouble.toInt()
+    private fun showNewLocationInputDialog(onSaveDescriptionClicked: (String) -> Unit){
+        val alertDialog: AlertDialog = requireActivity().let {
+            val binding: InputTextDialogBinding = DataBindingUtil.inflate(
+                it.layoutInflater, R.layout.input_text_dialog, null,false
+            )
+            val builder = AlertDialog.Builder(it)
+
+            builder.apply {
+                setTitle(R.string.explore_location_dialog_input_title)
+                setView(binding.root)
+                setPositiveButton(R.string.save) { _, _ ->
+                    onSaveDescriptionClicked(binding.inputText.text.toString())
+                }
+                setNegativeButton(R.string.cancel) { _, _ ->
+                    // Only dismiss
+                }
+            }
+            builder.create()
+        }
+        alertDialog.show()
     }
 }
