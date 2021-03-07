@@ -2,6 +2,7 @@
     <string name="app_name">Flickr Gallery</string>
 
     <string name="explorar">Explorar</string>
+    <string name="explore_location_dialog_input_title">Introducir descripción</string>
 
     <string name="store_location">Guardar localizacion</string>
     <string name="stored_location_success">Localizacion guardada</string>
@@ -19,9 +20,12 @@
     <string name="photo_details_save_btn">button to save image</string>
 
     <string name="retry">"Reintentar"</string>
+    <string name="save">"Guardar"</string>
+    <string name="cancel">"Cancelar"</string>
 
     <string name="saved_photos_item">Foto guardada</string>
     <string name="saved_photos_delete">Eliminar foto guardada</string>
     <string name="saved_photos_delete_success">Has eliminado la foto guardada</string>
+    <string name="stored_locations_item_blank_description">Sin descripción</string>
 
 </resources>
