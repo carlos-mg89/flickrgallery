@@ -26,5 +26,6 @@
     <string name="saved_photos_item">Foto guardada</string>
     <string name="saved_photos_delete">Eliminar foto guardada</string>
     <string name="saved_photos_delete_success">Has eliminado la foto guardada</string>
+    <string name="stored_locations_item_blank_description">Sin descripción</string>
 
 </resources>
