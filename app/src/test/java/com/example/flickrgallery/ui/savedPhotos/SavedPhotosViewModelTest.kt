@@ -1,9 +1,8 @@
-package com.example.flickrgallery.savedPhotos
+package com.example.flickrgallery.ui.savedPhotos
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.example.domain.Photo
-import com.example.flickrgallery.ui.savedPhotos.SavedPhotosViewModel
 import com.example.usecases.DeleteSavedPhoto
 import com.example.usecases.GetSavedPhotos
 import com.nhaarman.mockitokotlin2.verify
