@@ -55,7 +55,7 @@ val scopedModule = module {
         viewModel { ExploreViewModel(get(), get(), get(), get()) }
     }
     scope(named<PhotoDetailsFragment>()) {
-        viewModel { PhotoDetailsViewModel(get(), get(), get()) }
+        viewModel { PhotoDetailsViewModel(get(), get(), get(), get()) }
     }
     scope(named<SavedPhotosFragment>()) {
         viewModel { SavedPhotosViewModel(get(), get(), get()) }
