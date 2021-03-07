@@ -12,7 +12,7 @@ class StoredLocationTest {
         val storedLocation = StoredLocation()
         val date = GregorianCalendar(2021, 0, 31).time
         storedLocation.savedDate = date
-        val expectedDateStr = "31/01/21 0:00"
+        val expectedDateStr = "1/31/21, 12:00 AM"
 
         val actualDateStr = storedLocation.savedDateString
 
