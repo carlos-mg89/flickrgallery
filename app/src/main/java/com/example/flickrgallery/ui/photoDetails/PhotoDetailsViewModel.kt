@@ -25,25 +25,21 @@ class PhotoDetailsViewModel(
 
     fun checkIfPhotoExists(photo: Photo) {
         launch(Dispatchers.IO) {
-            _favoriteStatus.postValue(isPhotoInDB(photo))
+            if (getSelectedPhoto.invoke(photo.id) != null) {
+                _favoriteStatus.postValue(true)
+            }
         }
-    }
-
-    private suspend fun isPhotoInDB(photo: Photo): Boolean {
-        return getSelectedPhoto.invoke(photo.id) != null
     }
 
     fun toggleSaveStatus(photo: Photo) {
-        launch(Dispatchers.IO) {
-            val newFavoriteStatus = if (isPhotoInDB(photo)) {
-                deletePhotoInList(photo)
-                false
-            } else {
-                savePhotoToList(photo)
-                true
-            }
-            _favoriteStatus.postValue(newFavoriteStatus)
+        val newFavoriteStatus = if (favoriteStatus.value == true) {
+            deletePhotoInList(photo)
+            false
+        } else {
+            savePhotoToList(photo)
+            true
         }
+        _favoriteStatus.value = newFavoriteStatus
     }
 
     private fun deletePhotoInList(photo: Photo) {
