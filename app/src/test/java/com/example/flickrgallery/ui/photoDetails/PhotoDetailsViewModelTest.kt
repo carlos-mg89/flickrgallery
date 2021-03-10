@@ -69,12 +69,14 @@ class PhotoDetailsViewModelTest {
     }
 
     @Test
-    fun `when toggleSaveStatus is called in a photo that is not saved, the markPhotoAsFavorite use case is invoked`() {
+    fun `when toggleSaveStatus is called in a photo that is not saved, the markPhotoAsFavorite use case is called`() {
         runBlocking {
             whenever( markPhotoAsFavorite.invoke(mockedUnSavedPhoto) ).thenReturn(Unit)
 
+            vm.favoriteStatus.observeForever(favoriteStatusObserver)
             vm.toggleSaveStatus(mockedUnSavedPhoto)
 
+            verify(favoriteStatusObserver).onChanged(true)
             verify(markPhotoAsFavorite).invoke(mockedUnSavedPhoto)
         }
     }
