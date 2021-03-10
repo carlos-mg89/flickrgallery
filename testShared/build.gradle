@@ -5,6 +5,7 @@ plugins {
 
 dependencies {
     implementation project(":domain")
+    implementation project(":data")
 
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     testImplementation "org.mockito:mockito-inline:2.28.2"
