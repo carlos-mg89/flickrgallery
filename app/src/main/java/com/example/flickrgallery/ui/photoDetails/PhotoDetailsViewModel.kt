@@ -49,7 +49,7 @@ class PhotoDetailsViewModel(
     }
 
     private fun savePhotoToList(photo: Photo) {
-        launch(Dispatchers.IO) {
+        launch {
             markPhotoAsFavorite.invoke(photo)
         }
     }
