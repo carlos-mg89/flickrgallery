@@ -7,10 +7,9 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.domain.Photo
 import com.example.flickrgallery.R
-import com.example.flickrgallery.data.source.toDomainPhoto
 import com.example.flickrgallery.databinding.StoredLocationFragmentBinding
-import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.ui.common.PhotosAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.androidx.scope.ScopeFragment
@@ -46,7 +45,7 @@ class StoredLocationFragment : ScopeFragment() {
     private fun navigateToDetail(photo: Photo) {
         findNavController().navigate(
             StoredLocationFragmentDirections.actionStoredLocationFragmentToPhotoDetailsFragment(
-                photo.toDomainPhoto()
+                photo
             )
         )
     }

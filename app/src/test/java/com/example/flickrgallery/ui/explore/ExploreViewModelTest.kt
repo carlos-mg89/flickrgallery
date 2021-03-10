@@ -4,7 +4,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.example.data.model.Location
 import com.example.domain.Photo
-import com.example.flickrgallery.data.source.toRoomPhoto
 import com.example.usecases.GetCurrentLocation
 import com.example.usecases.GetCurrentLocationPhotos
 import com.example.usecases.SaveStoredLocation
@@ -19,8 +18,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentCaptor
-import org.mockito.BDDMockito
-import org.mockito.Captor
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 
@@ -32,8 +29,7 @@ class ExploreViewModelTest {
     @get: Rule
     val rule = InstantTaskExecutorRule()
 
-    private val mockedDomainPhotos = listOf(Photo())
-    private val mockedFrameworkPhotos = listOf(Photo().toRoomPhoto())
+    private val mockedPhotos = listOf(Photo())
 
     @Mock
     lateinit var getCurrentLocation: GetCurrentLocation
@@ -58,7 +54,7 @@ class ExploreViewModelTest {
         isFabEnabled = false
     )
     private val finishedState = ExploreUiState(
-        photos = mockedFrameworkPhotos,
+        photos = mockedPhotos,
         isProgressVisible = false,
         isFabEnabled = true
     )
@@ -76,7 +72,7 @@ class ExploreViewModelTest {
     @Test
     fun `after proceedGettingUpdates is called, the state goes from initial to loading and to finished`() {
         runBlocking {
-            whenever(getCurrentLocationPhotos.invoke(any(), any())).thenReturn(mockedDomainPhotos)
+            whenever(getCurrentLocationPhotos.invoke(any(), any())).thenReturn(mockedPhotos)
             whenever(getCurrentLocation.invoke()).thenReturn(listOf(Location()).asFlow())
 
             viewModel.exploreUiState.observeForever(stateObserver)
@@ -110,7 +106,7 @@ class ExploreViewModelTest {
     fun `proceedGettingUpdates shows loading when starts`() {
 
         runBlocking {
-            whenever(getCurrentLocationPhotos.invoke(any(), any())).thenReturn(mockedDomainPhotos)
+            whenever(getCurrentLocationPhotos.invoke(any(), any())).thenReturn(mockedPhotos)
             whenever(getCurrentLocation.invoke()).thenReturn(listOf(Location()).asFlow())
 
             var receivedStatePosition = 1
@@ -126,7 +122,7 @@ class ExploreViewModelTest {
     fun `proceedGettingUpdates shows finished ui state when finished`() {
 
         runBlocking {
-            whenever(getCurrentLocationPhotos.invoke(any(), any())).thenReturn(mockedDomainPhotos)
+            whenever(getCurrentLocationPhotos.invoke(any(), any())).thenReturn(mockedPhotos)
             whenever(getCurrentLocation.invoke()).thenReturn(listOf(Location()).asFlow())
 
             var receivedStatePosition = 1

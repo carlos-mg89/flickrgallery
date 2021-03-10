@@ -3,9 +3,8 @@ package com.example.flickrgallery.ui.explore
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.data.model.Location
+import com.example.domain.Photo
 import com.example.domain.StoredLocation
-import com.example.flickrgallery.data.source.toRoomPhoto
-import com.example.flickrgallery.model.Photo
 import com.example.flickrgallery.ui.common.ScopedViewModelWithCustomDispatcher
 import com.example.usecases.GetCurrentLocation
 import com.example.usecases.GetCurrentLocationPhotos
@@ -42,7 +41,7 @@ class ExploreViewModel(
         setUiBusy()
         this.location = location
         val photos = getCurrentLocationPhotos.invoke(location.latitude, location.longitude)
-        setUiPhotosReceived(photos.map { it.toRoomPhoto() })
+        setUiPhotosReceived(photos)
     }
 
     fun storeLocation(description: String = "") {

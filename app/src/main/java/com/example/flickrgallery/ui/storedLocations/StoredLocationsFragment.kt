@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.domain.StoredLocation
-import com.example.flickrgallery.data.source.toFrameworkStoredLocation
 import com.example.flickrgallery.databinding.StoredLocationsFragmentBinding
 import com.example.flickrgallery.ui.storedLocations.StoredLocationsFragmentDirections.Companion.actionStoredLocationsFragmentToStoredLocationFragment
 import org.koin.androidx.scope.ScopeFragment
@@ -52,8 +51,7 @@ class StoredLocationsFragment : ScopeFragment() {
     }
 
     private fun navigateToStoredLocation(storedLocation: StoredLocation) {
-        val frameworkStoredLocation = storedLocation.toFrameworkStoredLocation()
         findNavController()
-            .navigate(actionStoredLocationsFragmentToStoredLocationFragment(frameworkStoredLocation))
+            .navigate(actionStoredLocationsFragmentToStoredLocationFragment(storedLocation))
     }
 }

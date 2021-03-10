@@ -3,7 +3,7 @@ package com.example.flickrgallery.ui.explore
 import android.view.View
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.flickrgallery.model.Photo
+import com.example.domain.Photo
 import com.example.flickrgallery.ui.common.PhotosAdapter
 
 

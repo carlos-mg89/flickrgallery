@@ -1,9 +1,10 @@
 package com.example.domain
 
+import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.*
 
-class StoredLocation {
+class StoredLocation: Serializable {
 
     var id: Int = 0
 
