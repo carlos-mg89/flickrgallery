@@ -62,8 +62,6 @@ class PhotoDetailsViewModelTest {
     @Test
     fun `when checkIfPhotoExists is called, the getSelectedPhoto use case is invoked`() {
         runBlocking {
-            whenever( getSelectedPhoto.invoke(mockedPhoto.id) ).thenReturn(mockedPhoto)
-
             vm.checkIfPhotoExists(mockedPhoto)
 
             verify(getSelectedPhoto).invoke(mockedPhoto.id)
@@ -73,7 +71,6 @@ class PhotoDetailsViewModelTest {
     @Test
     fun `when toggleSaveStatus is called in a photo that is not saved, the markPhotoAsFavorite use case is invoked`() {
         runBlocking {
-            whenever( getSelectedPhoto.invoke(mockedUnSavedPhoto.id) ).thenReturn(null)
             whenever( markPhotoAsFavorite.invoke(mockedUnSavedPhoto) ).thenReturn(Unit)
 
             vm.toggleSaveStatus(mockedUnSavedPhoto)
@@ -85,7 +82,6 @@ class PhotoDetailsViewModelTest {
     @Test
     fun `when toggleSaveStatus is called in a photo that is not saved, favoriteStatus is true`() {
         runBlocking {
-            whenever( getSelectedPhoto.invoke(mockedUnSavedPhoto.id) ).thenReturn(null)
             whenever( markPhotoAsFavorite.invoke(mockedUnSavedPhoto) ).thenReturn(Unit)
 
             vm.favoriteStatus.observeForever(favoriteStatusObserver)
@@ -97,15 +93,15 @@ class PhotoDetailsViewModelTest {
 
     @Test
     fun `when toggleSaveStatus is called in a saved photo, the unMarkPhotoAsFavorite use case is invoked`() {
-        val savedPhoto = mockedPhoto
         runBlocking {
-            whenever( getSelectedPhoto.invoke(savedPhoto.id) ).thenReturn(savedPhoto)
+            whenever( getSelectedPhoto.invoke(mockedPhoto.id) ).thenReturn(mockedPhoto)
             whenever( unMarkPhotoAsFavorite.invoke(any()) ).thenReturn(Unit)
 
-            vm.toggleSaveStatus(savedPhoto)
+            vm.favoriteStatus.observeForever(favoriteStatusObserver)
+            vm.checkIfPhotoExists(mockedPhoto)
+            vm.toggleSaveStatus(mockedPhoto)
 
-            verify(getSelectedPhoto).invoke(savedPhoto.id)
-            verify(unMarkPhotoAsFavorite).invoke(savedPhoto)
+            verify(unMarkPhotoAsFavorite).invoke(mockedPhoto)
         }
     }
 
@@ -115,9 +111,10 @@ class PhotoDetailsViewModelTest {
             whenever( getSelectedPhoto.invoke(mockedPhoto.id) ).thenReturn(mockedPhoto)
 
             vm.favoriteStatus.observeForever(favoriteStatusObserver)
+            vm.checkIfPhotoExists(mockedPhoto)
             vm.toggleSaveStatus(mockedPhoto)
 
-            verify(favoriteStatusObserver).onChanged(false)
+            verify(favoriteStatusObserver, times(2)).onChanged(false)
         }
     }
 }

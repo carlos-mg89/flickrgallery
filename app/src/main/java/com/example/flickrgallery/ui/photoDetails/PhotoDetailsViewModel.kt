@@ -24,9 +24,9 @@ class PhotoDetailsViewModel(
         get() = _favoriteStatus
 
     fun checkIfPhotoExists(photo: Photo) {
-        launch(Dispatchers.IO) {
+        launch {
             if (getSelectedPhoto.invoke(photo.id) != null) {
-                _favoriteStatus.postValue(true)
+                _favoriteStatus.value = true
             }
         }
     }
@@ -43,7 +43,7 @@ class PhotoDetailsViewModel(
     }
 
     private fun deletePhotoInList(photo: Photo) {
-        launch(Dispatchers.IO) {
+        launch {
             unMarkPhotoAsFavorite.invoke(photo)
         }
     }
