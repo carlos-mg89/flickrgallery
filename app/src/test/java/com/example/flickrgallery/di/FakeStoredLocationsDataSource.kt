@@ -2,17 +2,33 @@ package com.example.flickrgallery.di
 
 import com.example.data.source.StoredLocationsDataSource
 import com.example.domain.StoredLocation
-import com.example.testshared.mockedStoredLocationList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 class FakeStoredLocationsDataSource: StoredLocationsDataSource {
 
-    override fun getAll(): Flow<List<StoredLocation>> = flowOf(mockedStoredLocationList)
+    var storedLocations: ArrayList<StoredLocation> = arrayListOf()
 
-    override suspend fun insert(storedLocation: StoredLocation) {}
+    override fun getAll(): Flow<List<StoredLocation>> = flowOf(storedLocations)
 
-    override suspend fun update(storedLocation: StoredLocation) {}
+    override suspend fun insert(storedLocation: StoredLocation) {
+        storedLocations.plus(storedLocation)
+    }
 
-    override suspend fun delete(storedLocation: StoredLocation) {}
+    override suspend fun update(storedLocation: StoredLocation) {
+        var storedLocationIndex = -1
+        storedLocations.forEachIndexed { index, it ->
+            if (it.id == storedLocation.id) storedLocationIndex = index
+        }
+
+        if (storedLocationIndex >= 0) {
+            storedLocations[storedLocationIndex] = storedLocation
+        } else {
+            insert(storedLocation)
+        }
+    }
+
+    override suspend fun delete(storedLocation: StoredLocation) {
+        storedLocations.remove(storedLocation)
+    }
 }
