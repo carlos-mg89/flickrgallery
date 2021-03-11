@@ -7,7 +7,6 @@ import com.example.domain.StoredLocation
 import com.example.flickrgallery.di.FakeStoredLocationsDataSource
 import com.example.flickrgallery.di.initMockedDi
 import com.example.testshared.mockedStoredLocations
-import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
