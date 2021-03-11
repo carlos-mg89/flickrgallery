@@ -2,18 +2,18 @@ package com.example.flickrgallery.ui.storedLocationPhotos
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.flickrgallery.data.source.toDomainStoredLocation
-import com.example.flickrgallery.data.source.toRoomPhoto
-import com.example.flickrgallery.model.Photo
-import com.example.flickrgallery.model.StoredLocation
-import com.example.flickrgallery.ui.common.ScopedViewModel
+import com.example.domain.Photo
+import com.example.domain.StoredLocation
+import com.example.flickrgallery.ui.common.ScopedViewModelWithCustomDispatcher
 import com.example.usecases.GetStoredLocationPhotos
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 
 
 class StoredLocationViewModel(
-        private val getStoredLocationPhotos: GetStoredLocationPhotos
-) : ScopedViewModel() {
+        private val getStoredLocationPhotos: GetStoredLocationPhotos,
+        uiDispatcher: CoroutineDispatcher
+) : ScopedViewModelWithCustomDispatcher(uiDispatcher) {
 
     private val _storedLocationUiState = MutableLiveData(StoredLocationState())
     val storedLocationUiState: LiveData<StoredLocationState>
@@ -28,28 +28,20 @@ class StoredLocationViewModel(
     }
 
     private suspend fun getPhotos(storedLocation: StoredLocation): List<Photo> {
-        val photos = getStoredLocationPhotos.invoke(storedLocation.toDomainStoredLocation())
-        return photos.map { it.toRoomPhoto() }
+        return getStoredLocationPhotos.invoke(storedLocation)
     }
 
     private fun setUiBusy() {
-        updateUiState {
-            it.isProgressVisible = true
-            return@updateUiState it
-        }
+        _storedLocationUiState.value = _storedLocationUiState.value!!.copy(
+                isProgressVisible = true,
+        ).copy()
     }
 
-    private fun setUiPhotosReceivedForStoredLocation(photos: List<Photo>) {
-        updateUiState {
-            it.isProgressVisible = false
-            it.photos = photos
-            return@updateUiState it
-        }
-    }
-
-    private fun updateUiState(updateUi: (StoredLocationState) -> StoredLocationState) {
-        val newState = updateUi(_storedLocationUiState.value!!)
-        _storedLocationUiState.postValue(newState)
+    private fun setUiPhotosReceivedForStoredLocation(newPhotos: List<Photo>) {
+        _storedLocationUiState.value = StoredLocationState(
+            isProgressVisible = false,
+            photos = newPhotos
+        )
     }
 }
 
