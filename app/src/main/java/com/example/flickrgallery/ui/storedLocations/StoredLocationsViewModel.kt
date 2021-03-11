@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.domain.StoredLocation
 import com.example.flickrgallery.ui.common.Event
-import com.example.flickrgallery.ui.common.ScopedViewModelWithCustomDispatcher
+import com.example.flickrgallery.ui.common.ScopedViewModel
 import com.example.usecases.DeleteStoredLocation
 import com.example.usecases.GetStoredLocations
 import kotlinx.coroutines.CoroutineDispatcher
@@ -16,7 +16,7 @@ class StoredLocationsViewModel(
         private val getStoredLocations: GetStoredLocations,
         private val deleteStoredLocation: DeleteStoredLocation,
         uiDispatcher: CoroutineDispatcher
-) : ScopedViewModelWithCustomDispatcher(uiDispatcher) {
+) : ScopedViewModel(uiDispatcher) {
 
     private val _storedLocations = MutableLiveData<List<StoredLocation>>(emptyList())
     val storedLocations: LiveData<List<StoredLocation>>
