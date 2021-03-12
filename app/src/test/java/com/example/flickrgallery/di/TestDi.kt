@@ -8,6 +8,8 @@ import com.example.data.source.PhotosRemoteDataSource
 import com.example.data.source.StoredLocationsDataSource
 import com.example.usecases.*
 import kotlinx.coroutines.Dispatchers
+import org.koin.core.context.startKoin
+import org.koin.core.module.Module
 import org.koin.dsl.module
 
 
@@ -37,4 +39,10 @@ val useCasesModule = module {
 val repoModule = module {
     single { PhotosRepo(get(), get()) }
     single { StoredLocationsRepo(get(), get()) }
+}
+
+fun initMockedDi(vararg modules: Module) {
+    startKoin {
+        modules( listOf(testModule, repoModule, useCasesModule) + modules)
+    }
 }
