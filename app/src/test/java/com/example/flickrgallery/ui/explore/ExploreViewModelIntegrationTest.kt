@@ -2,9 +2,7 @@ package com.example.flickrgallery.ui.explore
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.example.flickrgallery.di.repoModule
-import com.example.flickrgallery.di.testModule
-import com.example.flickrgallery.di.useCasesModule
+import com.example.flickrgallery.di.initMockedDi
 import com.example.testshared.mockedDomainPhoto
 import com.nhaarman.mockitokotlin2.lastValue
 import com.nhaarman.mockitokotlin2.times
@@ -16,14 +14,13 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.koin.core.context.startKoin
-import org.koin.core.module.Module
 import org.koin.dsl.module
 import org.koin.test.AutoCloseKoinTest
 import org.koin.test.get
 import org.mockito.ArgumentCaptor
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
+
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
@@ -59,12 +56,6 @@ class ExploreViewModelIntegrationTest: AutoCloseKoinTest() {
 
             val actualPhotoId = captor.lastValue.photos.last().id
             Assert.assertEquals(expectedPhotoId, actualPhotoId)
-        }
-    }
-
-    private fun initMockedDi(vararg modules: Module) {
-        startKoin {
-            modules( listOf(testModule, repoModule, useCasesModule) + modules)
         }
     }
 }

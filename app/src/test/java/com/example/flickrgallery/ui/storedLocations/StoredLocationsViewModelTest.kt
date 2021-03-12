@@ -3,6 +3,7 @@ package com.example.flickrgallery.ui.storedLocations
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.example.domain.StoredLocation
+import com.example.testshared.mockedStoredLocations
 import com.example.usecases.DeleteStoredLocation
 import com.example.usecases.GetStoredLocations
 import com.nhaarman.mockitokotlin2.verify
@@ -34,23 +35,6 @@ class StoredLocationsViewModelTest {
     lateinit var storedLocationsObserver: Observer<List<StoredLocation>>
 
     private lateinit var vm: StoredLocationsViewModel
-
-    private val mockedStoredLocations = listOf(
-        StoredLocation().apply {
-            id = 2
-            savedDate = Calendar.getInstance().time
-            latitude = 42.10
-            longitude = 2.35
-            description = "Location #2"
-        },
-        StoredLocation().apply {
-            id = 1
-            savedDate = Calendar.getInstance().time
-            latitude = 41.10
-            longitude = 1.35
-            description = "Location #1"
-        }
-    )
 
     @Before
     fun setUp() {
