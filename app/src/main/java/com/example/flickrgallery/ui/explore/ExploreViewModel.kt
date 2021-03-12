@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.data.model.Location
 import com.example.domain.Photo
 import com.example.domain.StoredLocation
-import com.example.flickrgallery.ui.common.ScopedViewModelWithCustomDispatcher
+import com.example.flickrgallery.ui.common.ScopedViewModel
 import com.example.usecases.GetCurrentLocation
 import com.example.usecases.GetCurrentLocationPhotos
 import com.example.usecases.SaveStoredLocation
@@ -20,7 +20,7 @@ class ExploreViewModel(
         private val saveStoredLocation: SaveStoredLocation,
         private val getCurrentLocationPhotos: GetCurrentLocationPhotos,
         uiDispatcher: CoroutineDispatcher
-) : ScopedViewModelWithCustomDispatcher(uiDispatcher) {
+) : ScopedViewModel(uiDispatcher) {
 
     private val _exploreUiState = MutableLiveData(ExploreUiState())
     val exploreUiState: LiveData<ExploreUiState>

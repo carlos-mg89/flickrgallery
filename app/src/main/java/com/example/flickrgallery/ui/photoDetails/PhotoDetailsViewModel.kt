@@ -3,12 +3,11 @@ package com.example.flickrgallery.ui.photoDetails
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.domain.Photo
-import com.example.flickrgallery.ui.common.ScopedViewModelWithCustomDispatcher
+import com.example.flickrgallery.ui.common.ScopedViewModel
 import com.example.usecases.GetSelectedPhoto
 import com.example.usecases.MarkPhotoAsFavorite
 import com.example.usecases.UnMarkPhotoAsFavorite
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
@@ -17,7 +16,7 @@ class PhotoDetailsViewModel(
     private val markPhotoAsFavorite: MarkPhotoAsFavorite,
     private val unMarkPhotoAsFavorite: UnMarkPhotoAsFavorite,
     uiDispatcher: CoroutineDispatcher
-) : ScopedViewModelWithCustomDispatcher(uiDispatcher) {
+) : ScopedViewModel(uiDispatcher) {
 
     private val _favoriteStatus = MutableLiveData(false)
     val favoriteStatus: LiveData<Boolean>
