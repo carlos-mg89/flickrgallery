@@ -23,3 +23,8 @@ val mockedUnSavedPhoto = Photo().apply {
     id = "1"
     isSaved = false
 }
+
+val mockedStoredLocation1 = StoredLocation().apply {
+    id = 1
+    description = "A testable StoredLocation"
+}
