@@ -14,3 +14,12 @@ val mockedStoredLocation = StoredLocation()
 val mockedStoredLocationList = listOf(mockedStoredLocation)
 
 val mockedLocation = Location()
+
+val mockedPhoto = Photo().apply {
+    id = "1"
+}
+
+val mockedUnSavedPhoto = Photo().apply {
+    id = "1"
+    isSaved = false
+}
