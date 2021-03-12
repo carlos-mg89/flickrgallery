@@ -48,13 +48,13 @@ class PhotoDetailsViewModelIntegrationTest: AutoCloseKoinTest() {
             newPhotos.add(it)
         }
 
-        val fakeStoredLocationsDataSource = get<PhotosLocalDataSource>() as FakePhotosLocalDataSource
-        fakeStoredLocationsDataSource.photos = newPhotos
+        val fakePhotosLocalDataSource = get<PhotosLocalDataSource>() as FakePhotosLocalDataSource
+        fakePhotosLocalDataSource.photos = newPhotos
     }
 
     private fun setFakePhotosLocalDataSourceToBeEmpty() {
-        val fakeStoredLocationsDataSource = get<PhotosLocalDataSource>() as FakePhotosLocalDataSource
-        fakeStoredLocationsDataSource.photos.clear()
+        val fakePhotosLocalDataSource = get<PhotosLocalDataSource>() as FakePhotosLocalDataSource
+        fakePhotosLocalDataSource.photos.clear()
     }
 
     @Test
@@ -84,13 +84,13 @@ class PhotoDetailsViewModelIntegrationTest: AutoCloseKoinTest() {
     @Test
     fun `when toggleSaveStatus is called in a photo that is not saved, the fakeStoredLocationsDataSource will have that photo in it`() {
         runBlocking {
-            val fakeStoredLocationsDataSource = get<PhotosLocalDataSource>() as FakePhotosLocalDataSource
-            fakeStoredLocationsDataSource.photos.clear()
+            val fakePhotosLocalDataSource = get<PhotosLocalDataSource>() as FakePhotosLocalDataSource
+            fakePhotosLocalDataSource.photos.clear()
 
             photoDetailsViewModel.favoriteStatus.observeForever(favoriteStatusObserver)
             photoDetailsViewModel.toggleSaveStatus(mockedUnSavedPhoto)
 
-            Assert.assertTrue(fakeStoredLocationsDataSource.photos.contains(mockedUnSavedPhoto))
+            Assert.assertTrue(fakePhotosLocalDataSource.photos.contains(mockedUnSavedPhoto))
         }
     }
 
@@ -109,20 +109,20 @@ class PhotoDetailsViewModelIntegrationTest: AutoCloseKoinTest() {
     @Test
     fun `when toggleSaveStatus is called in a saved photo, the fakeStoredLocationsDataSource will not contain that photo`() {
         runBlocking {
-            val fakeStoredLocationsDataSource = get<PhotosLocalDataSource>() as FakePhotosLocalDataSource
-            fakeStoredLocationsDataSource.photos.add(mockedPhoto)
+            val fakePhotosLocalDataSource = get<PhotosLocalDataSource>() as FakePhotosLocalDataSource
+            fakePhotosLocalDataSource.photos.add(mockedPhoto)
 
             photoDetailsViewModel.toggleSaveStatus(mockedPhoto)
 
-            Assert.assertFalse(fakeStoredLocationsDataSource.photos.contains(mockedUnSavedPhoto))
+            Assert.assertFalse(fakePhotosLocalDataSource.photos.contains(mockedUnSavedPhoto))
         }
     }
 
     @Test
     fun `when toggleSaveStatus is called in a saved photo, favoriteStatus is false`() {
         runBlocking {
-            val fakeStoredLocationsDataSource = get<PhotosLocalDataSource>() as FakePhotosLocalDataSource
-            fakeStoredLocationsDataSource.photos.add(mockedPhoto)
+            val fakePhotosLocalDataSource = get<PhotosLocalDataSource>() as FakePhotosLocalDataSource
+            fakePhotosLocalDataSource.photos.add(mockedPhoto)
 
             photoDetailsViewModel.favoriteStatus.observeForever(favoriteStatusObserver)
             photoDetailsViewModel.toggleSaveStatus(mockedPhoto)
