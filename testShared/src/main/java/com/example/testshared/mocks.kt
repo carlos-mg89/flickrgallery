@@ -23,3 +23,14 @@ val mockedUnSavedPhoto = Photo().apply {
     id = "1"
     isSaved = false
 }
+
+val mockedPhotos = listOf(
+        Photo().apply {
+            id = "1"
+            title = "Test Photo 1"
+        },
+        Photo().apply {
+            id = "2"
+            title = "Test Photo 2"
+        }
+)
