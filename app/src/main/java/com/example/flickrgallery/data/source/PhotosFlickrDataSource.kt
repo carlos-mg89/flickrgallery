@@ -2,21 +2,25 @@ package com.example.flickrgallery.data.source
 
 import com.example.data.source.PhotosRemoteDataSource
 import com.example.flickrgallery.client.FlickrService
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import com.example.domain.Photo as DomainPhoto
 
-class PhotosFlickerDataSource: PhotosRemoteDataSource{
+class PhotosFlickerDataSource (baseUrl: String) : PhotosRemoteDataSource {
 
-    companion object{
-        private const val BASE_URL = "https://www.flickr.com/services/rest/"
+    val okHttpClient = HttpLoggingInterceptor().run {
+        level = HttpLoggingInterceptor.Level.BODY
+        OkHttpClient.Builder().addInterceptor(this).build()
     }
 
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
+    private val service = Retrofit.Builder()
+        .baseUrl(baseUrl)
+        .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-    private val service: FlickrService = retrofit.create(FlickrService::class.java)
+        .run { create(FlickrService::class.java) }
 
     override suspend fun getPhotosNearby(
         latitude: Double,

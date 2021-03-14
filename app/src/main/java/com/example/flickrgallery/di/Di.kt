@@ -40,7 +40,8 @@ val dataSourceModule = module {
     single<LocationDataSource> { FusedLocationDataSource(get()) }
     single<StoredLocationsDataSource> { StoredLocationsRoomDataSource(get()) }
     single<PhotosLocalDataSource> { PhotosRoomDataSource(get()) }
-    single<PhotosRemoteDataSource> { PhotosFlickerDataSource() }
+    single(named("baseUrl")) { "https://www.flickr.com/services/rest/" }
+    single<PhotosRemoteDataSource> { PhotosFlickerDataSource(get(named("baseUrl"))) }
 }
 
 val repoModule = module {
