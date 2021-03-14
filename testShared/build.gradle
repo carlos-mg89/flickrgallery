@@ -10,5 +10,4 @@ dependencies {
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     testImplementation "org.mockito:mockito-inline:2.28.2"
     testImplementation "junit:junit:$junit_version"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.4.21"
 }
