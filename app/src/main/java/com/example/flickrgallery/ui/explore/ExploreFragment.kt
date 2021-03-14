@@ -1,5 +1,6 @@
 package com.example.flickrgallery.ui.explore
 
+import EspressoIdlingResource
 import android.Manifest
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -47,7 +48,8 @@ class ExploreFragment : ScopeFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_explore, container ,false)
+        EspressoIdlingResource.increment()
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_explore, container, false)
         bindViewWithData()
         setupUi()
         requestLocationPermissionAndGetPhotos()

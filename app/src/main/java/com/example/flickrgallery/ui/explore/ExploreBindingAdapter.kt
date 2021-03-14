@@ -1,5 +1,6 @@
 package com.example.flickrgallery.ui.explore
 
+import EspressoIdlingResource
 import android.view.View
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +12,7 @@ import com.example.flickrgallery.ui.common.PhotosAdapter
 fun RecyclerView.setItems(photos: List<Photo>?) {
     (adapter as? PhotosAdapter)?.let {
         it.photos = photos ?: emptyList()
+        if (!photos.isNullOrEmpty()) EspressoIdlingResource.decrement()
     }
 }
 
