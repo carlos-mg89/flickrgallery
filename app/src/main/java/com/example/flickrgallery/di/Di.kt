@@ -6,10 +6,7 @@ import com.example.data.source.LocationDataSource
 import com.example.data.source.PhotosLocalDataSource
 import com.example.data.source.PhotosRemoteDataSource
 import com.example.data.source.StoredLocationsDataSource
-import com.example.flickrgallery.data.source.FusedLocationDataSource
-import com.example.flickrgallery.data.source.PhotosFlickerDataSource
-import com.example.flickrgallery.data.source.PhotosRoomDataSource
-import com.example.flickrgallery.data.source.StoredLocationsRoomDataSource
+import com.example.flickrgallery.data.source.*
 import com.example.flickrgallery.db.Db
 import com.example.flickrgallery.ui.MainActivity
 import com.example.flickrgallery.ui.explore.ExploreFragment
@@ -40,12 +37,14 @@ val dataSourceModule = module {
     single<LocationDataSource> { FusedLocationDataSource(get()) }
     single<StoredLocationsDataSource> { StoredLocationsRoomDataSource(get()) }
     single<PhotosLocalDataSource> { PhotosRoomDataSource(get()) }
-    single<PhotosRemoteDataSource> { PhotosFlickerDataSource() }
+    single<PhotosRemoteDataSource> { FlickrPhotosDbDataSource(get()) }
+    single(named("baseUrl")) { "https://www.flickr.com/services/rest/" }
+    single { PhotosFlickerDb(get(named("baseUrl"))) }
 }
 
 val repoModule = module {
-    single { PhotosRepo(get(), get()) }
-    single { StoredLocationsRepo(get(), get()) }
+    factory { PhotosRepo(get(), get()) }
+    factory { StoredLocationsRepo(get(), get()) }
 }
 
 @ExperimentalCoroutinesApi
