@@ -6,13 +6,15 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    // Target y compile version a 29 para poder usar orchestrator con API30:
+    // https://github.com/android/android-test/issues/743
+    compileSdkVersion 29
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.example.flickrgallery"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
 
@@ -29,9 +31,9 @@ android {
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         testInstrumentationRunnerArguments clearPackageData: 'true'
 
-//        testOptions {
-//            execution 'ANDROIDX_TEST_ORCHESTRATOR'
-//        }
+        testOptions {
+            execution 'ANDROIDX_TEST_ORCHESTRATOR'
+        }
     }
 
     buildTypes {
