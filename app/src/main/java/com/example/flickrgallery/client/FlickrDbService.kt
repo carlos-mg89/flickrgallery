@@ -4,7 +4,7 @@ import com.example.flickrgallery.model.PhotoDbResult
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface FlickrService {
+interface FlickrDbService {
 
     companion object {
         private const val FLICKR_API_KEY = "27db486eb2d4e3faad9bc3a727e8211a"
