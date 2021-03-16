@@ -1,4 +1,4 @@
-package com.example.flickrgallery.ui.utils
+package com.example.flickrgallery.ui.common
 
 import androidx.test.platform.app.InstrumentationRegistry
 import okhttp3.mockwebserver.MockResponse

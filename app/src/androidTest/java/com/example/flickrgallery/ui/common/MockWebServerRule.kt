@@ -1,4 +1,4 @@
-package com.example.flickrgallery.ui
+package com.example.flickrgallery.ui.common
 
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.rules.TestRule
