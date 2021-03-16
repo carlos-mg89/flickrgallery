@@ -3,10 +3,11 @@ package com.example.flickrgallery.ui
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
-import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.example.flickrgallery.R
 import com.example.flickrgallery.ui.common.BaseUiTest
@@ -17,21 +18,23 @@ import org.hamcrest.TypeSafeMatcher
 import org.junit.Test
 
 
-class FromExploreToStoredLocationsUiTest : BaseUiTest() {
+class FromExploreToStoredLocationsUi3Test : BaseUiTest() {
 
     companion object {
         const val storedLocationDescription = "A UI test StoredLocation"
     }
 
     @Test
-    fun saveStoredLocationAndSwipeToStoredLocationsTab() {
-        saveStoredLocationWithDescription()
+    fun swipeToStoredLocationsTabAndThenNavigateToStoredLocationPhotos() {
         saveStoredLocationWithDescription()
 
         transitionNavigationFromExploreToStoredLocationsTest()
 
-        onView(withId(R.id.recycler_view)).check(
-            ViewAssertions.matches(hasChildCount(2))
+        onView(withId(R.id.recycler_view)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0,
+                click()
+            )
         )
     }
 

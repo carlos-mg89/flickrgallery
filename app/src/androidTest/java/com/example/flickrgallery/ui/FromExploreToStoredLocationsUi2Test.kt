@@ -10,6 +10,7 @@ import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.example.flickrgallery.R
 import com.example.flickrgallery.ui.common.BaseUiTest
+import com.example.flickrgallery.ui.common.TestUtils
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
@@ -17,22 +18,24 @@ import org.hamcrest.TypeSafeMatcher
 import org.junit.Test
 
 
-class FromExploreToStoredLocationsUiTest : BaseUiTest() {
+class FromExploreToStoredLocationsUi2Test : BaseUiTest() {
 
     companion object {
         const val storedLocationDescription = "A UI test StoredLocation"
     }
 
     @Test
-    fun saveStoredLocationAndSwipeToStoredLocationsTab() {
-        saveStoredLocationWithDescription()
+    fun swipeToStoredLocationsTabToCheckRecyclerViewContents() {
         saveStoredLocationWithDescription()
 
         transitionNavigationFromExploreToStoredLocationsTest()
 
-        onView(withId(R.id.recycler_view)).check(
-            ViewAssertions.matches(hasChildCount(2))
-        )
+        onView(TestUtils.withRecyclerView(R.id.recycler_view).atPosition(0))
+            .check(
+                ViewAssertions.matches(
+                    hasDescendant(withText(storedLocationDescription))
+                )
+            )
     }
 
     private fun saveStoredLocationWithDescription() {
