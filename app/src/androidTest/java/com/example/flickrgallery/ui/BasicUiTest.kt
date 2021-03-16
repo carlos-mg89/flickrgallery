@@ -66,8 +66,5 @@ class BasicUiTest : KoinTest {
                 click()
             )
         )
-
-//        onView(withId(R.id.description_text))
-//            .check(matches(hasDescendant(withText("MEU"))))
     }
 }
