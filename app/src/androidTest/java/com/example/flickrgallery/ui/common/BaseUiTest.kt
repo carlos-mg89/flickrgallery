@@ -18,7 +18,7 @@ import org.koin.test.KoinTest
 open class BaseUiTest : KoinTest {
 
     companion object {
-        val photosJsonFile = "nearby_photos.json"
+        const val photosJsonFile = "nearby_photos.json"
     }
 
     private lateinit var context: Context
