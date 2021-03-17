@@ -7,12 +7,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.domain.Photo
 import com.example.flickrgallery.R
 import com.example.flickrgallery.databinding.SavedPhotosFragmentBinding
 import com.example.flickrgallery.ui.savedPhotos.SavedPhotosFragmentDirections.Companion.actionSavedPhotosFragmentToPhotoDetailsFragment
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.androidx.scope.ScopeFragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SavedPhotosFragment : ScopeFragment() {
 
@@ -40,6 +41,11 @@ class SavedPhotosFragment : ScopeFragment() {
     }
 
     private fun subscribeUi() {
+        val itemDivider = DividerItemDecoration(
+            binding.recyclerView.context,
+            DividerItemDecoration.VERTICAL
+        )
+        binding.recyclerView.addItemDecoration(itemDivider)
         binding.recyclerView.adapter = SavedPhotosAdapter(
             onPhotoItemClicked = onSavedPhotoClicked(),
             onDeleteBtnClicked = onDeleteBtnClicked()
