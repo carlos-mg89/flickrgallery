@@ -1,10 +1,9 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.FlickrGallery" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryDark">@color/purple_700</item>
-        <item name="colorAccent">@color/teal_200</item>
-        <!-- Customize your theme here. -->
+<resources>
+    <style name="Theme.FlickrGallery" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/dark_grey</item>
+        <item name="colorPrimaryDark">@color/darker_grey</item>
+        <item name="colorAccent">@color/yellow</item>
+        <item name="colorSecondary">@color/yellow</item>
+        <item name="colorSecondaryVariant">@color/yellow</item>
     </style>
 </resources>

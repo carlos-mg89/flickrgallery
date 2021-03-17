@@ -12,15 +12,33 @@
             type="com.example.flickrgallery.ui.photoDetails.PhotoDetailsViewModel" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.photoDetails.PhotoDetailsFragment"
         android:orientation="vertical">
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/save_image_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="2dp"
+            android:contentDescription="@string/photo_details_save_btn"
+            android:onClick="@{ () -> viewModel.toggleSaveStatus(photo) }"
+            android:scaleType="centerInside"
+            android:src="@drawable/photo_no_saved"
+            android:translationY="32dp"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+            app:layout_constraintEnd_toEndOf="parent" />
+
         <RelativeLayout
+            android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="257dp">
+            android:layout_height="257dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/photo"
@@ -28,29 +46,21 @@
                 android:layout_height="match_parent"
                 android:contentDescription="@string/photo_details_photo"
                 android:scaleType="centerCrop"
-                tools:src="@tools:sample/avatars"
-                app:url="@{ photo.getMedium640Url() }"/>
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/save_image_fab"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_margin="10dp"
-                android:scaleType="centerInside"
-                android:contentDescription="@string/photo_details_save_btn"
-                android:src="@drawable/photo_no_saved"
-                app:fabSize="mini"
-                android:onClick="@{ () -> viewModel.toggleSaveStatus(photo) }" />
+                app:url="@{ photo.getMedium640Url() }"
+                tools:src="@tools:sample/avatars" />
 
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
 
             <TextView
                 android:id="@+id/description_label"
@@ -65,13 +75,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
-                android:text="@{ photo.title }"/>
+                android:text="@{ photo.title }" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/label_save_data"
@@ -100,7 +110,7 @@
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -112,12 +122,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:paddingTop="20dp"
-                        tools:text="@tools:sample/lorem/random"/>
+                        tools:text="@tools:sample/lorem/random" />
 
                 </LinearLayout>
             </ScrollView>
 
         </LinearLayout>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

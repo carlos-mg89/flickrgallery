@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Flickr Gallery</string>
+    <string name="app_name">Location Scout</string>
 
     <string name="explorar">Explorar</string>
     <string name="explore_location_dialog_input_title">Introducir descripción</string>
