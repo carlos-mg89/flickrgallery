@@ -52,7 +52,7 @@ class ExploreViewModelIntegrationTest: AutoCloseKoinTest() {
             exploreViewModel.proceedGettingUpdates()
 
             val captor: ArgumentCaptor<ExploreUiState> = ArgumentCaptor.forClass(ExploreUiState::class.java)
-            verify(stateObserver, times(3)).onChanged(captor.capture())
+            verify(stateObserver, times(2)).onChanged(captor.capture())
 
             val actualPhotoId = captor.lastValue.photos.last().id
             Assert.assertEquals(expectedPhotoId, actualPhotoId)

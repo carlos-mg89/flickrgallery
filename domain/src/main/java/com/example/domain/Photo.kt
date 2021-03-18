@@ -20,6 +20,8 @@ class Photo: Serializable {
     var observation: String = ""
     var isSaved = false
     var savedDate: Date = Calendar.getInstance().time
+    val savedDateString: String
+        get() = savedDate.toFormattedString()
 
     companion object {
         const val MEDIUM_640_IMAGE_SUFFIX = "_z.jpg";

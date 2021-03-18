@@ -27,7 +27,6 @@ class ExploreFragment : ScopeFragment() {
     private lateinit var binding: FragmentExploreBinding
     val viewModel: ExploreViewModel by viewModel()
 
-    // Falta controlar el "Denegar siempre"
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->

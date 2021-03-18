@@ -42,13 +42,26 @@ class PhotoDetailsFragment : ScopeFragment() {
 
     private fun subscribeUi() {
         viewModel.favoriteStatus.observe(this.viewLifecycleOwner) { isSaved ->
-            val drawableRes = if (isSaved) {
-                R.drawable.photo_saved
-            } else {
-                R.drawable.photo_no_saved
-            }
-            binding.saveImageFab.setImageResource(drawableRes)
+            binding.saveImageFab.setImageResource(getFabDrawableRes(isSaved))
+            binding.saveImageFab.contentDescription = getFabContentDescriptionRes(isSaved)
         }
+    }
+
+    private fun getFabDrawableRes(isSaved: Boolean): Int {
+        return if (isSaved) {
+            R.drawable.photo_saved
+        } else {
+            R.drawable.photo_no_saved
+        }
+    }
+
+    private fun getFabContentDescriptionRes(isSaved: Boolean): String {
+        val stringRes = if (isSaved) {
+            R.string.photo_details_unsave_btn
+        } else {
+            R.string.photo_details_save_btn
+        }
+        return getString(stringRes)
     }
 
 }

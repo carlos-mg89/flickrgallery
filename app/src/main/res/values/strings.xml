@@ -1,11 +1,12 @@
 <resources>
-    <string name="app_name">Flickr Gallery</string>
+    <string name="app_name">Location Scout</string>
 
     <string name="explorar">Explorar</string>
     <string name="explore_location_dialog_input_title">Introducir descripción</string>
 
     <string name="store_location">Guardar localizacion</string>
     <string name="stored_location_success">Localizacion guardada</string>
+    <string name="stored_location_photos">Fotos de localización</string>
     <string name="location_permission_denied">¡Para eso es necesario acceder a la localización!</string>
     <string name="stored_locations">Localizaciones</string>
     <string name="stored_location_see_photos">Ver fotos</string>
@@ -18,11 +19,13 @@
     <string name="photo_details_description">Descripción:</string>
     <string name="photo_details_photo">photo</string>
     <string name="photo_details_save_btn">button to save image</string>
+    <string name="photo_details_unsave_btn">button to unsave image</string>
 
     <string name="retry">"Reintentar"</string>
     <string name="save">"Guardar"</string>
     <string name="cancel">"Cancelar"</string>
 
+    <string name="saved_photos_title">Detalles foto</string>
     <string name="saved_photos_item">Foto guardada</string>
     <string name="saved_photos_delete">Eliminar foto guardada</string>
     <string name="saved_photos_delete_success">Has eliminado la foto guardada</string>
