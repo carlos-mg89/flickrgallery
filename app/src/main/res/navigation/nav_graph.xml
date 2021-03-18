@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/exploreFragment"
         android:name="com.example.flickrgallery.ui.explore.ExploreFragment"
-        android:label="fragment_explore"
+        android:label="@string/app_name"
         tools:layout="@layout/fragment_explore" >
         <action
             android:id="@+id/action_exploreFragment_to_photoDetailsFragment"
@@ -20,18 +20,20 @@
             app:nullable="true"
             android:defaultValue="@null" />
     </fragment>
+
     <fragment
         android:id="@+id/savedPhotosFragment"
         android:name="com.example.flickrgallery.ui.savedPhotos.SavedPhotosFragment"
-        android:label="SavedPhotosFragment" >
+        android:label="@string/img_guardadas" >
         <action
             android:id="@+id/action_savedPhotosFragment_to_photoDetailsFragment"
             app:destination="@id/photoDetailsFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/photoDetailsFragment"
         android:name="com.example.flickrgallery.ui.photoDetails.PhotoDetailsFragment"
-        android:label="photo_details_fragment"
+        android:label="@string/saved_photos_title"
         tools:layout="@layout/photo_details_fragment" >
         <argument
             android:name="photoArg"
@@ -39,18 +41,20 @@
             app:nullable="true"
             android:defaultValue="@null" />
     </fragment>
+
     <fragment
         android:id="@+id/storedLocationsFragment"
         android:name="com.example.flickrgallery.ui.storedLocations.StoredLocationsFragment"
-        android:label="StoredLocationsFragment" >
+        android:label="@string/stored_locations" >
         <action
             android:id="@+id/action_storedLocationsFragment_to_storedLocationFragment"
             app:destination="@id/storedLocationFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/storedLocationFragment"
         android:name="com.example.flickrgallery.ui.storedLocationPhotos.StoredLocationFragment"
-        android:label="fragment_stored_location"
+        android:label="@string/stored_location_photos"
         tools:layout="@layout/stored_location_fragment" >
         <action
             android:id="@+id/action_storedLocationFragment_to_photoDetailsFragment"

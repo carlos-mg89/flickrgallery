@@ -6,6 +6,7 @@
 
     <string name="store_location">Guardar localizacion</string>
     <string name="stored_location_success">Localizacion guardada</string>
+    <string name="stored_location_photos">Fotos de localización</string>
     <string name="location_permission_denied">¡Para eso es necesario acceder a la localización!</string>
     <string name="stored_locations">Localizaciones</string>
     <string name="stored_location_see_photos">Ver fotos</string>
@@ -24,6 +25,7 @@
     <string name="save">"Guardar"</string>
     <string name="cancel">"Cancelar"</string>
 
+    <string name="saved_photos_title">Detalles foto</string>
     <string name="saved_photos_item">Foto guardada</string>
     <string name="saved_photos_delete">Eliminar foto guardada</string>
     <string name="saved_photos_delete_success">Has eliminado la foto guardada</string>
