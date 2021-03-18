@@ -43,11 +43,6 @@ class ExploreViewModelTest {
 
     lateinit var viewModel: ExploreViewModel
 
-    private val initialState = ExploreUiState(
-        photos = emptyList(),
-        isProgressVisible = false,
-        isFabEnabled = false
-    )
     private val loadingState = ExploreUiState(
         photos = emptyList(),
         isProgressVisible = true,
@@ -79,26 +74,22 @@ class ExploreViewModelTest {
             viewModel.proceedGettingUpdates()
 
             val captor: ArgumentCaptor<ExploreUiState> = ArgumentCaptor.forClass(ExploreUiState::class.java)
-            verify(stateObserver, times(3)).onChanged(captor.capture())
+            verify(stateObserver, times(2)).onChanged(captor.capture())
 
-            assertEquals(initialState.isFabEnabled, captor.firstValue.isFabEnabled)
-            assertEquals(initialState.isProgressVisible, captor.firstValue.isProgressVisible)
-            assertEquals(initialState.photos.size, captor.firstValue.photos.size)
+            assertEquals(loadingState.isFabEnabled, captor.firstValue.isFabEnabled)
+            assertEquals(loadingState.isProgressVisible, captor.firstValue.isProgressVisible)
+            assertEquals(loadingState.photos.size, captor.firstValue.photos.size)
 
-            assertEquals(loadingState.isFabEnabled, captor.secondValue.isFabEnabled)
-            assertEquals(loadingState.isProgressVisible, captor.secondValue.isProgressVisible)
-            assertEquals(loadingState.photos.size, captor.secondValue.photos.size)
-
-            assertEquals(finishedState.isFabEnabled, captor.thirdValue.isFabEnabled)
-            assertEquals(finishedState.isProgressVisible, captor.thirdValue.isProgressVisible)
-            assertEquals(finishedState.photos.size, captor.thirdValue.photos.size)
+            assertEquals(finishedState.isFabEnabled, captor.secondValue.isFabEnabled)
+            assertEquals(finishedState.isProgressVisible, captor.secondValue.isProgressVisible)
+            assertEquals(finishedState.photos.size, captor.secondValue.photos.size)
         }
     }
 
     @Test
     fun `view model starts with initial ui state`() {
         viewModel.exploreUiState.observeForever {observedState ->
-            assertEquals(initialState, observedState)
+            assertEquals(loadingState, observedState)
         }
     }
 
@@ -111,7 +102,7 @@ class ExploreViewModelTest {
 
             var receivedStatePosition = 1
             viewModel.exploreUiState.observeForever {observedState ->
-                if (receivedStatePosition == 2) assertEquals(loadingState, observedState)
+                if (receivedStatePosition == 2) assertEquals(finishedState, observedState)
                 receivedStatePosition ++
             }
             viewModel.proceedGettingUpdates()
