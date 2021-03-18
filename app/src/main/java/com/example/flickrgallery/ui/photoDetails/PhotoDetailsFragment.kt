@@ -48,6 +48,13 @@ class PhotoDetailsFragment : ScopeFragment() {
                 R.drawable.photo_no_saved
             }
             binding.saveImageFab.setImageResource(drawableRes)
+
+            val stringRes = if (isSaved) {
+                R.string.photo_details_unsave_btn
+            } else {
+                R.string.photo_details_save_btn
+            }
+            binding.saveImageFab.contentDescription = getString(stringRes)
         }
     }
 
