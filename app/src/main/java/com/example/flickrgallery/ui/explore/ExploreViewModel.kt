@@ -28,6 +28,10 @@ class ExploreViewModel(
 
     var location = Location()
 
+    init {
+        setUiBusy()
+    }
+
     @ExperimentalCoroutinesApi
     fun proceedGettingUpdates() {
         launch {
@@ -38,7 +42,6 @@ class ExploreViewModel(
     }
 
     private suspend fun onNewPositionReceived(location: Location) {
-        setUiBusy()
         this.location = location
         val photos = getCurrentLocationPhotos.invoke(location.latitude, location.longitude)
         setUiPhotosReceived(photos)
