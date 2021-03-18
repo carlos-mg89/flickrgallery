@@ -21,7 +21,7 @@ open class BaseUiTest : KoinTest {
         const val photosJsonFile = "nearby_photos.json"
     }
 
-    private lateinit var context: Context
+    protected lateinit var context: Context
     private val mockWebServerRule = MockWebServerRule()
 
     @get:Rule
